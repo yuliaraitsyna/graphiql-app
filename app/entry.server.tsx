@@ -1,0 +1,177 @@
+import { PassThrough } from "node:stream";
+import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import { createReadableStreamFromReadable } from "@remix-run/node";
+import { RemixServer } from "@remix-run/react";
+import { isbot } from "isbot";
+import { renderToPipeableStream } from "react-dom/server";
+import { createInstance, i18n as i18next } from "i18next";
+import i18nServer from "./i18n.server";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import * as i18n from "../src/locales/config/i18n";
+import theme from "../src/theme/theme";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import { CacheProvider } from "@emotion/react";
+import createEmotionServer from "@emotion/server/create-instance";
+import createEmotionCache from "../src/utils/createEmotionCache";
+
+const ABORT_DELAY = 5_000;
+
+export default async function handleRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+  // This is ignored so we can keep it in the template for visibility.  Feel
+  // free to delete this parameter in your app if you're not using it!
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  loadContext: AppLoadContext,
+) {
+  const instance = createInstance();
+  const lng = await i18nServer.getLocale(request);
+  const ns = i18nServer.getRouteNamespaces(remixContext);
+
+  await instance.use(initReactI18next).init({ ...i18n, lng, ns });
+
+  return isbot(request.headers.get("user-agent") || "")
+    ? handleBotRequest(
+        request,
+        responseStatusCode,
+        responseHeaders,
+        remixContext,
+        loadContext,
+        instance,
+      )
+    : handleBrowserRequest(
+        request,
+        responseStatusCode,
+        responseHeaders,
+        remixContext,
+        loadContext,
+        instance,
+      );
+}
+
+async function handleBotRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+  _loadContext: AppLoadContext,
+  i18next: i18next,
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const cache = createEmotionCache();
+    const { extractCriticalToChunks } = createEmotionServer(cache);
+    const { pipe, abort } = renderToPipeableStream(
+      <I18nextProvider i18n={i18next}>
+        <CacheProvider value={cache}>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <RemixServer
+              context={remixContext}
+              url={request.url}
+              abortDelay={ABORT_DELAY}
+            />
+          </ThemeProvider>
+        </CacheProvider>
+      </I18nextProvider>,
+      {
+        onAllReady() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = createReadableStreamFromReadable(body);
+
+          responseHeaders.set("Content-Type", "text/html");
+
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            }),
+          );
+
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
+      },
+    );
+
+    setTimeout(abort, ABORT_DELAY);
+  });
+}
+
+async function handleBrowserRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+  _loadContext: AppLoadContext,
+  i18next: i18next,
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const cache = createEmotionCache();
+    const { extractCriticalToChunks } = createEmotionServer(cache);
+    const { pipe, abort } = renderToPipeableStream(
+      <I18nextProvider i18n={i18next}>
+        <CacheProvider value={cache}>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            {/* <CssBaseline /> */}
+            <RemixServer
+              context={remixContext}
+              url={request.url}
+              abortDelay={ABORT_DELAY}
+            />
+          </ThemeProvider>
+        </CacheProvider>
+      </I18nextProvider>,
+      {
+        onShellReady() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = createReadableStreamFromReadable(body);
+
+          responseHeaders.set("Content-Type", "text/html");
+
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            }),
+          );
+
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
+      },
+    );
+
+    setTimeout(abort, ABORT_DELAY);
+  });
+}

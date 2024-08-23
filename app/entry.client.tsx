@@ -1,0 +1,89 @@
+import { RemixBrowser } from "@remix-run/react";
+import i18next from "i18next";
+import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
+import Fetch from "i18next-fetch-backend";
+import { startTransition, StrictMode } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import { getInitialNamespaces } from "remix-i18next/client";
+import {
+  defaultNS,
+  fallbackLng,
+  supportedLngs,
+} from "../src/locales/config/i18n";
+import * as React from "react";
+import { CacheProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import createEmotionCache from "../src/utils/createEmotionCache";
+import ClientStyleContext from "../src/utils/ClientCtyleContext";
+import theme from "../src/theme/theme";
+
+interface ClientCacheProviderProps {
+  children: React.ReactNode;
+}
+
+function ClientCacheProvider({ children }: ClientCacheProviderProps) {
+  const [cache, setCache] = React.useState(createEmotionCache());
+
+  const clientStyleContextValue = React.useMemo(
+    () => ({
+      reset() {
+        setCache(createEmotionCache());
+      },
+    }),
+    [],
+  );
+
+  return (
+    <ClientStyleContext.Provider value={clientStyleContextValue}>
+      <CacheProvider value={cache}>{children}</CacheProvider>
+    </ClientStyleContext.Provider>
+  );
+}
+
+async function main() {
+  // eslint-disable-next-line import/no-named-as-default-member
+  await i18next
+    .use(initReactI18next) // Tell i18next to use the react-i18next plugin
+    .use(Fetch) // Tell i18next to use the Fetch backend
+    .use(I18nextBrowserLanguageDetector) // Setup a client-side language detector
+    .init({
+      defaultNS,
+      fallbackLng,
+      supportedLngs,
+      ns: getInitialNamespaces(),
+      detection: {
+        // Here only enable htmlTag detection, we'll detect the language only
+        // server-side with remix-i18next, by using the `<html lang>` attribute
+        // we can communicate to the client the language detected server-side
+        order: ["htmlTag"],
+        // Because we only use htmlTag, there's no reason to cache the language
+        // on the browser, so we disable it
+        caches: [],
+      },
+      backend: {
+        // We will configure the backend to fetch the translations from the
+        // resource route /api/locales and pass the lng and ns as search params
+        loadPath: "/api/locales?lng={{lng}}&ns={{ns}}",
+      },
+    });
+
+  startTransition(() => {
+    hydrateRoot(
+      document,
+      <ClientCacheProvider>
+        <ThemeProvider theme={theme}>
+          <I18nextProvider i18n={i18next}>
+            <CssBaseline />
+            <StrictMode>
+              <RemixBrowser />
+            </StrictMode>
+          </I18nextProvider>
+        </ThemeProvider>
+      </ClientCacheProvider>,
+    );
+  });
+}
+
+main().catch((error) => console.error(error));
