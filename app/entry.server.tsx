@@ -9,7 +9,7 @@ import i18nServer from "./i18n.server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import * as i18n from "./locales/config/i18n";
 import theme from "./theme/theme";
-import CssBaseline from "@mui/material/CssBaseline";
+import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
 // import createEmotionServer from "@emotion/server/create-instance";
@@ -131,7 +131,7 @@ async function handleBrowserRequest(
         <CacheProvider value={cache}>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            {/* <CssBaseline /> */}
+            <CssBaseline />
             <RemixServer
               context={remixContext}
               url={request.url}

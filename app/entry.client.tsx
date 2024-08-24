@@ -10,7 +10,7 @@ import { defaultNS, fallbackLng, supportedLngs } from "./locales/config/i18n";
 import * as React from "react";
 import { CacheProvider } from "@emotion/react";
 import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import { CssBaseline } from "@mui/material";
 import createEmotionCache from "./utils/createEmotionCache";
 import ClientStyleContext from "./utils/ClientCtyleContext";
 import theme from "./theme/theme";
