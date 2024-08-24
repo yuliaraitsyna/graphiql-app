@@ -9,11 +9,9 @@ import { getInitialNamespaces } from "remix-i18next/client";
 import { defaultNS, fallbackLng, supportedLngs } from "./locales/config/i18n";
 import * as React from "react";
 import { CacheProvider } from "@emotion/react";
-import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import createEmotionCache from "./utils/createEmotionCache";
 import ClientStyleContext from "./utils/ClientCtyleContext";
-import theme from "./theme/theme";
 
 interface ClientCacheProviderProps {
   children: React.ReactNode;
@@ -69,14 +67,12 @@ async function main() {
     hydrateRoot(
       document,
       <ClientCacheProvider>
-        <ThemeProvider theme={theme}>
-          <I18nextProvider i18n={i18next}>
-            <CssBaseline />
-            <StrictMode>
-              <RemixBrowser />
-            </StrictMode>
-          </I18nextProvider>
-        </ThemeProvider>
+        <I18nextProvider i18n={i18next}>
+          <CssBaseline />
+          <StrictMode>
+            <RemixBrowser />
+          </StrictMode>
+        </I18nextProvider>
       </ClientCacheProvider>,
     );
   });

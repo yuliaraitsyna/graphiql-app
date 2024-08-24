@@ -8,9 +8,7 @@ import { createInstance, i18n as i18next } from "i18next";
 import i18nServer from "./i18n.server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import * as i18n from "./locales/config/i18n";
-import theme from "./theme/theme";
 import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
 // import createEmotionServer from "@emotion/server/create-instance";
 import createEmotionCache from "./utils/createEmotionCache";
@@ -67,15 +65,13 @@ async function handleBotRequest(
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <CacheProvider value={cache}>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <RemixServer
-              context={remixContext}
-              url={request.url}
-              abortDelay={ABORT_DELAY}
-            />
-          </ThemeProvider>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <RemixServer
+            context={remixContext}
+            url={request.url}
+            abortDelay={ABORT_DELAY}
+          />
         </CacheProvider>
       </I18nextProvider>,
       {
@@ -129,15 +125,13 @@ async function handleBrowserRequest(
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <CacheProvider value={cache}>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <RemixServer
-              context={remixContext}
-              url={request.url}
-              abortDelay={ABORT_DELAY}
-            />
-          </ThemeProvider>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <RemixServer
+            context={remixContext}
+            url={request.url}
+            abortDelay={ABORT_DELAY}
+          />
         </CacheProvider>
       </I18nextProvider>,
       {
