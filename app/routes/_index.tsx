@@ -6,7 +6,7 @@ import {
 } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
-import i18nServer from "~/i18n.server";
+import i18nServer from "../i18n.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [

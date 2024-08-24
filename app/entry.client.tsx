@@ -6,18 +6,14 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { getInitialNamespaces } from "remix-i18next/client";
-import {
-  defaultNS,
-  fallbackLng,
-  supportedLngs,
-} from "../src/locales/config/i18n";
+import { defaultNS, fallbackLng, supportedLngs } from "./locales/config/i18n";
 import * as React from "react";
 import { CacheProvider } from "@emotion/react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import createEmotionCache from "../src/utils/createEmotionCache";
-import ClientStyleContext from "../src/utils/ClientCtyleContext";
-import theme from "../src/theme/theme";
+import createEmotionCache from "./utils/createEmotionCache";
+import ClientStyleContext from "./utils/ClientCtyleContext";
+import theme from "./theme/theme";
 
 interface ClientCacheProviderProps {
   children: React.ReactNode;

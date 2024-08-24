@@ -24,6 +24,7 @@
     "@emotion/server": "latest",
     "@emotion/styled": "latest",
     "@fontsource/roboto": "latest",
+    "@hookform/resolvers": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "next",
     "@remix-run/node": "latest",
@@ -38,7 +39,9 @@
     "pretty-cache-header": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-hook-form": "latest",
     "react-i18next": "latest",
+    "remix-hook-form": "latest",
     "remix-i18next": "latest",
     "zod": "latest"
   },

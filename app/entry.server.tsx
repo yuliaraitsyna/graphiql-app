@@ -7,13 +7,13 @@ import { renderToPipeableStream } from "react-dom/server";
 import { createInstance, i18n as i18next } from "i18next";
 import i18nServer from "./i18n.server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
-import * as i18n from "../src/locales/config/i18n";
-import theme from "../src/theme/theme";
+import * as i18n from "./locales/config/i18n";
+import theme from "./theme/theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
-import createEmotionServer from "@emotion/server/create-instance";
-import createEmotionCache from "../src/utils/createEmotionCache";
+// import createEmotionServer from "@emotion/server/create-instance";
+import createEmotionCache from "./utils/createEmotionCache";
 
 const ABORT_DELAY = 5_000;
 
@@ -63,7 +63,7 @@ async function handleBotRequest(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const cache = createEmotionCache();
-    const { extractCriticalToChunks } = createEmotionServer(cache);
+    // const { extractCriticalToChunks } = createEmotionServer(cache);
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <CacheProvider value={cache}>
@@ -125,7 +125,7 @@ async function handleBrowserRequest(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const cache = createEmotionCache();
-    const { extractCriticalToChunks } = createEmotionServer(cache);
+    // const { extractCriticalToChunks } = createEmotionServer(cache);
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <CacheProvider value={cache}>
