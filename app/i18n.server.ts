@@ -12,7 +12,7 @@ export const localeCookie = createCookie("lng", {
 
 export default new RemixI18Next({
   detection: {
-    supportedLanguages: i18n.supportedLngs,
+    supportedLanguages: i18n.supportedLanguages,
     fallbackLanguage: i18n.fallbackLng,
     cookie: localeCookie,
   },

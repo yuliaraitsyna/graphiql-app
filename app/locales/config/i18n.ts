@@ -5,10 +5,10 @@ import esTranslation from "../es";
 
 // This is the list of languages your application supports, the last one is your
 // fallback language
-export const supportedLngs = ["es", "en"];
+export const supportedLanguages = ["es", "en"];
 
 // This is the language you want to use in case
-// the user language is not in the supportedLngs
+// the user language is not in the supportedLanguages
 export const fallbackLng = "en";
 
 // The default namespace of i18next is "translation", but you can customize it

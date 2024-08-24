@@ -6,12 +6,16 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { getInitialNamespaces } from "remix-i18next/client";
-import { defaultNS, fallbackLng, supportedLngs } from "./locales/config/i18n";
+import {
+  defaultNS,
+  fallbackLng,
+  supportedLanguages,
+} from "./locales/config/i18n";
 import * as React from "react";
 import { CacheProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import createEmotionCache from "./utils/createEmotionCache";
-import ClientStyleContext from "./utils/ClientCtyleContext";
+import ClientStyleContext from "./utils/ClientStyleContext";
 
 interface ClientCacheProviderProps {
   children: React.ReactNode;
@@ -45,7 +49,7 @@ async function main() {
     .init({
       defaultNS,
       fallbackLng,
-      supportedLngs,
+      supportedLngs: supportedLanguages,
       ns: getInitialNamespaces(),
       detection: {
         // Here only enable htmlTag detection, we'll detect the language only
