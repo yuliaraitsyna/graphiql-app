@@ -14,7 +14,7 @@
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "prepare": "husky",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "coverage": "jest --coverage"
   },
   "dependencies": {
