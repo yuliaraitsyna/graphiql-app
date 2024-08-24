@@ -3,7 +3,7 @@ import {
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
-} from "@remix-run/node";
+} from "@vercel/remix";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import i18nServer from "../i18n.server";

@@ -3,10 +3,17 @@ import { installGlobals } from "@remix-run/node";
 import { defineConfig } from "vite";
 import { envOnlyMacros } from "vite-env-only";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { vercelPreset } from "@vercel/remix/vite";
 
 installGlobals();
 
 export default defineConfig({
-  plugins: [envOnlyMacros(), remix(), tsconfigPaths()],
+  plugins: [
+    envOnlyMacros(),
+    remix({
+      presets: [vercelPreset()],
+    }),
+    tsconfigPaths(),
+  ],
   server: { port: 3000 },
 });

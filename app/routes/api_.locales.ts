@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@vercel/remix";
 import { cacheHeader } from "pretty-cache-header";
 import { z } from "zod";
 import { resources } from "../locales/config/i18n";

@@ -30,6 +30,7 @@
     "@remix-run/node": "latest",
     "@remix-run/react": "latest",
     "@remix-run/serve": "latest",
+    "@vercel/remix": "latest",
     "graphql": "latest",
     "firebase": "latest",
     "i18next": "latest",
