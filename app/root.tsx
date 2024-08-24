@@ -1,35 +1,21 @@
-import { LoaderFunctionArgs, json } from "@vercel/remix";
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-  useRouteLoaderData,
-} from "@remix-run/react";
-import i18nServer, { localeCookie } from "./i18n.server";
-import { useChangeLanguage } from "remix-i18next/react";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+import {LoaderFunctionArgs, json} from '@vercel/remix';
+import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData} from '@remix-run/react';
+import i18nServer, {localeCookie} from './i18n.server';
+import {useChangeLanguage} from 'remix-i18next/react';
+import '@fontsource/roboto';
 
-export const handle = { i18n: ["translation"] };
+export const handle = {i18n: ['translation']};
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({request}: LoaderFunctionArgs) {
   const locale = await i18nServer.getLocale(request);
-  return json(
-    { locale },
-    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
-  );
+  return json({locale}, {headers: {'Set-Cookie': await localeCookie.serialize(locale)}});
 }
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  const loaderData = useRouteLoaderData<typeof loader>("root");
+export function Layout({children}: {children: React.ReactNode}) {
+  const loaderData = useRouteLoaderData<typeof loader>('root');
 
   return (
-    <html lang={loaderData?.locale ?? "en"}>
+    <html lang={loaderData?.locale ?? 'en'}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -46,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { locale } = useLoaderData<typeof loader>();
+  const {locale} = useLoaderData<typeof loader>();
   useChangeLanguage(locale);
   return <Outlet />;
 }
