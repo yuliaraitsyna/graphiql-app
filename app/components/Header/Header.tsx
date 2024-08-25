@@ -1,7 +1,11 @@
+import LanguageToggler from '../UI/LanguageToggler';
+
 export default function Header() {
   return (
     <>
-      <header>header</header>
+      <header>
+        <LanguageToggler />
+      </header>
     </>
   );
 }
