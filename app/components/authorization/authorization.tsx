@@ -4,11 +4,22 @@ import SignIn from './signIn';
 import SignUp from './signUp';
 import {SubmitHandler} from 'react-hook-form';
 import {FormProps} from './models/formProps';
+//import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+//import { auth } from '~/utils/firebaseConfig';
 
 const Authorization: React.FC = () => {
   const [action, setAction] = React.useState('signIn');
 
-  const handleSubmit: SubmitHandler<FormProps> = (data: FormProps) => {
+  const handleSubmit: SubmitHandler<FormProps> = async (data: FormProps) => {
+    // try {
+    //     if (action === 'signIn') {
+    //         await signInWithEmailAndPassword(auth, data.email, data.password);
+    //     } else if (action === 'signUp') {
+    //         await createUserWithEmailAndPassword(auth, data.email, data.password);
+    //     }
+    // } catch (error) {
+    //     console.error('Authentication error:', error);
+    // }
     console.log(data);
   };
 
