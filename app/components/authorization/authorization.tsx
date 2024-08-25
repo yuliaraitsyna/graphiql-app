@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Button, Container, Typography} from '@mui/material';
 import SignIn from './signIn';
 import SignUp from './signUp';
@@ -7,21 +7,30 @@ import {FormProps} from './models/formProps';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '~/utils/firebaseConfig';
 import {FormAction} from './models/formAction';
+import {useNavigate} from '@remix-run/react';
+import {red} from '@mui/material/colors';
 
 const Authorization: React.FC = () => {
-  const [action, setAction] = React.useState<FormAction>(FormAction.SIGN_IN);
+  const [action, setAction] = useState<FormAction>(FormAction.SIGN_IN);
+  const [authError, setAuthError] = useState<string>('');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setAuthError('');
+  }, [action]);
 
   const handleSubmit: SubmitHandler<FormProps> = async (data: FormProps) => {
     try {
       if (action === FormAction.SIGN_IN) {
-        const user = await signInWithEmailAndPassword(auth, data.email, data.password);
-        console.log('Successful sign in:', user);
+        await signInWithEmailAndPassword(auth, data.email, data.password);
+        navigate('/');
       } else if (action === FormAction.SIGN_UP) {
-        const user = await createUserWithEmailAndPassword(auth, data.email, data.password);
-        console.log('Successful sign up:', user);
+        await createUserWithEmailAndPassword(auth, data.email, data.password);
       }
     } catch (error) {
       console.error('Authentication error:', error);
+      setAuthError('Authorization error');
     }
   };
 
@@ -31,6 +40,9 @@ const Authorization: React.FC = () => {
         {action === FormAction.SIGN_IN ? 'Sign in' : 'Sign up'}
       </Typography>
       {action === FormAction.SIGN_IN ? <SignIn onSubmit={handleSubmit} /> : <SignUp onSubmit={handleSubmit} />}
+      <Typography color={red[500]} textAlign={'center'}>
+        {authError}
+      </Typography>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
         <Button
           onClick={() =>
