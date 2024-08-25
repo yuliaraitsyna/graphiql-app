@@ -1,6 +1,5 @@
 import {CssBaseline} from '@mui/material';
 import {RemixBrowser} from '@remix-run/react';
-import {i18next} from '../entry.client';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import Fetch from 'i18next-fetch-backend';
 import React, {startTransition, StrictMode} from 'react';
@@ -10,6 +9,7 @@ import {getInitialNamespaces} from 'remix-i18next/client';
 import {defaultNS, fallbackLng, supportedLanguages} from '~/locales/config/i18n';
 import {ClientStyleContext, createEmotionCache} from './';
 import {CacheProvider} from '@emotion/react';
+import i18next from 'i18next';
 
 interface ClientCacheProviderProps {
   children: React.ReactNode;
@@ -35,6 +35,7 @@ function ClientCacheProvider({children}: ClientCacheProviderProps) {
 }
 
 export async function i18nHydrate() {
+  // eslint-disable-next-line import/no-named-as-default-member
   await i18next
     .use(initReactI18next)
     .use(Fetch)
@@ -46,6 +47,7 @@ export async function i18nHydrate() {
       ns: getInitialNamespaces(),
       detection: {
         order: ['htmlTag'],
+        lookupFromPathIndex: 0,
         caches: [],
       },
       backend: {
