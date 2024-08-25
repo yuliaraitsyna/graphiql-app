@@ -14,12 +14,13 @@ export default function LanguageToggler() {
   return (
     <>
       <ToggleButtonGroup
-        color="standard"
+        color="primary"
         value={language}
         exclusive
         onChange={handleChange}
         aria-label="Language"
-        size="small">
+        size="small"
+        style={{backgroundColor: 'white'}}>
         <ToggleButton value="en">EN</ToggleButton>
         <ToggleButton value="es">ES</ToggleButton>
       </ToggleButtonGroup>
