@@ -31,7 +31,7 @@ export default function Header() {
           <Box display="flex" justifyContent="space-between" alignItems="center" padding={2} flexWrap="wrap">
             <Stack direction="row" spacing={1}>
               <WhiteLink to="/">
-                <img width="120" src={Logo} alt="App logo" />
+                <img width="50" src={Logo} alt="App logo" />
               </WhiteLink>
               <Box display="flex" alignItems="center">
                 <WhiteLink to="/fef">{t('mainPage')}</WhiteLink>
