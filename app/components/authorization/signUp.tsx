@@ -26,6 +26,22 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
         <Typography component={'label'} htmlFor="email">
+          Name
+        </Typography>
+        <TextField
+          type="text"
+          id="name"
+          {...register('name', {
+            required: 'Name is required',
+            pattern: {
+              value: /^[A-Z][a-zA-Z]*$/,
+              message: 'Invalid name pattern',
+            },
+          })}
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
+        <Typography component={'label'} htmlFor="email">
           Email
         </Typography>
         <TextField
