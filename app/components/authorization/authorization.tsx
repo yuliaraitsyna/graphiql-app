@@ -24,15 +24,18 @@ const Authorization: React.FC = () => {
     try {
       if (action === FormAction.SIGN_IN) {
         await signInWithEmailAndPassword(auth, data.email, data.password);
+
+        localStorage.setItem('user', data.email.split('@')[0]);
+
         setAuthError('');
         navigate('/');
       } else if (action === FormAction.SIGN_UP) {
         await createUserWithEmailAndPassword(auth, data.email, data.password);
+
         setAuthError('');
         navigate('/');
-        if (data.name) {
-          localStorage.setItem('user', data.name);
-        }
+
+        localStorage.setItem('user', data.email.split('@')[0]);
       }
     } catch (error) {
       console.error('Authentication error:', error);
