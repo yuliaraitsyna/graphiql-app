@@ -12,7 +12,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import {grey} from '@mui/material/colors';
+import {blue, grey} from '@mui/material/colors';
 import React, {useState} from 'react';
 import {Header} from './models/header';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -102,7 +102,9 @@ const HeadersEditor: React.FC = () => {
           </TableHead>
           <TableBody>
             {headers.map((header, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                sx={index === editingIndex ? {backgroundColor: blue[100]} : {backgroundColor: 'transparent'}}>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
                   <Checkbox checked={header.checked} onChange={() => handleCheckboxChange(index)}></Checkbox>
                 </TableCell>
@@ -114,6 +116,7 @@ const HeadersEditor: React.FC = () => {
                     disabled={index !== editingIndex}
                     onChange={e => handleHeaderChange('key', e.target.value)}
                     onKeyDown={handleEditFinish}
+                    onBlur={() => setEditingIndex(null)}
                   />
                 </TableCell>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
@@ -124,6 +127,7 @@ const HeadersEditor: React.FC = () => {
                     disabled={index !== editingIndex}
                     onChange={e => handleHeaderChange('value', e.target.value)}
                     onKeyDown={handleEditFinish}
+                    onBlur={() => setEditingIndex(null)}
                   />
                 </TableCell>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
