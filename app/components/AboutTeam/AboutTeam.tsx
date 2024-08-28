@@ -1,6 +1,6 @@
-import {Avatar, Box, Card, CardContent, Container, Grid, Typography} from '@mui/material';
-import {Link} from '@remix-run/react';
+import {Container, Grid, Typography} from '@mui/material';
 import {team} from '~/constants';
+import TeamCard from '../TeamCard/TeamCard';
 export default function AboutTeam() {
   return (
     <Container maxWidth="lg" style={{paddingTop: '50px', paddingBottom: '50px'}}>
@@ -22,34 +22,9 @@ export default function AboutTeam() {
       </Grid>
       <Grid container spacing={2} justifyContent="center">
         {team.map((member, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Box display="flex" height="100%">
-              <Card
-                style={{flexGrow: 1}}
-                sx={{
-                  flexGrow: 1,
-                  boxShadow: 3,
-                  transition: '0.3s',
-                  '&:hover': {boxShadow: 6},
-                }}>
-                <CardContent>
-                  <Link to={member.git}>
-                    <Avatar alt={member.name} src={member.image} sx={{width: 150, height: 150, margin: '0 auto'}} />
-                  </Link>
-                  <Typography variant="h6" component="div" align="center">
-                    {member.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" align="center" sx={{marginBottom: 2}}>
-                    {member.role}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary" align="center">
-                    {member.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
+          <TeamCard team={member} key={index} />
         ))}
+        ;
       </Grid>
     </Container>
   );
