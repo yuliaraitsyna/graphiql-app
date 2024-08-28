@@ -76,14 +76,28 @@ const HeadersEditor: React.FC = () => {
         <Table sx={{border: '1px solid', borderColor: grey[100]}} padding="normal" size="small">
           <TableHead sx={{backgroundColor: grey[100]}}>
             <TableRow>
-              <TableCell sx={{border: '1px solid', borderColor: grey[200], width: '10%'}}></TableCell>
-              <TableCell sx={{border: '1px solid', borderColor: grey[200], width: '40%'}}>
+              <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '75px'}}></TableCell>
+              <TableCell
+                sx={{
+                  border: '1px solid',
+                  borderColor: grey[200],
+                  width: '35%',
+                  minWidth: 'auto',
+                  whiteSpace: 'nowrap',
+                }}>
                 <b>Key</b>
               </TableCell>
-              <TableCell sx={{border: '1px solid', borderColor: grey[200], width: '40%'}}>
+              <TableCell
+                sx={{
+                  border: '1px solid',
+                  borderColor: grey[200],
+                  width: '35%',
+                  minWidth: 'auto',
+                  whiteSpace: 'nowrap',
+                }}>
                 <b>Value</b>
               </TableCell>
-              <TableCell sx={{border: '1px solid', borderColor: grey[200], width: '10%'}}></TableCell>
+              <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '160px'}}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
