@@ -23,19 +23,19 @@ const Authorization: React.FC = () => {
   const handleSubmit: SubmitHandler<FormProps> = async (data: FormProps) => {
     try {
       if (action === FormAction.SIGN_IN) {
-        await signInWithEmailAndPassword(auth, data.email, data.password);
+        const userCredentials = await signInWithEmailAndPassword(auth, data.email, data.password);
 
-        localStorage.setItem('user', data.email.split('@')[0]);
+        localStorage.setItem('user', JSON.stringify(userCredentials.user.email));
 
-        setAuthError('');
+        setAuthError(' ');
         navigate('/');
       } else if (action === FormAction.SIGN_UP) {
-        await createUserWithEmailAndPassword(auth, data.email, data.password);
+        const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
-        setAuthError('');
+        setAuthError(' ');
         navigate('/');
 
-        localStorage.setItem('user', data.email.split('@')[0]);
+        localStorage.setItem('user', JSON.stringify(userCredentials.user.email));
       }
     } catch (error) {
       console.error('Authentication error:', error);
@@ -43,12 +43,20 @@ const Authorization: React.FC = () => {
     }
   };
 
+  const handleInputChange = () => {
+    setAuthError(' ');
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Typography component={'h5'} variant="h5" textAlign={'center'}>
         {action === FormAction.SIGN_IN ? 'Sign in' : 'Sign up'}
       </Typography>
-      {action === FormAction.SIGN_IN ? <SignIn onSubmit={handleSubmit} /> : <SignUp onSubmit={handleSubmit} />}
+      {action === FormAction.SIGN_IN ? (
+        <SignIn onSubmit={handleSubmit} onInputChange={handleInputChange} />
+      ) : (
+        <SignUp onSubmit={handleSubmit} onInputChange={handleInputChange} />
+      )}
       <Typography color={red[500]} textAlign={'center'}>
         {authError}
       </Typography>

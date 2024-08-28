@@ -4,7 +4,10 @@ import {SubmitHandler, useForm} from 'react-hook-form';
 import {handlePasswordCheck} from './utils/passwordValidation';
 import {FormProps} from './models/formProps';
 
-const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
+const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () => void}> = ({
+  onSubmit,
+  onInputChange,
+}) => {
   const {
     register,
     handleSubmit,
@@ -21,22 +24,6 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
         <Typography component={'label'} htmlFor="email">
-          Name
-        </Typography>
-        <TextField
-          type="text"
-          id="name"
-          {...register('name', {
-            required: 'Name is required',
-            pattern: {
-              value: /^[A-Z][a-zA-Z]*$/,
-              message: 'Invalid name pattern',
-            },
-          })}
-          error={!!errors.name}
-          helperText={errors.name?.message || ' '}
-        />
-        <Typography component={'label'} htmlFor="email">
           Email
         </Typography>
         <TextField
@@ -47,6 +34,9 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
               message: 'Invalid email address',
+            },
+            onChange: () => {
+              onInputChange();
             },
           })}
           error={!!errors.email}
@@ -66,6 +56,7 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
             },
             onChange: () => {
               trigger('password');
+              onInputChange();
             },
           })}
           error={!!errors.password}
@@ -80,6 +71,9 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
           {...register('repeatPassword', {
             required: 'Repeating password is required',
             validate: value => value === password || 'Passwords do not match',
+            onChange: () => {
+              onInputChange();
+            },
           })}
           error={!!errors.repeatPassword}
           helperText={errors.repeatPassword?.message || ' '}

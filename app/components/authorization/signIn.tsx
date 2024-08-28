@@ -3,7 +3,10 @@ import {Box, Typography, TextField, Button} from '@mui/material';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {FormProps} from './models/formProps';
 
-const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
+const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () => void}> = ({
+  onSubmit,
+  onInputChange,
+}) => {
   const {
     register,
     handleSubmit,
@@ -27,6 +30,9 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
               message: 'Invalid email address',
             },
+            onChange: () => {
+              onInputChange();
+            },
           })}
           error={!!errors.email}
           helperText={errors.email?.message || ' '}
@@ -37,7 +43,12 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
         <TextField
           type="password"
           id="password"
-          {...register('password', {required: 'Password is required'})}
+          {...register('password', {
+            required: 'Password is required',
+            onChange: () => {
+              onInputChange();
+            },
+          })}
           error={!!errors.password}
         />
       </Box>
