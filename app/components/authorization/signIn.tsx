@@ -27,7 +27,7 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
           {...register('email', {
             required: 'Email is required',
             pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              value: /^[0-9A-Za-z]{1,}@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,}$/,
               message: 'Invalid email address',
             },
             onChange: () => {
