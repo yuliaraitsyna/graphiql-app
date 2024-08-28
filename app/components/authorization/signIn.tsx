@@ -29,7 +29,7 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
             },
           })}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={errors.email?.message || ' '}
         />
         <Typography component={'label'} htmlFor="password">
           Password
@@ -39,7 +39,6 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
           id="password"
           {...register('password', {required: 'Password is required'})}
           error={!!errors.password}
-          helperText={errors.password?.message}
         />
       </Box>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} padding={2}>

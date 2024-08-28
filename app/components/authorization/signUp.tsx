@@ -1,12 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Box, Typography, TextField, Button} from '@mui/material';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {
-  getHelperPasswordMessage,
-  getPasswordStrengthColor,
-  handlePasswordCheck,
-  PasswordStrength,
-} from './utils/passwordValidation';
+import {handlePasswordCheck} from './utils/passwordValidation';
 import {FormProps} from './models/formProps';
 
 const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
@@ -15,12 +10,12 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
     handleSubmit,
     watch,
     formState: {errors},
+    trigger,
   } = useForm<FormProps>({
     mode: 'onChange',
   });
 
   const password = watch('password');
-  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength | null>(null);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -39,7 +34,7 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
             },
           })}
           error={!!errors.name}
-          helperText={errors.name?.message}
+          helperText={errors.name?.message || ' '}
         />
         <Typography component={'label'} htmlFor="email">
           Email
@@ -55,7 +50,7 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
             },
           })}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={errors.email?.message || ' '}
         />
         <Typography component={'label'} htmlFor="password">
           Password
@@ -65,21 +60,17 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
           id="password"
           {...register('password', {
             required: 'Password is required',
-            onChange: e => {
-              setPasswordStrength(handlePasswordCheck(e.target.value));
+            validate: value => {
+              const passwordError = handlePasswordCheck(value);
+              return passwordError || true;
+            },
+            onChange: () => {
+              trigger('password');
             },
           })}
           error={!!errors.password}
-          helperText={errors.password?.message}
+          helperText={errors.password?.message || ' '}
         />
-        {passwordStrength && (
-          <Box>
-            <Typography color={getPasswordStrengthColor(passwordStrength)}>{passwordStrength} Password</Typography>
-            <Typography fontSize={10} margin={1}>
-              {getHelperPasswordMessage(passwordStrength)}
-            </Typography>
-          </Box>
-        )}
         <Typography component={'label'} htmlFor="repeat-password">
           Repeat Password
         </Typography>
@@ -91,7 +82,7 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>}> = ({onSubmit}) => {
             validate: value => value === password || 'Passwords do not match',
           })}
           error={!!errors.repeatPassword}
-          helperText={errors.repeatPassword?.message}
+          helperText={errors.repeatPassword?.message || ' '}
         />
       </Box>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} padding={2}>
