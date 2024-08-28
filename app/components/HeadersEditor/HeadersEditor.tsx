@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import {blue, grey} from '@mui/material/colors';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Header} from './models/header';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -27,6 +27,19 @@ const initialHeader: Header = {
 const HeadersEditor: React.FC = () => {
   const [headers, setHeaders] = useState<Header[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const storedHeaders = localStorage.getItem('headers');
+    if (storedHeaders) {
+      setHeaders(JSON.parse(storedHeaders));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (headers.length > 0) {
+      localStorage.setItem('headers', JSON.stringify(headers));
+    }
+  }, [headers]);
 
   const handleHeaderAddition = () => {
     setHeaders([...headers, initialHeader]);
@@ -59,6 +72,9 @@ const HeadersEditor: React.FC = () => {
 
   const handleDelete = (index: number) => {
     const updatedHeaders = headers.filter((_, i) => i !== index);
+    if (updatedHeaders.length === 0) {
+      localStorage.removeItem('headers');
+    }
     setHeaders(updatedHeaders);
   };
 
