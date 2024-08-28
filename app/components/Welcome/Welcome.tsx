@@ -1,4 +1,5 @@
 import {Box, Button, Container, Typography} from '@mui/material';
+import {Link as RemixLink} from '@remix-run/react';
 
 export default function Welcome() {
   return (
@@ -25,10 +26,15 @@ export default function Welcome() {
           sx={{
             flexWrap: 'wrap',
           }}>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2, marginRight: 1}}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{marginBottom: 2, marginRight: 1}}
+            component={RemixLink}
+            to="/sign-in">
             Sign In
           </Button>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2}}>
+          <Button variant="contained" color="primary" sx={{marginBottom: 2}} component={RemixLink} to="/sign-up">
             Sign Up
           </Button>
         </Box>
@@ -39,13 +45,23 @@ export default function Welcome() {
           sx={{
             flexWrap: 'wrap',
           }}>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2, marginRight: 1}}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{marginBottom: 2, marginRight: 1}}
+            component={RemixLink}
+            to="/rest">
             Rest Client
           </Button>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2, marginRight: 1}}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{marginBottom: 2, marginRight: 1}}
+            component={RemixLink}
+            to="/graphql">
             GraphiQL Client
           </Button>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2}}>
+          <Button variant="contained" color="primary" sx={{marginBottom: 2}} component={RemixLink} to="/history">
             History
           </Button>
         </Box>
