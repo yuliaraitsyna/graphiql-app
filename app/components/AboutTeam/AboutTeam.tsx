@@ -24,7 +24,6 @@ export default function AboutTeam() {
         {team.map((member, index) => (
           <TeamCard team={member} key={index} />
         ))}
-        ;
       </Grid>
     </Container>
   );
