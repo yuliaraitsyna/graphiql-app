@@ -135,7 +135,7 @@ const VariablesEditor: React.FC = () => {
                     disableUnderline
                     fullWidth
                     disabled={index !== editingIndex}
-                    onChange={e => handleVariableChange('name', e.target.value)}
+                    onChange={e => handleVariableChange('value', e.target.value)}
                     onKeyDown={handleEditFinish}
                     onBlur={() => setEditingIndex(null)}
                   />
