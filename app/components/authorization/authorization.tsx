@@ -25,7 +25,7 @@ const Authorization: React.FC = () => {
       if (action === FormAction.SIGN_IN) {
         const userCredentials = await signInWithEmailAndPassword(auth, data.email, data.password);
 
-        localStorage.setItem('user', JSON.stringify(userCredentials.user.email));
+        localStorage.setItem('user', JSON.stringify(userCredentials));
 
         setAuthError('');
         navigate('/');
@@ -35,7 +35,7 @@ const Authorization: React.FC = () => {
         setAuthError('');
         navigate('/');
 
-        localStorage.setItem('user', JSON.stringify(userCredentials.user.email));
+        localStorage.setItem('user', JSON.stringify(userCredentials));
       }
     } catch (error) {
       console.error('Authentication error:', error);
