@@ -1,9 +1,14 @@
 import {Box, Container, Link, Stack, Typography} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
-import gitLogo from '../../assets/images/git.svg';
+import {GitHub as GitHubIcon} from '@mui/icons-material';
 
 export default function Footer() {
   const theme = useTheme();
+  const links = [
+    {href: 'https://github.com/playoffthecuff/', alt: 'Github'},
+    {href: 'https://github.com/elizaveta-tukailo/', alt: 'Github'},
+    {href: 'https://github.com/yuliaraitsyna', alt: 'Github'},
+  ];
   return (
     <Box
       component="footer"
@@ -13,15 +18,11 @@ export default function Footer() {
       }}>
       <Container maxWidth="lg" sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Stack direction="row" alignItems="center" spacing={1} sx={{width: '33%'}}>
-          <Link href="https://github.com/playoffthecuff/" sx={{color: 'white'}}>
-            <img src={gitLogo} width="25" alt="Github" />
-          </Link>
-          <Link href="https://github.com/elizaveta-tukailo/" sx={{color: 'white'}}>
-            <img src={gitLogo} width="25" alt="Github" />
-          </Link>
-          <Link href="https://github.com/yuliaraitsyna" sx={{color: 'white'}}>
-            <img src={gitLogo} width="25" alt="Github" />
-          </Link>
+          {links.map((link, index) => (
+            <Link key={index} href={link.href} sx={{color: 'white'}}>
+              <GitHubIcon />
+            </Link>
+          ))}
         </Stack>
         <Typography sx={{color: 'white', width: '33%', textAlign: 'center'}}>© {new Date().getFullYear()}</Typography>
         <Link href="https://rs.school/react/" sx={{color: 'white', width: '33%', textAlign: 'right'}}>
