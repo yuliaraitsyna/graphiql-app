@@ -3,7 +3,6 @@ import {json, type LoaderFunctionArgs, type MetaFunction} from '@vercel/remix';
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {useTranslation} from 'react-i18next';
 import i18nServer from '../i18n.server';
-import Authorization from '~/components/authorization/authorization';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: data?.title}, {name: 'description', content: data?.description}];
@@ -40,7 +39,6 @@ export default function Index() {
           English
         </Button>
       </div>
-      <Authorization />
     </>
   );
 }

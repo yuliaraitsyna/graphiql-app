@@ -7,18 +7,22 @@ import {FormProps} from './models/formProps';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '~/utils/firebaseConfig';
 import {FormAction} from './models/formAction';
-import {useNavigate} from '@remix-run/react';
+import {useNavigate, useLocation} from '@remix-run/react';
 import {red} from '@mui/material/colors';
 
 const Authorization: React.FC = () => {
-  const [action, setAction] = useState<FormAction>(FormAction.SIGN_IN);
+  const location = useLocation();
+  const initialAction = location.pathname === '/sign-up' ? FormAction.SIGN_UP : FormAction.SIGN_IN;
+
+  const [action, setAction] = useState<FormAction>(initialAction);
   const [authError, setAuthError] = useState<string>('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    setAction(initialAction);
     setAuthError('');
-  }, [action]);
+  }, [initialAction]);
 
   const handleSubmit: SubmitHandler<FormProps> = async (data: FormProps) => {
     try {
@@ -47,6 +51,17 @@ const Authorization: React.FC = () => {
     setAuthError('');
   };
 
+  const toggleAction = () => {
+    const newAction = action === FormAction.SIGN_IN ? FormAction.SIGN_UP : FormAction.SIGN_IN;
+    setAction(newAction);
+
+    if (newAction === FormAction.SIGN_IN) {
+      navigate('/sign-in', {replace: true});
+    } else {
+      navigate('/sign-up', {replace: true});
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Typography component={'h5'} variant="h5" textAlign={'center'}>
@@ -61,12 +76,7 @@ const Authorization: React.FC = () => {
         {authError}
       </Typography>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
-        <Button
-          onClick={() =>
-            action === FormAction.SIGN_IN ? setAction(FormAction.SIGN_UP) : setAction(FormAction.SIGN_IN)
-          }>
-          {action === FormAction.SIGN_IN ? 'Sign up' : 'Sign in'}
-        </Button>
+        <Button onClick={toggleAction}>{action === FormAction.SIGN_IN ? 'Sign up' : 'Sign in'}</Button>
       </Box>
     </Container>
   );
