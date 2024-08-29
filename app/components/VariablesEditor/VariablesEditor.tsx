@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import {blue, grey} from '@mui/material/colors';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {Variable} from '../models/variable';
@@ -27,6 +27,19 @@ const initialVariable: Variable = {
 const VariablesEditor: React.FC = () => {
   const [variables, setVariables] = useState<Variable[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const storedVariables = localStorage.getItem('variables');
+    if (storedVariables) {
+      setVariables(JSON.parse(storedVariables));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (variables.length > 0) {
+      localStorage.setItem('variables', JSON.stringify(variables));
+    }
+  }, [variables]);
 
   const handleVariablerAddition = () => {
     setVariables([...variables, initialVariable]);
@@ -53,6 +66,9 @@ const VariablesEditor: React.FC = () => {
 
   const handleDelete = (index: number) => {
     const updatedVariables = variables.filter((_, i) => i !== index);
+    if (!updatedVariables.length) {
+      localStorage.removeItem('variables');
+    }
     setVariables(updatedVariables);
   };
 
