@@ -1,10 +1,10 @@
 import {Container, Grid, Typography} from '@mui/material';
-//import {TeamCard} from '../TeamCard/TeamCard';
+import {TeamCard} from '../TeamCard/TeamCard';
 import {useTranslation} from 'react-i18next';
-//import { Team } from '~/models/team';
 
 export function AboutTeam() {
   const {t} = useTranslation();
+  const team = t('page.main.team', {returnObjects: true});
   return (
     <Container maxWidth="lg" style={{paddingTop: '50px', paddingBottom: '50px'}}>
       <Typography component={'h3'} variant="h3" textAlign={'center'} style={{marginBottom: '16px'}}>
@@ -21,10 +21,9 @@ export function AboutTeam() {
         </Grid>
       </Grid>
       <Grid container spacing={2} justifyContent="center">
-        {/* {{teamObject.map((member:Team, index:number) => (
-          <TeamCard team={member} key={index} />
-        ))} }
-       */}
+        {Object.entries(team).map(([key, value]) => (
+          <TeamCard team={value} key={Number(key)} />
+        ))}
       </Grid>
     </Container>
   );
