@@ -1,6 +1,6 @@
 import {Box, Card, CardContent, Container, Grid, Typography} from '@mui/material';
 
-export default function AboutApp() {
+export function AboutApp() {
   return (
     <Container maxWidth="lg" style={{paddingTop: '50px', paddingBottom: '50px'}}>
       <Typography component={'h3'} variant="h3" textAlign={'center'} style={{marginBottom: '16px'}}>

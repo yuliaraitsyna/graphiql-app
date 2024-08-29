@@ -1,8 +1,8 @@
 import {json, type LoaderFunctionArgs, type MetaFunction} from '@vercel/remix';
 import i18nServer from '../i18n.server';
-import AboutTeam from '~/components/AboutTeam/AboutTeam';
-import AboutApp from '~/components/AboutApp/AboutApp';
-import Welcome from '~/components/Welcome/Welcome';
+import {AboutTeam} from '~/components/AboutTeam/AboutTeam';
+import {AboutApp} from '~/components/AboutApp/AboutApp';
+import {Welcome} from '~/components/Welcome/Welcome';
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: data?.title}, {name: 'description', content: data?.description}];
 };

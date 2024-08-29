@@ -1,7 +1,6 @@
 import {Box, Button, Container, Typography} from '@mui/material';
 import {Link as RemixLink} from '@remix-run/react';
-
-export default function Welcome() {
+export function Welcome() {
   return (
     <Container maxWidth="lg" sx={{paddingTop: '50px', paddingBottom: '50px'}}>
       <Box

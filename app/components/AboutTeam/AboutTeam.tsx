@@ -1,7 +1,6 @@
 import {Container, Grid, Typography} from '@mui/material';
-import {team} from '~/constants';
-import TeamCard from '../TeamCard/TeamCard';
-export default function AboutTeam() {
+import {TeamCard} from '../TeamCard/TeamCard';
+export function AboutTeam() {
   return (
     <Container maxWidth="lg" style={{paddingTop: '50px', paddingBottom: '50px'}}>
       <Typography component={'h3'} variant="h3" textAlign={'center'} style={{marginBottom: '16px'}}>

@@ -12,7 +12,7 @@ interface TeamCardProps {
   key: number;
 }
 
-const TeamCard: React.FC<TeamCardProps> = ({team}) => {
+export const TeamCard: React.FC<TeamCardProps> = ({team}) => {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Box display="flex" height="100%">
@@ -43,4 +43,3 @@ const TeamCard: React.FC<TeamCardProps> = ({team}) => {
     </Grid>
   );
 };
-export default TeamCard;
