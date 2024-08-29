@@ -27,12 +27,12 @@ const Authorization: React.FC = () => {
 
         localStorage.setItem('user', JSON.stringify(userCredentials.user.email));
 
-        setAuthError(' ');
+        setAuthError('');
         navigate('/');
       } else if (action === FormAction.SIGN_UP) {
         const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
-        setAuthError(' ');
+        setAuthError('');
         navigate('/');
 
         localStorage.setItem('user', JSON.stringify(userCredentials.user.email));
@@ -44,7 +44,7 @@ const Authorization: React.FC = () => {
   };
 
   const handleInputChange = () => {
-    setAuthError(' ');
+    setAuthError('');
   };
 
   return (

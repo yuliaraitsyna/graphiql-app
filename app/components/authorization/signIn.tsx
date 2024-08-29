@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, Typography, TextField, Button} from '@mui/material';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {FormProps} from './models/formProps';
+import {emailPattern} from './models/regex';
 
 const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () => void}> = ({
   onSubmit,
@@ -27,7 +28,7 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
           {...register('email', {
             required: 'Email is required',
             pattern: {
-              value: /^[0-9A-Za-z]{1,}@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,}$/,
+              value: emailPattern,
               message: 'Invalid email address',
             },
             onChange: () => {
