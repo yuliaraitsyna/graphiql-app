@@ -2,7 +2,7 @@ import {Menu, MenuItem} from '@mui/material';
 import {Link as RemixLink} from '@remix-run/react';
 import WhiteButton from '../UI/WhiteButton';
 import {useTranslation} from 'react-i18next';
-
+import {pages} from '~/constants';
 interface MobileMenuProps {
   anchorEl: null | HTMLElement;
   open: boolean;
@@ -24,23 +24,23 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose})
         },
       }}>
       <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to="/">
-          {t('mainPage')}
+        <WhiteButton component={RemixLink} to={pages.main.path}>
+          {t(pages.main.translationKey)}
         </WhiteButton>
       </MenuItem>
       <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to="/sign-out">
-          {t('signOut')}
+        <WhiteButton component={RemixLink} to={pages.signOut.path}>
+          {t(pages.signOut.translationKey)}
         </WhiteButton>
       </MenuItem>
       <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to="/sign-in">
-          {t('signIn')}
+        <WhiteButton component={RemixLink} to={pages.signIn.path}>
+          {t(pages.signIn.translationKey)}
         </WhiteButton>
       </MenuItem>
       <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to="/sign-up">
-          {t('signUp')}
+        <WhiteButton component={RemixLink} to={pages.signUp.path}>
+          {t(pages.signUp.translationKey)}
         </WhiteButton>
       </MenuItem>
     </Menu>

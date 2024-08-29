@@ -9,6 +9,7 @@ import WhiteButton from '../UI/WhiteButton';
 import Logo from '../../../public/logo.svg';
 import WhiteLink from '../UI/WhiteLink';
 import {MobileMenu} from '../MobileMenu/MobileMenu';
+import {pages} from '../../constants/index';
 
 export function Header() {
   const {t} = useTranslation();
@@ -47,11 +48,11 @@ export function Header() {
               padding: {xs: '10px 0', sm: '0'},
             }}>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <WhiteLink to="/">
-                <img width="40" src={Logo} alt="App logo" />
+              <WhiteLink to={pages.main.path}>
+                <img width="40" src={Logo} alt={t('common.altAppLogo')} />
               </WhiteLink>
               <Box display={{xs: 'none', md: 'flex'}} alignItems="center">
-                <WhiteLink to="/">{t('mainPage')}</WhiteLink>
+                <WhiteLink to={pages.main.path}>{t(pages.main.translationKey)}</WhiteLink>
               </Box>
             </Stack>
             <Box display={{xs: 'flex', md: 'none'}}>
@@ -63,14 +64,14 @@ export function Header() {
             <Box display={{xs: 'none', md: 'flex'}} alignItems="center">
               <LanguageToggler />
               <Stack direction="row" spacing={1} ml={2}>
-                <WhiteButton component={RemixLink} to="/sign-out">
-                  {t('signOut')}
+                <WhiteButton component={RemixLink} to={pages.signOut.path}>
+                  {t(pages.signOut.translationKey)}
                 </WhiteButton>
-                <WhiteButton component={RemixLink} to="/sign-in">
-                  {t('signIn')}
+                <WhiteButton component={RemixLink} to={pages.signIn.translationKey}>
+                  {t(pages.signIn.translationKey)}
                 </WhiteButton>
-                <WhiteButton component={RemixLink} to="/sign-up">
-                  {t('signUp')}
+                <WhiteButton component={RemixLink} to={pages.signUp.translationKey}>
+                  {t(pages.signUp.translationKey)}
                 </WhiteButton>
               </Stack>
             </Box>
