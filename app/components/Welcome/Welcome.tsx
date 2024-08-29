@@ -1,6 +1,9 @@
 import {Box, Button, Container, Typography} from '@mui/material';
 import {Link as RemixLink} from '@remix-run/react';
+import {useTranslation} from 'react-i18next';
+import {pages} from '~/constants';
 export function Welcome() {
+  const {t} = useTranslation();
   return (
     <Container maxWidth="lg" sx={{paddingTop: '50px', paddingBottom: '50px'}}>
       <Box
@@ -16,7 +19,7 @@ export function Welcome() {
           boxShadow: 2,
         }}>
         <Typography component={'h2'} variant="h3" textAlign={'center'} style={{marginBottom: '24px'}}>
-          Welcome!
+          {t('page.main.welcome')} / {t('page.main.welcomeBack')}, User!
         </Typography>
         <Box
           display="flex"
@@ -30,11 +33,16 @@ export function Welcome() {
             color="primary"
             sx={{marginBottom: 2, marginRight: 1}}
             component={RemixLink}
-            to="/sign-in">
-            Sign In
+            to={pages.signIn.path}>
+            {t(pages.signIn.translationKey)}
           </Button>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2}} component={RemixLink} to="/sign-up">
-            Sign Up
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{marginBottom: 2}}
+            component={RemixLink}
+            to={pages.signUp.path}>
+            {t(pages.signUp.translationKey)}
           </Button>
         </Box>
         <Box
@@ -49,19 +57,24 @@ export function Welcome() {
             color="primary"
             sx={{marginBottom: 2, marginRight: 1}}
             component={RemixLink}
-            to="/rest">
-            Rest Client
+            to={pages.restClient.path}>
+            {t(pages.restClient.translationKey)}
           </Button>
           <Button
             variant="contained"
             color="primary"
             sx={{marginBottom: 2, marginRight: 1}}
             component={RemixLink}
-            to="/graphql">
-            GraphiQL Client
+            to={pages.graphqlClient.path}>
+            {t(pages.graphqlClient.translationKey)}
           </Button>
-          <Button variant="contained" color="primary" sx={{marginBottom: 2}} component={RemixLink} to="/history">
-            History
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{marginBottom: 2}}
+            component={RemixLink}
+            to={pages.history.path}>
+            {t(pages.history.translationKey)}
           </Button>
         </Box>
       </Box>

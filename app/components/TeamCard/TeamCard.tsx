@@ -1,14 +1,10 @@
+/* eslint-disable react/prop-types */
 import {Avatar, Box, Card, CardContent, Grid, Typography} from '@mui/material';
 import {Link} from '@remix-run/react';
+import {Team} from '~/models/team';
 
 interface TeamCardProps {
-  team: {
-    image: string;
-    git: string;
-    name: string;
-    role: string;
-    description: string;
-  };
+  team: Team;
   key: number;
 }
 
