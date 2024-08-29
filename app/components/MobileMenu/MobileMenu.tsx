@@ -9,7 +9,7 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose}) => {
+export const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose}) => {
   const {t} = useTranslation();
   return (
     <Menu
@@ -46,4 +46,3 @@ const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose}) => {
     </Menu>
   );
 };
-export default MobileMenu;

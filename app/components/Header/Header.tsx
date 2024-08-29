@@ -8,9 +8,9 @@ import LanguageToggler from '../UI/LanguageToggler';
 import WhiteButton from '../UI/WhiteButton';
 import Logo from '../../../public/logo.svg';
 import WhiteLink from '../UI/WhiteLink';
-import MobileMenu from '../MobileMenu/MobileMenu';
+import {MobileMenu} from '../MobileMenu/MobileMenu';
 
-export default function Header() {
+export function Header() {
   const {t} = useTranslation();
   const theme = useTheme();
   const [bgColor, setBgColor] = useState(theme.palette.primary.main);
