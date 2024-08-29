@@ -12,18 +12,16 @@ export default function LanguageToggler() {
     }
   };
   return (
-    <>
-      <ToggleButtonGroup
-        color="primary"
-        value={language}
-        exclusive
-        onChange={handleChange}
-        aria-label="Language"
-        size="small"
-        style={{backgroundColor: 'white'}}>
-        <ToggleButton value="en">EN</ToggleButton>
-        <ToggleButton value="es">ES</ToggleButton>
-      </ToggleButtonGroup>
-    </>
+    <ToggleButtonGroup
+      color="primary"
+      value={language}
+      exclusive
+      onChange={handleChange}
+      aria-label="Language"
+      size="small"
+      style={{backgroundColor: 'white'}}>
+      <ToggleButton value="en">EN</ToggleButton>
+      <ToggleButton value="es">ES</ToggleButton>
+    </ToggleButtonGroup>
   );
 }
