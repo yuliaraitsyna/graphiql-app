@@ -2,7 +2,7 @@ import {Box, Container, Link, Stack, Typography} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import {GitHub as GitHubIcon} from '@mui/icons-material';
 
-export default function Footer() {
+export function Footer() {
   const theme = useTheme();
   const links = [
     {href: 'https://github.com/playoffthecuff/', alt: 'Github'},

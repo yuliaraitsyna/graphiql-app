@@ -3,7 +3,7 @@ import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRoute
 import i18nServer, {localeCookie} from './i18n.server';
 import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
-import Footer from './components/Footer/Footer';
+import {Footer} from './components/Footer';
 
 export const handle = {i18n: ['translation']};
 
