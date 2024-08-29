@@ -57,6 +57,12 @@ const VariablesEditor: React.FC = () => {
     }
   };
 
+  const handleCheckboxChange = (index: number) => {
+    const updatedVariables = [...variables];
+    updatedVariables[index].checked = !updatedVariables[index].checked;
+    setVariables(updatedVariables);
+  };
+
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.currentTarget.blur();
@@ -116,7 +122,7 @@ const VariablesEditor: React.FC = () => {
                 key={index}
                 sx={index === editingIndex ? {backgroundColor: blue[100]} : {backgroundColor: 'transparent'}}>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
-                  <Checkbox checked={variable.checked} onChange={() => {}}></Checkbox>
+                  <Checkbox checked={variable.checked} onChange={() => handleCheckboxChange(index)}></Checkbox>
                 </TableCell>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
                   <Input
