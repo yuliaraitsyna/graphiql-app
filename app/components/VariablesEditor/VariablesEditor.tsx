@@ -28,13 +28,41 @@ const VariablesEditor: React.FC = () => {
   const [variables, setVariables] = useState<Variable[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
+  const handleVariablerAddition = () => {
+    setVariables([...variables, initialVariable]);
+  };
+
+  const handleEditClick = (index: number) => {
+    setEditingIndex(index);
+  };
+
+  const handleVariableChange = (field: keyof Variable, value: string) => {
+    if (editingIndex !== null) {
+      const updatedVariables = [...variables];
+      updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
+      setVariables(updatedVariables);
+    }
+  };
+
+  const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.currentTarget.blur();
+      setEditingIndex(null);
+    }
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedVariables = variables.filter((_, i) => i !== index);
+    setVariables(updatedVariables);
+  };
+
   return (
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
           Variables
         </Typography>
-        <Button variant="contained" onClick={() => {}}>
+        <Button variant="contained" onClick={handleVariablerAddition}>
           Add
         </Button>
       </Box>
@@ -80,8 +108,8 @@ const VariablesEditor: React.FC = () => {
                     disableUnderline
                     fullWidth
                     disabled={index !== editingIndex}
-                    onChange={() => {}}
-                    onKeyDown={() => {}}
+                    onChange={e => handleVariableChange('name', e.target.value)}
+                    onKeyDown={handleEditFinish}
                     onBlur={() => setEditingIndex(null)}
                   />
                 </TableCell>
@@ -91,17 +119,17 @@ const VariablesEditor: React.FC = () => {
                     disableUnderline
                     fullWidth
                     disabled={index !== editingIndex}
-                    onChange={() => {}}
-                    onKeyDown={() => {}}
+                    onChange={e => handleVariableChange('name', e.target.value)}
+                    onKeyDown={handleEditFinish}
                     onBlur={() => setEditingIndex(null)}
                   />
                 </TableCell>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
                   <Box display={'flex'} alignItems={'center'}>
-                    <Button onClick={() => {}}>
+                    <Button onClick={() => handleEditClick(index)}>
                       <EditIcon />
                     </Button>
-                    <Button onClick={() => {}}>
+                    <Button onClick={() => handleDelete(index)}>
                       <DeleteIcon />
                     </Button>
                   </Box>
