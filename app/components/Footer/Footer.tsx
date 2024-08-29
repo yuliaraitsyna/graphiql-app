@@ -13,7 +13,7 @@ export default function Footer() {
       }}>
       <Container maxWidth="lg" sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Stack direction="row" alignItems="center" spacing={1} sx={{width: '33%'}}>
-          <Link href="https://github.com/playoffthecuff/graphiql-app" sx={{color: 'white'}}>
+          <Link href="https://github.com/playoffthecuff/" sx={{color: 'white'}}>
             <img src={gitLogo} width="25" alt="Github" />
           </Link>
           <Link href="https://github.com/elizaveta-tukailo/" sx={{color: 'white'}}>
