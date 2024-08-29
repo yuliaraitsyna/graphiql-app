@@ -17,6 +17,7 @@ import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {Variable} from '../models/variable';
+import {variableNamePattern, variableValuePattern} from '../models/regex';
 
 const initialVariable: Variable = {
   name: '',
@@ -50,10 +51,14 @@ const VariablesEditor: React.FC = () => {
   };
 
   const handleVariableChange = (field: keyof Variable, value: string) => {
-    if (editingIndex !== null) {
-      const updatedVariables = [...variables];
-      updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
-      setVariables(updatedVariables);
+    const pattern = field === 'name' ? variableNamePattern : variableValuePattern;
+
+    if (pattern.test(value) || value === '') {
+      if (editingIndex !== null) {
+        const updatedVariables = [...variables];
+        updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
+        setVariables(updatedVariables);
+      }
     }
   };
 
