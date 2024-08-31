@@ -18,7 +18,7 @@ function StrNum({content}: {content: string}) {
 }
 
 export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue = '', onChange}: Props) {
-  const [content, setContent] = useState(prettifyJson(defaultValue));
+  const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue) : defaultValue);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
