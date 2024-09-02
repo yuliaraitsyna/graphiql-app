@@ -45,25 +45,25 @@
   border-right: 1px solid #666;
 }
 
-.input-wrapper {
+.inputWrapper {
   display: grid;
   font-size: inherit;
   line-height: normal;
 }
-.input-wrapper::after {
+.inputWrapper::after {
   content: attr(data-replicated-value) ' ';
   white-space: pre;
   visibility: hidden;
 }
-.input-wrapper > textarea {
+.inputWrapper > textarea {
   resize: none;
   overflow: hidden;
   &:disabled {
     color: rgba(0, 0, 0, 0.87);
   }
 }
-.input-wrapper > textarea,
-.input-wrapper::after {
+.inputWrapper > textarea,
+.inputWrapper::after {
   border: none;
   outline: none;
   padding: 0;
