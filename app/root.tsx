@@ -3,6 +3,11 @@ import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRoute
 import i18nServer, {localeCookie} from './i18n.server';
 import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
+import {Header} from './components/Header/Header';
+import {Footer} from './components/Footer';
+export function links() {
+  return [{rel: 'stylesheet', href: './app/styles/global.css'}];
+}
 
 export const handle = {i18n: ['translation']};
 
@@ -23,7 +28,9 @@ export function Layout({children}: {children: React.ReactNode}) {
         <Links />
       </head>
       <body>
-        {children}
+        <Header />
+        <main>{children}</main>
+         <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
