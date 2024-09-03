@@ -4,6 +4,10 @@ import i18nServer, {localeCookie} from './i18n.server';
 import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
 import {Header} from './components/Header/Header';
+import {Footer} from './components/Footer';
+export function links() {
+  return [{rel: 'stylesheet', href: './app/styles/global.css'}];
+}
 
 export const handle = {i18n: ['translation']};
 
@@ -25,7 +29,8 @@ export function Layout({children}: {children: React.ReactNode}) {
       </head>
       <body>
         <Header />
-        {children}
+        <main>{children}</main>
+         <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
