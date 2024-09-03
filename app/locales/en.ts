@@ -12,6 +12,10 @@ export default {
         'RS School is a free and community-based online education program conducted by The Rolling Scopes Community since 2013. Currently 500+ developers from different countries and companies involve in the education process as mentors.',
       aboutCourse:
         'React course provides by RS School is designed for developers who want to harness the power of one of the most popular JavaScript libraries in the world. Dive deep into the essentials of React and learn how to create dynamic, high-performance user interfaces. Throughout the course, you will engage in hands-on projects that solidify your understanding and give you practical experience. Learn best practices for building scalable applications, manage application state effectively, and optimize performance.',
+      aboutText1:
+        'The objective of this course is to acquire knowledge and practical experience in working with React, promotebest coding practices, and provide an opportunity for collaborative teamwork.',
+      aboutText2:
+        'Working together as a team on a coding task brings out the best in all of us, and our collaboration is a testament to the synergy we create. Each team member brings unique skills and perspectives, which allows us to tackle challenges.',
       restTitle: 'REST client',
       restDescription:
         'Traditional approaches to calling a REST API require the API user to know a programming language, understand the APIs protocol, and interpret the response. A REST client streamlines this process, enabling developers of all levels to explore, test, and debug REST APIs from an intuitive user interface.',

@@ -9,6 +9,10 @@ export default {
         'RS School es un programa de educación en línea gratuito y basado en la comunidad dirigido por The Rolling Scopes Community desde 2013. Actualmente, más de 500 desarrolladores de diferentes países y empresas participan en el proceso educativo como mentores.',
       aboutCourse:
         'React curso proporciona por RS School está diseñado para desarrolladores que quieren aprovechar el poder de una de las bibliotecas de JavaScript más populares en el mundo. Sumérgete en los fundamentos de React y aprende a crear interfaces de usuario dinámicas y de alto rendimiento. A lo largo del curso, participará en proyectos prácticos que consolidarán sus conocimientos y le proporcionarán experiencia práctica. Aprenda las mejores prácticas para crear aplicaciones escalables, gestionar el estado de la aplicación de forma eficaz y optimizar el rendimiento.',
+      aboutText1:
+        'El objetivo de este curso es adquirir conocimientos y experiencia práctica en el trabajo con React, promover las mejores prácticas de codificación y proporcionar una oportunidad para el trabajo colaborativo en equipo.',
+      aboutText2:
+        'Trabajar en equipo en una tarea de codificación saca lo mejor de cada uno de nosotros, y nuestra colaboración es un testimonio de la sinergia que creamos. Cada miembro del equipo aporta habilidades y perspectivas únicas, lo que nos permite hacer frente a los desafíos.Trabajar juntos como un equipo en una tarea de codificación saca lo mejor de todos nosotros, y nuestra colaboración es un testimonio de la sinergia que creamos. Cada miembro del equipo aporta habilidades y perspectivas únicas, lo que nos permite afrontar los retos.',
       restTitle: 'Cliente REST',
       restDescription:
         'Los enfoques tradicionales para llamar a una API REST requieren que el usuario de la API conozca un lenguaje de programación, comprenda el protocolo de la API e interprete la respuesta. Un cliente REST agiliza este proceso, permitiendo a desarrolladores de todos los niveles explorar, probar y depurar las API REST desde una interfaz de usuario intuitiva.',
