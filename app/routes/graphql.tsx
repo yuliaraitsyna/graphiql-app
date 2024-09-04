@@ -1,5 +1,5 @@
 import GraphiqlClient from '~/components/GraphiqlClient/GraphiqlClient';
 
-export default function SignInRoute() {
+export default function GraphqlRoute() {
   return <GraphiqlClient />;
 }
