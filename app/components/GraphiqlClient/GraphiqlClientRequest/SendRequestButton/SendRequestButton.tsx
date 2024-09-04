@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 interface UrlProps {
   endpointUrl: string;
   body: string;
-  headers: Record<string, string>[];
+  headers: object;
 }
 
 interface SendRequestButtonProps {
