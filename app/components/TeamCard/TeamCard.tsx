@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import {Avatar, Box, Card, CardContent, Grid, Typography} from '@mui/material';
 import {Link} from '@remix-run/react';
-import {Team} from '~/models/team';
+import {Team} from '~/models/index';
 
 interface TeamCardProps {
   team: Team;
