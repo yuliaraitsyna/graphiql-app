@@ -2,7 +2,7 @@ import {Grid, TextField, Typography} from '@mui/material';
 import {UrlProps} from './models';
 import styles from './Url.module.css';
 
-export const Url: React.FC<UrlProps> = ({label, name, value, onInput, onBlur, placeholder = ''}) => {
+export const Url: React.FC<UrlProps> = ({label, name, value, onInput, onBlur, onChange, placeholder = ''}) => {
   return (
     <Grid className={styles.urlRow} container spacing={2} alignItems="center">
       <Grid item xs={12} sm={3}>
@@ -17,6 +17,7 @@ export const Url: React.FC<UrlProps> = ({label, name, value, onInput, onBlur, pl
           size="small"
           name={name}
           placeholder={placeholder}
+          onChange={onChange}
           onInput={onInput}
           onBlur={onBlur}
           value={value}
