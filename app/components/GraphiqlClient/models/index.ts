@@ -4,17 +4,17 @@ import {Variable} from '~/components/models/variable';
 export type RequestStatus = 'idle' | 'pending' | 'fullfilled' | 'rejected';
 
 export interface GraphqlRequestState {
-  endpointValue: string;
-  sdlValue: string;
-  queryValue: string;
+  endpointUrl: string;
+  sdlUrl: string;
+  query: string;
   headers: Header | Header[] | null;
-  variablesValue: Variable | Variable[] | null;
+  variables: Variable | Variable[] | null;
 }
 
 export const initialStateGraphqlRequest: GraphqlRequestState = {
-  endpointValue: '',
-  sdlValue: '',
-  queryValue: '',
+  endpointUrl: '',
+  sdlUrl: '',
+  query: '',
   headers: null,
-  variablesValue: null,
+  variables: null,
 };

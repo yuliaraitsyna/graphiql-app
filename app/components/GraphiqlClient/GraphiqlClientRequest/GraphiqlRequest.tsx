@@ -9,28 +9,38 @@ import JsonEditor from '~/components/JsonEditor/JsonEditor';
 
 export function GraphiqlRequest() {
   const {t} = useTranslation();
-  const {endpointUrl, sdlUrl, url, handleEndpointUrlChange, handleEndpointUrlBlur, handleSDLChange} = useGraphqlData();
+  const {endpointUrl, sdlUrl, graphqlData, handleEndpointUrlChange, handleEndpointUrlBlur, handleSDLChange} =
+    useGraphqlData();
   return (
     <Container maxWidth="xl">
       <Typography component={'h4'} variant="h4" textAlign={'center'}>
         {t('links.graphqlClient')}
       </Typography>
-      <form>
+      <div>
         <Box sx={{flexGrow: 1, padding: 2}}>
-          <SendRequestButton url={url} />
+          <SendRequestButton url={graphqlData} />
           <Url
+            label={t('page.graphiql.endpointUrl')}
             name="endpoint"
             value={endpointUrl}
-            label={t('page.graphiql.endpointUrl')}
             onChange={handleEndpointUrlChange}
             onBlur={handleEndpointUrlBlur}
+            placeholder={t('page.graphiql.placeholderEndpointUrl')}
           />
-          <Url name="sdl" value={sdlUrl} label={t('page.graphiql.sdlUrl')} onChange={handleSDLChange} />
+
+          <Url
+            label={t('page.graphiql.sdlUrl')}
+            name="sdl"
+            value={sdlUrl}
+            onChange={handleSDLChange}
+            placeholder={t('page.graphiql.placeholderSdlUrl')}
+          />
         </Box>
+
         <HeadersEditor />
         <JsonEditor type="JSON" mode="edit" />
         <VariablesEditor />
-      </form>
+      </div>
     </Container>
   );
 }

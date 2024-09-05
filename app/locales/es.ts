@@ -49,6 +49,13 @@ export default {
       ],
       altAppLogo: 'Logotipo de la aplicación',
     },
+    graphiql: {
+      sendButton: 'Enviar',
+      endpointUrl: 'URL del punto final',
+      placeholderEndpointUrl: 'Introduzca la URL del punto final',
+      sdlUrl: 'LDE Url',
+      placeholderSdlUrl: 'Introduzca la URL de LDE',
+    },
   },
   links: {
     signIn: 'Iniciar sesión',

@@ -51,6 +51,13 @@ export default {
         },
       ],
     },
+    graphiql: {
+      sendButton: 'Send',
+      endpointUrl: 'Endpoint URL',
+      placeholderEndpointUrl: 'Enter endpoint URL',
+      sdlUrl: 'SDL URL',
+      placeholderSdlUrl: 'Enter SDL URL',
+    },
   },
   links: {
     signIn: 'Sign in',

@@ -1,25 +1,22 @@
 import {Button} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-
-interface UrlProps {
-  endpointUrl: string;
-  body: string;
-  headers: object;
-}
+import {GraphqlRequestState} from '../../models';
+import styles from './SendRequestButton.module.css';
 
 interface SendRequestButtonProps {
-  url: UrlProps;
+  url: GraphqlRequestState;
 }
 
 export const SendRequestButton: React.FC<SendRequestButtonProps> = ({url}) => {
   const {t} = useTranslation();
   const sendGraphqlRequest = () => {
     console.log(url);
-    //handle result and save to ls
   };
   return (
-    <Button variant="contained" onClick={sendGraphqlRequest}>
-      {t('page.graphiql.sendButton')}
-    </Button>
+    <div className={styles.sendRequestBtnWrap}>
+      <Button variant="contained" onClick={sendGraphqlRequest}>
+        {t('page.graphiql.sendButton')}
+      </Button>
+    </div>
   );
 };
