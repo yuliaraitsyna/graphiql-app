@@ -16,8 +16,12 @@ import {blue, grey} from '@mui/material/colors';
 import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {Variable} from '../models/variable';
-import {variableNamePattern, variableValuePattern} from '../models/regex';
+import {Variable} from './models/variable';
+import {variableNamePattern, variableValuePattern} from './models/regex';
+
+interface VariableProps {
+  setStoredVariables: (headers: Variable[]) => void;
+}
 
 const initialVariable: Variable = {
   name: '',
@@ -25,16 +29,18 @@ const initialVariable: Variable = {
   checked: false,
 };
 
-const VariablesEditor: React.FC = () => {
+const VariablesEditor: React.FC<VariableProps> = ({setStoredVariables}) => {
   const [variables, setVariables] = useState<Variable[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const storedVariables = localStorage.getItem('variables');
     if (storedVariables) {
-      setVariables(JSON.parse(storedVariables));
+      const parsedVariables = JSON.parse(storedVariables);
+      setVariables(parsedVariables);
+      setStoredVariables(parsedVariables);
     }
-  }, []);
+  }, [setStoredVariables]);
 
   useEffect(() => {
     if (variables.length > 0) {
@@ -44,6 +50,7 @@ const VariablesEditor: React.FC = () => {
 
   const handleVariablerAddition = () => {
     setVariables([...variables, initialVariable]);
+    setStoredVariables([...variables, initialVariable]);
   };
 
   const handleEditClick = (index: number) => {
@@ -58,6 +65,7 @@ const VariablesEditor: React.FC = () => {
         const updatedVariables = [...variables];
         updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
         setVariables(updatedVariables);
+        setStoredVariables(updatedVariables);
       }
     }
   };
@@ -66,6 +74,7 @@ const VariablesEditor: React.FC = () => {
     const updatedVariables = [...variables];
     updatedVariables[index].checked = !updatedVariables[index].checked;
     setVariables(updatedVariables);
+    setStoredVariables(updatedVariables);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -81,6 +90,7 @@ const VariablesEditor: React.FC = () => {
       localStorage.removeItem('variables');
     }
     setVariables(updatedVariables);
+    setStoredVariables(updatedVariables);
   };
 
   return (
