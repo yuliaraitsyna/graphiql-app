@@ -11,8 +11,7 @@ type UrlPartToChange = 'endpoint' | 'query' | 'headers' | 'variables';
 export default function transformGraphUrl(urlPartToChange: UrlPartToChange, value: string, data: Url): void {
   const {endpointUrl, query, headers, variables} = data;
   const method = 'GRAPHQL';
-  let newUrl,
-    encodedEndpoint,
+  let encodedEndpoint,
     encodedQuery,
     encodedVariables = '';
   encodedEndpoint = endpointUrl ? btoa(endpointUrl) : '';
@@ -34,9 +33,6 @@ export default function transformGraphUrl(urlPartToChange: UrlPartToChange, valu
     case 'variables':
       encodedVariables = JSON.stringify(JSON.parse(value));
       break;
-    default:
-      newUrl = `/${encodedEndpoint}/${encodedQuery + encodedVariables}/?${headers}`;
-      break;
   }
   const encodedBody = btoa(JSON.stringify({encodedQuery, encodedVariables}));
 
@@ -46,6 +42,6 @@ export default function transformGraphUrl(urlPartToChange: UrlPartToChange, valu
     encodedBody ? `${encodedBody}/` : '',
     headersString ? `?${headersString}` : '',
   ];
-  newUrl = `/${urlParts.join('')}`;
+  const newUrl = `/${urlParts.join('')}`;
   window.history.replaceState({}, '', newUrl);
 }
