@@ -6,7 +6,7 @@ import '@fontsource/roboto';
 import {Header} from './components/Header/Header';
 import {Footer} from './components/Footer';
 export function links() {
-  return [{rel: 'stylesheet', href: './app/styles/global.css'}];
+  return [{rel: 'stylesheet', href: '/app/styles/global.css'}];
 }
 
 export const handle = {i18n: ['translation']};
@@ -30,7 +30,7 @@ export function Layout({children}: {children: React.ReactNode}) {
       <body>
         <Header />
         <main>{children}</main>
-         <Footer />
+        <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
