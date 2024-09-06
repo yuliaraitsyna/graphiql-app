@@ -1,5 +1,9 @@
-import GraphiqlClient from '../components/GraphiqlClient/GraphiqlClient';
+import {GraphiqlRequest} from '../components/GraphiqlClient/GraphiqlClientRequest';
 
 export default function GraphqlEndpointBodyRoute() {
-  return <GraphiqlClient />;
+  return (
+    <>
+      <GraphiqlRequest />;
+    </>
+  );
 }

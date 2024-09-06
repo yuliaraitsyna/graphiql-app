@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import transformGraphUrl from '../utils/transformGraphUrl';
+import {transformGraphUrl} from '../utils/transformGraphUrl';
 import encodeHeaders from '../utils/encodeHeaders';
 
 jest.mock('../utils/encodeHeaders');

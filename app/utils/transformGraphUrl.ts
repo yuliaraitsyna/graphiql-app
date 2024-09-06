@@ -8,7 +8,7 @@ interface Url {
 }
 type UrlPartToChange = 'endpoint' | 'query' | 'headers' | 'variables';
 
-export default function transformGraphUrl(urlPartToChange: UrlPartToChange, value: string, data: Url): void {
+export function transformGraphUrl(urlPartToChange: UrlPartToChange, value: string, data: Url): void {
   const {endpointUrl, query, headers, variables} = data;
   const method = 'GRAPHQL';
   let encodedEndpoint,
