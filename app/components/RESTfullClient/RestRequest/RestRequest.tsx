@@ -7,38 +7,26 @@ import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {RESTAction} from './models/RESTAction';
 import {useNavigate} from '@remix-run/react';
 
-interface RestRequestProps {
-  initialMethod: HTTPMethods;
-}
-
-const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
-  const [method, setMethod] = useState<HTTPMethods>(initialMethod);
+const RestRequest: React.FC = () => {
+  const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [URL, setURL] = useState<string>('');
 
   const navigate = useNavigate();
 
-  const handleSendingRequest = () => {
-    const storedHeaders = localStorage.getItem('headers');
-    const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
+  const handleSendingRequest = async () => {
+    const headers = localStorage.getItem('headers') ? JSON.parse(localStorage.getItem('headers') || '') : {};
+    const variables = localStorage.getItem('variables') ? JSON.parse(localStorage.getItem('variables') || '') : {};
 
-    let queryParams = '';
+    const queryParams = new URLSearchParams(variables).toString();
+    const headerParams = Object.entries(headers)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+      .join('&');
 
-    if (headers) {
-      const encodedHeaders = Object.entries(headers)
-        .map(([key, value]) => {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
-        })
-        .join('&');
-      queryParams = `${encodedHeaders}`;
-    }
+    const encodedURL = btoa(encodeURIComponent(URL));
+    const finalUrl = `/${method}/${encodedURL}?${queryParams}${headerParams ? `&${headerParams}` : ''}`;
 
-    if (URL) {
-      const encodedURL = btoa(unescape(encodeURIComponent(URL)));
-      navigate(`/${method}?url=${encodedURL}${queryParams}`, {replace: true});
-    } else {
-      navigate(`/${method}`, {replace: true});
-    }
+    navigate(finalUrl, {replace: true});
   };
 
   const handleMethodSelection = (event: SelectChangeEvent) => {

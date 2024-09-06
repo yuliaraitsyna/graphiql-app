@@ -1,5 +1,5 @@
 import RestRequest from '~/components/RESTfullClient/RestRequest/RestRequest';
 
-export default function RESTMethodRoute() {
+export default function RESTMethodUrlRoute() {
   return <RestRequest />;
 }
