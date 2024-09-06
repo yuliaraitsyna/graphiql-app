@@ -6,6 +6,8 @@ import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
 import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {RESTAction} from './models/RESTAction';
 import {useNavigate} from '@remix-run/react';
+import {Header} from '~/components/HeadersEditor/models/header';
+import {Variable} from '~/components/models/variable';
 
 interface RestRequestProps {
   initialMethod: HTTPMethods;
@@ -14,13 +16,15 @@ interface RestRequestProps {
 const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
   const [method, setMethod] = useState<HTTPMethods>(initialMethod);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
+  const [headers, setHeaders] = useState<Header[]>([]);
+  const [variables, setVariables] = useState<Variable[]>([]);
   const [URL, setURL] = useState<string>('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedHeaders = localStorage.getItem('headers');
-    const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
+    //const storedHeaders = localStorage.getItem('headers');
+    //const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
 
     const encodedHeaders = Object.entries(headers)
       .map(([key, value]) => {
@@ -37,7 +41,7 @@ const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
     } else {
       navigate(`/rest/${method}`, {replace: true});
     }
-  }, [method, URL, navigate]);
+  }, [method, URL, navigate, headers]);
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
     setMethod(event.target.value as HTTPMethods);
@@ -51,6 +55,14 @@ const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
 
   const handleURLChange = (value: string) => {
     setURL(value);
+  };
+
+  const handleHeadersSetting = (storedHeaders: Header[]) => {
+    setHeaders(storedHeaders);
+  };
+
+  const handleVariablesSetting = (storedVariables: Variable[]) => {
+    setVariables(storedVariables);
   };
 
   return (
