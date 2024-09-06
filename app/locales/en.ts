@@ -68,4 +68,9 @@ export default {
     restClient: 'Rest Client',
     graphqlClient: 'GraphiQL Client',
   },
+  errors: {
+    graphql: {
+      endpoint: 'Check endpoint url!',
+    },
+  },
 };

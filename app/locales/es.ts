@@ -66,4 +66,9 @@ export default {
     restClient: 'Resto Cliente',
     graphqlClient: 'Cliente GraphiQL',
   },
+  errors: {
+    graphql: {
+      endpoint: 'Comprobar url de punto final!',
+    },
+  },
 };

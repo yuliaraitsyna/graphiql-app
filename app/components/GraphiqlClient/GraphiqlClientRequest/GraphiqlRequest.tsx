@@ -9,10 +9,18 @@ import useGraphqlData from '../../../hooks/useGraphqlData';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
-  const {endpointUrl, sdlUrl, handleEndpointUrlChange, handleEndpointUrlBlur, handleSDLChange, handleSendRequest} =
-    useGraphqlData();
+  const {
+    errors,
+    endpointUrl,
+    sdlUrl,
+    handleEndpointUrlChange,
+    handleEndpointUrlBlur,
+    handleSDLChange,
+    handleSendRequest,
+  } = useGraphqlData();
   return (
     <Container maxWidth="xl">
+      {errors ? Object.entries(errors).map(([key, value]) => <div key={key}>Errors: {value as string}</div>) : null}
       <Typography component={'h4'} variant="h4" textAlign={'center'}>
         {t('links.graphqlClient')}
       </Typography>

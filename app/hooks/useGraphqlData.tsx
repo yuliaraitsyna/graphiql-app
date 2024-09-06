@@ -2,8 +2,13 @@ import {useState} from 'react';
 // import { buildClientSchema, GraphQLSchema, parse } from 'graphql';
 import {transformGraphUrl} from '../utils/transformGraphUrl';
 import {emptySchema} from '../utils/emptyGraphiQLSchema';
+import useGraphqlErrors from './useGraphqlErrors';
+import {useTranslation} from 'react-i18next';
 
 const useGraphqlData = () => {
+  const {t} = useTranslation();
+  const {errors, setError, clearError} = useGraphqlErrors();
+
   const [graphqlData, setGraphqlData] = useState({
     endpointUrl: '',
     sdlUrl: '',
@@ -22,7 +27,14 @@ const useGraphqlData = () => {
   };
 
   const handleEndpointUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
-    transformGraphUrl('endpoint', event.target.value, graphqlData);
+    const value = event.target.value;
+    console.log(URL.canParse(value));
+    if (URL.canParse(value)) {
+      transformGraphUrl('endpoint', value, graphqlData);
+      clearError(event.target.name);
+    } else {
+      setError(event.target.name, t('errors.graphql.endpoint'));
+    }
   };
 
   const handleSDLChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +76,7 @@ const useGraphqlData = () => {
     }
   };
   return {
+    errors,
     graphqlData,
     ...graphqlData,
     handleEndpointUrlChange,
