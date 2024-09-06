@@ -1,13 +1,11 @@
 import {Box, Button, Container, Input, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
 import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {RESTAction} from './models/RESTAction';
 import {useNavigate} from '@remix-run/react';
-import {Header} from '~/components/HeadersEditor/models/header';
-import {Variable} from '~/components/models/variable';
 
 interface RestRequestProps {
   initialMethod: HTTPMethods;
@@ -16,32 +14,32 @@ interface RestRequestProps {
 const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
   const [method, setMethod] = useState<HTTPMethods>(initialMethod);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
-  const [headers, setHeaders] = useState<Header[]>([]);
-  const [variables, setVariables] = useState<Variable[]>([]);
   const [URL, setURL] = useState<string>('');
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    //const storedHeaders = localStorage.getItem('headers');
-    //const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
+  const handleSendingRequest = () => {
+    const storedHeaders = localStorage.getItem('headers');
+    const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
 
-    const encodedHeaders = Object.entries(headers)
-      .map(([key, value]) => {
-        return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
-      })
-      .join('&');
+    let queryParams = '';
 
-    const queryParams = `${encodedHeaders}`;
-
-    const encodedURL = btoa(unescape(encodeURIComponent(URL)));
+    if (headers) {
+      const encodedHeaders = Object.entries(headers)
+        .map(([key, value]) => {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
+        })
+        .join('&');
+      queryParams = `${encodedHeaders}`;
+    }
 
     if (URL) {
-      navigate(`/rest/${method}?url=${encodedURL}${queryParams}`, {replace: true});
+      const encodedURL = btoa(unescape(encodeURIComponent(URL)));
+      navigate(`/${method}?url=${encodedURL}${queryParams}`, {replace: true});
     } else {
-      navigate(`/rest/${method}`, {replace: true});
+      navigate(`/${method}`, {replace: true});
     }
-  }, [method, URL, navigate, headers]);
+  };
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
     setMethod(event.target.value as HTTPMethods);
@@ -55,14 +53,6 @@ const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
 
   const handleURLChange = (value: string) => {
     setURL(value);
-  };
-
-  const handleHeadersSetting = (storedHeaders: Header[]) => {
-    setHeaders(storedHeaders);
-  };
-
-  const handleVariablesSetting = (storedVariables: Variable[]) => {
-    setVariables(storedVariables);
   };
 
   return (
@@ -85,7 +75,9 @@ const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
           value={URL}
           onChange={e => handleURLChange(e.target.value)}
         />
-        <Button variant="contained">Send</Button>
+        <Button variant="contained" onClick={handleSendingRequest}>
+          Send
+        </Button>
       </Box>
       <Button onClick={handleToggleRESTAction}>
         {action === RESTAction.SET_HEADERS ? RESTAction.SET_VARIABLES : RESTAction.SET_HEADERS}
