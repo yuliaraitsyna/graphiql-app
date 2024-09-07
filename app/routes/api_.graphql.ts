@@ -28,7 +28,7 @@ const fetchGraphQLData = async ({endpointUrl, query, variables}: FetchGraphQLDat
   const responseData = await response.json();
   return {
     status: response.status,
-    data: responseData,
+    data: responseData.data,
   };
 };
 
@@ -50,7 +50,7 @@ const fetchGraphQLIntrospectionData = async ({sdlUrl}: FetchGraphQLIntrospection
   const responseData = await response.json();
   return {
     status: response.status,
-    data: responseData,
+    data: responseData.data,
     schema: buildClientSchema(responseData.data),
   };
 };
