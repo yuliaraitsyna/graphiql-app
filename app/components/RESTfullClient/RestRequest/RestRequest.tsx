@@ -19,9 +19,21 @@ const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const storedHeaders = localStorage.getItem('headers');
+    const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
+
+    const encodedHeaders = Object.entries(headers)
+      .map(([key, value]) => {
+        return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
+      })
+      .join('&');
+
+    const queryParams = `${encodedHeaders}`;
+
     const encodedURL = btoa(unescape(encodeURIComponent(URL)));
+
     if (URL) {
-      navigate(`/rest/${method}?url=${encodedURL}`, {replace: true});
+      navigate(`/rest/${method}?url=${encodedURL}${queryParams}`, {replace: true});
     } else {
       navigate(`/rest/${method}`, {replace: true});
     }
