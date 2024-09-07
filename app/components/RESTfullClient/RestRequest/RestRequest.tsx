@@ -10,12 +10,15 @@ import {RequestParams} from '../models/RequestParams';
 import {fetchRestData} from '~/routes/api_.rest';
 import {useNavigate} from '@remix-run/react';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
+import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 
-const RestRequest: React.FC = () => {
+interface RestRequestParams {
+  onSendRequest: (response: Response) => void;
+}
+const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
   const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [body, setBody] = useState<string>('');
-  const [response, setResponse] = useState<Response>();
   const [URL, setURL] = useState<string>('');
 
   const navigate = useNavigate();
@@ -24,27 +27,28 @@ const RestRequest: React.FC = () => {
     const storedHeaders = localStorage.getItem('headers');
     const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
 
+    const storedVariables = localStorage.getItem('variables');
+    const variables = storedVariables ? JSON.parse(storedVariables) : null;
+
+    const endpointURL = replaceVariablesInURL(URL, variables);
+
     let parsedBody = null;
 
-    try {
-      parsedBody = body ? JSON.parse(body) : null;
-    } catch (error) {
-      console.error('Invalid JSON body:', error);
-      return;
-    }
+    parsedBody = body ? JSON.parse(body) : null;
 
     const params: RequestParams = {
-      endpointUrl: URL,
+      endpointUrl: endpointURL,
       method: method,
       headers: headers,
+      variables: variables,
       body: parsedBody,
     };
 
     const encodedURL = createRestEncodedURL(params);
 
     try {
-      const res = await fetchRestData(params);
-      setResponse(res);
+      const response = await fetchRestData(params);
+      onSendRequest(response);
       navigate(`/${method}/${encodedURL}`, {replace: true});
     } catch (error) {
       console.error('Error sending request:', error);

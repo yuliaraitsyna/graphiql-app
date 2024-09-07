@@ -95,7 +95,6 @@ export const action: ActionFunction = async ({params, request}) => {
     const decodedURL = atob(encodedURL);
 
     const body = await request.json();
-    console.log('BODY', body);
 
     const response = await fetchRestData({
       endpointUrl: decodedURL,
