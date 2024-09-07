@@ -1,11 +1,12 @@
+/* eslint-disable import/no-unresolved */
 import {Box, Container, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-import HeadersEditor from '../../../components/HeadersEditor/HeadersEditor';
-import VariablesEditor from '../../../components/VariablesEditor/VariablesEditor';
+import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
+import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {SendRequestButton} from './SendRequestButton';
 import {Url} from './Url';
-import useGraphqlData from '../../../hooks/useGraphqlData';
-//import JsonEditor from '~/components/JsonEditor/JsonEditor';
+import useGraphqlData from '~/hooks/useGraphqlData';
+import {QueryEditor} from '~/components/QueryEditor/QueryEditor';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
@@ -18,6 +19,7 @@ export const GraphiqlRequest: React.FC = () => {
     handleSDLChange,
     handleSendRequest,
   } = useGraphqlData();
+
   return (
     <Container maxWidth="xl">
       {errors ? Object.entries(errors).map(([key, value]) => <div key={key}>Errors: {value as string}</div>) : null}
@@ -43,8 +45,11 @@ export const GraphiqlRequest: React.FC = () => {
             placeholder={t('page.graphiql.placeholderSdlUrl')}
           />
         </Box>
+        <Box>
+          <HeadersEditor />
+          <QueryEditor />
+        </Box>
 
-        <HeadersEditor />
         {/* <JsonEditor type="JSON" mode="edit" /> */}
         <VariablesEditor />
       </div>

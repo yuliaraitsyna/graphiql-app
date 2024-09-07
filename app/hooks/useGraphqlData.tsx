@@ -17,6 +17,7 @@ const useGraphqlData = () => {
     headers: [],
     schema: emptySchema,
     introspection: {data: null, endpoint: ''},
+    response: {},
   });
 
   const handleEndpointUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,10 +29,15 @@ const useGraphqlData = () => {
 
   const handleEndpointUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    console.log(URL.canParse(value));
     if (URL.canParse(value)) {
       transformGraphUrl('endpoint', value, graphqlData);
       clearError(event.target.name);
+      if (graphqlData.sdlUrl === '') {
+        setGraphqlData(prevState => ({
+          ...prevState,
+          sdlUrl: value + '?sdl',
+        }));
+      }
     } else {
       setError(event.target.name, t('errors.graphql.endpoint'));
     }
@@ -44,15 +50,22 @@ const useGraphqlData = () => {
     }));
   };
 
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGraphqlData(prevState => ({
+      ...prevState,
+      query: event.target.value,
+    }));
+  };
+
   const handleSendRequest = async () => {
     console.log(window.location);
     const apiUrl = `${window.location.protocol}//${window.location.host}/api/graphql`;
-    const formData = new FormData();
+    const queryData = new FormData();
     //formData.append('endpointUrl', graphqlData.endpointUrl);
-    formData.append('endpointUrl', 'https://countries.trevorblades.com/');
+    queryData.append('endpointUrl', 'https://countries.trevorblades.com/');
     //formData.append('sdlUrl', graphqlData.sdlUrl);
-    formData.append('sdlUrl', '');
-    formData.append(
+    queryData.append('sdlUrl', '');
+    queryData.append(
       'query',
       `query {
   countries {
@@ -60,13 +73,36 @@ const useGraphqlData = () => {
   }
 }`,
     );
-    formData.append('variables', '');
-    formData.append('headers', '');
-    formData.append('_action', 'QUERY');
+    queryData.append('variables', '');
+    queryData.append('headers', '');
+    queryData.append('_action', 'QUERY');
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
-        body: formData,
+        body: queryData,
+        redirect: 'follow',
+      });
+      const result = await response.json();
+      clearError('response');
+      setGraphqlData(prevState => ({
+        ...prevState,
+        response: result,
+      }));
+    } catch (error) {
+      if (error) {
+        setError('response', t('errors.graphql.endpoint'));
+      }
+    }
+
+    const introspectionData = new FormData();
+    introspectionData.append('_action', 'SDL');
+    introspectionData.append('sdlUrl', 'https://countries.trevorblades.com/?sdl');
+
+    //schema, introspection
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        body: introspectionData,
         redirect: 'follow',
       });
       const result = await response.json();
@@ -75,6 +111,7 @@ const useGraphqlData = () => {
       console.log('error', error);
     }
   };
+
   return {
     errors,
     graphqlData,
@@ -83,6 +120,7 @@ const useGraphqlData = () => {
     handleEndpointUrlBlur,
     handleSDLChange,
     handleSendRequest,
+    handleQueryChange,
   };
 };
 
