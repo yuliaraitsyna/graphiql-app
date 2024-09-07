@@ -11,7 +11,11 @@ export const createRestEncodedURL = (params: RequestParams): string => {
   }
 
   const queryParams = params.headers
-    ?.map(header => `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`)
+    ?.map(header => {
+      if (header.checked) {
+        return `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`;
+      }
+    })
     .join('&');
 
   if (queryParams) {
