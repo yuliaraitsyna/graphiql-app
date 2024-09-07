@@ -9,10 +9,12 @@ import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
 import {RequestParams} from '../models/RequestParams';
 import {fetchRestData} from '~/routes/api_.rest';
 import {useNavigate} from '@remix-run/react';
+import JsonEditor from '~/components/JsonEditor/JsonEditor';
 
 const RestRequest: React.FC = () => {
   const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
+  const [body, setBody] = useState<string>('');
   const [response, setResponse] = useState<Response>();
   const [URL, setURL] = useState<string>('');
 
@@ -22,10 +24,20 @@ const RestRequest: React.FC = () => {
     const storedHeaders = localStorage.getItem('headers');
     const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
 
+    let parsedBody = null;
+
+    try {
+      parsedBody = body ? JSON.parse(body) : null;
+    } catch (error) {
+      console.error('Invalid JSON body:', error);
+      return;
+    }
+
     const params: RequestParams = {
       endpointUrl: URL,
       method: method,
       headers: headers,
+      body: parsedBody,
     };
 
     const encodedURL = createRestEncodedURL(params);
@@ -53,8 +65,13 @@ const RestRequest: React.FC = () => {
     setURL(value);
   };
 
+  const handleBodyChange = (body: string) => {
+    console.log(body);
+    setBody(body);
+  };
+
   return (
-    <Container sx={{width: '80%', border: 'solid red'}}>
+    <Container sx={{width: '80%'}}>
       <Typography component={'h4'} variant="h4" textAlign={'left'}>
         REST Client
       </Typography>
@@ -81,6 +98,7 @@ const RestRequest: React.FC = () => {
         {action === RESTAction.SET_HEADERS ? RESTAction.SET_VARIABLES : RESTAction.SET_HEADERS}
       </Button>
       {action === RESTAction.SET_HEADERS ? <HeadersEditor></HeadersEditor> : <VariablesEditor></VariablesEditor>}
+      <JsonEditor mode="edit" type="JSON" defaultValue="" onChange={handleBodyChange}></JsonEditor>
     </Container>
   );
 };

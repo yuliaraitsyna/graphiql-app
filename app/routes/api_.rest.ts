@@ -29,7 +29,7 @@ export const fetchRestData = async (params: RequestParams) => {
     headers: headersObj,
   };
 
-  if (params.method === HTTPMethods.POST || params.method === HTTPMethods.PUT || params.method === HTTPMethods.PATCH) {
+  if ([HTTPMethods.POST, HTTPMethods.PUT, HTTPMethods.PATCH].includes(params.method)) {
     fetchOptions.body = JSON.stringify(params.body || {});
   }
 
@@ -95,6 +95,7 @@ export const action: ActionFunction = async ({params, request}) => {
     const decodedURL = atob(encodedURL);
 
     const body = await request.json();
+    console.log('BODY', body);
 
     const response = await fetchRestData({
       endpointUrl: decodedURL,
