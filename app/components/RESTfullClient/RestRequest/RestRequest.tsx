@@ -5,6 +5,9 @@ import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
 import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {RESTAction} from './models/RESTAction';
+import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
+import {RequestParams} from '../models/RequestParams';
+import {fetchRestData} from '~/routes/api_.rest';
 import {useNavigate} from '@remix-run/react';
 
 const RestRequest: React.FC = () => {
@@ -15,18 +18,30 @@ const RestRequest: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSendingRequest = async () => {
-    const headers = localStorage.getItem('headers') ? JSON.parse(localStorage.getItem('headers') || '') : {};
-    const variables = localStorage.getItem('variables') ? JSON.parse(localStorage.getItem('variables') || '') : {};
+    const storedHeaders = localStorage.getItem('headers');
+    const headers = storedHeaders ? JSON.parse(storedHeaders) : null;
 
-    const queryParams = new URLSearchParams(variables).toString();
-    const headerParams = Object.entries(headers)
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
-      .join('&');
+    const params: RequestParams = {
+      endpointUrl: URL,
+      method: method,
+      headers: headers,
+    };
 
-    const encodedURL = btoa(encodeURIComponent(URL));
-    const finalUrl = `/${method}/${encodedURL}?${queryParams}${headerParams ? `&${headerParams}` : ''}`;
+    const encodedURL = createRestEncodedURL(params);
+    console.log('Encoded URL:', encodedURL);
 
-    navigate(finalUrl, {replace: true});
+    try {
+      const response = await fetchRestData(params);
+      console.log('Response:', response);
+
+      if (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE') {
+        navigate(`/${method}/${encodedURL}`, {replace: true});
+      } else {
+        navigate(`/${method}/${encodedURL}`, {replace: true});
+      }
+    } catch (error) {
+      console.error('Error sending request:', error);
+    }
   };
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
