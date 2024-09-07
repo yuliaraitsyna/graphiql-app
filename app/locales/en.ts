@@ -51,6 +51,13 @@ export default {
         },
       ],
     },
+    rest: {
+      title: 'REST Client',
+      setHeaders: 'Set headers',
+      setVariables: 'Set variables',
+      send: 'Send',
+      placeholder: 'Endpoint URL',
+    },
   },
   links: {
     signIn: 'Sign in',

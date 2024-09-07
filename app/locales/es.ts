@@ -49,6 +49,13 @@ export default {
       ],
       altAppLogo: 'Logotipo de la aplicación',
     },
+    rest: {
+      title: 'Cliente REST',
+      setHeaders: 'Establecer encabezados',
+      setVariables: 'Establecer variables',
+      send: 'Enviar',
+      placeholder: 'URL del punto de acceso',
+    },
   },
   links: {
     signIn: 'Iniciar sesión',

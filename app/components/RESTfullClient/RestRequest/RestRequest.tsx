@@ -1,5 +1,5 @@
 import {Box, Button, Container, Input, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
-import React, {useState} from 'react';
+import React, {useState, useTransition} from 'react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
@@ -11,11 +11,13 @@ import {fetchRestData} from '~/routes/api_.rest';
 import {useNavigate} from '@remix-run/react';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
+import {useTranslation} from 'react-i18next';
 
 interface RestRequestParams {
   onSendRequest: (response: Response) => void;
 }
 const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
+  const {t} = useTranslation();
   const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [body, setBody] = useState<string>('');
@@ -77,7 +79,7 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
   return (
     <Container sx={{width: '80%'}}>
       <Typography component={'h4'} variant="h4" textAlign={'left'}>
-        REST Client
+        {t('page.rest.title')}
       </Typography>
       <Box sx={{border: `1px solid ${grey[400]}`, borderRadius: '5px', display: 'flex', width: '100%'}}>
         <Select fullWidth value={method} onChange={handleMethodSelection} sx={{maxWidth: '150px'}}>
@@ -88,18 +90,18 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
           ))}
         </Select>
         <Input
-          placeholder={'Endpoint URL'}
+          placeholder={t('page.rest.placeholder')}
           sx={{width: '80%', margin: '5px'}}
           disableUnderline
           value={URL}
           onChange={e => handleURLChange(e.target.value)}
         />
         <Button variant="contained" onClick={handleSendingRequest}>
-          Send
+          {t('page.rest.send')}
         </Button>
       </Box>
       <Button onClick={handleToggleRESTAction}>
-        {action === RESTAction.SET_HEADERS ? RESTAction.SET_VARIABLES : RESTAction.SET_HEADERS}
+        {action === RESTAction.SET_HEADERS ? t('page.rest.setVariables') : t('page.rest.setHeaders')}
       </Button>
       {action === RESTAction.SET_HEADERS ? <HeadersEditor></HeadersEditor> : <VariablesEditor></VariablesEditor>}
       <JsonEditor mode="edit" type="JSON" defaultValue="" onChange={handleBodyChange}></JsonEditor>
