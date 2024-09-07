@@ -1,14 +1,31 @@
 import {Box, Button, Container, Input, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
 import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {RESTAction} from './models/RESTAction';
+import {useNavigate} from '@remix-run/react';
 
-const RestRequest: React.FC = () => {
-  const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
+interface RestRequestProps {
+  initialMethod: HTTPMethods;
+}
+
+const RestRequest: React.FC<RestRequestProps> = ({initialMethod}) => {
+  const [method, setMethod] = useState<HTTPMethods>(initialMethod);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
+  const [URL, setURL] = useState<string>('');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const encodedURL = btoa(unescape(encodeURIComponent(URL)));
+    if (URL) {
+      navigate(`/rest/${method}?url=${encodedURL}`, {replace: true});
+    } else {
+      navigate(`/rest/${method}`, {replace: true});
+    }
+  }, [method, URL, navigate]);
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
     setMethod(event.target.value as HTTPMethods);
@@ -18,6 +35,10 @@ const RestRequest: React.FC = () => {
     setAction(prevAction =>
       prevAction === RESTAction.SET_HEADERS ? RESTAction.SET_VARIABLES : RESTAction.SET_HEADERS,
     );
+  };
+
+  const handleURLChange = (value: string) => {
+    setURL(value);
   };
 
   return (
@@ -33,7 +54,13 @@ const RestRequest: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-        <Input placeholder={'Endpoint URL'} sx={{width: '80%', margin: '5px'}} disableUnderline></Input>
+        <Input
+          placeholder={'Endpoint URL'}
+          sx={{width: '80%', margin: '5px'}}
+          disableUnderline
+          value={URL}
+          onChange={e => handleURLChange(e.target.value)}
+        />
         <Button variant="contained">Send</Button>
       </Box>
       <Button onClick={handleToggleRESTAction}>
