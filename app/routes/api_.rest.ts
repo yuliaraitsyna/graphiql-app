@@ -35,8 +35,13 @@ export const fetchRestData = async (params: RequestParams) => {
 
   try {
     const response = await fetch(finalUrl, fetchOptions);
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    if (params.method === HTTPMethods.HEAD) {
+      return {headers: response.headers};
     }
 
     const data = await response.json();
@@ -57,16 +62,25 @@ export const loader: LoaderFunction = async ({params}: LoaderFunctionArgs) => {
 
   const decodedURL = atob(encodedURL);
 
-  if (method !== 'GET') {
-    throw new Response('Invalid request method', {status: 405});
+  if (method === HTTPMethods.GET) {
+    const response = await fetchRestData({
+      endpointUrl: decodedURL,
+      method,
+    });
+
+    return json(response);
   }
 
-  const response = await fetchRestData({
-    endpointUrl: decodedURL,
-    method,
-  });
+  if (method === HTTPMethods.HEAD) {
+    const response = await fetch(decodedURL, {
+      method: HTTPMethods.HEAD,
+      headers: (await fetchRestData({endpointUrl: decodedURL, method: HTTPMethods.HEAD})).headers,
+    });
 
-  return json(response);
+    return new Response(null, {headers: response.headers});
+  }
+
+  throw new Response('Invalid request method', {status: 405});
 };
 
 export const action: ActionFunction = async ({params, request}) => {

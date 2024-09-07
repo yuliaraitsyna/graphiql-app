@@ -13,6 +13,7 @@ import {useNavigate} from '@remix-run/react';
 const RestRequest: React.FC = () => {
   const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
+  const [response, setResponse] = useState<Response>();
   const [URL, setURL] = useState<string>('');
 
   const navigate = useNavigate();
@@ -28,17 +29,11 @@ const RestRequest: React.FC = () => {
     };
 
     const encodedURL = createRestEncodedURL(params);
-    console.log('Encoded URL:', encodedURL);
 
     try {
-      const response = await fetchRestData(params);
-      console.log('Response:', response);
-
-      if (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE') {
-        navigate(`/${method}/${encodedURL}`, {replace: true});
-      } else {
-        navigate(`/${method}/${encodedURL}`, {replace: true});
-      }
+      const res = await fetchRestData(params);
+      setResponse(res);
+      navigate(`/${method}/${encodedURL}`, {replace: true});
     } catch (error) {
       console.error('Error sending request:', error);
     }
