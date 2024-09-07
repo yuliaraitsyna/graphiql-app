@@ -29,6 +29,9 @@ const fetchGraphQLData = async ({endpointUrl, query, variables}: FetchGraphQLDat
     data: responseData,
   };
 };
+export const loader = async () => {
+  return new Response('Method Not Allowed', {status: 405});
+};
 
 export const action = async ({request}: ActionFunctionArgs): Promise<Response> => {
   if (request.method !== 'POST') {
@@ -44,7 +47,10 @@ export const action = async ({request}: ActionFunctionArgs): Promise<Response> =
     switch (_action) {
       case 'QUERY':
         apiResponse = await fetchGraphQLData({endpointUrl, query, variables});
-        return cors(request, json({message: 'Getting data from the endpoint URL', data: apiResponse}));
+        return cors(
+          request,
+          json({message: 'Getting data from the endpoint URL', method: request.method, data: apiResponse}),
+        );
       default:
         return new Response('Method Not Allowed', {status: 405});
     }
