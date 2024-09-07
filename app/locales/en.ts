@@ -1,4 +1,7 @@
 export default {
+  title: 'Graphiql',
+  description:
+    'An intuitive tool for making REST API and GraphQL requests, designed to simplify data fetching and interaction with APIs.',
   common: {
     altAppLogo: 'App logo',
   },

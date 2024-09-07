@@ -1,4 +1,7 @@
 export default {
+  title: 'Graphiql',
+  description:
+    'Una herramienta intuitiva para realizar solicitudes API REST y GraphQL, diseñada para simplificar la obtención de datos y la interacción con las API.',
   page: {
     main: {
       welcome: 'Bienvenido',
