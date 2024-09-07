@@ -1,5 +1,4 @@
-import {Alert, Box, IconButton, Snackbar, SnackbarCloseReason} from '@mui/material';
-import {CloseIcon} from '../Icons';
+import {Alert, Box, Snackbar, SnackbarCloseReason} from '@mui/material';
 
 type Props = {
   message: string;
@@ -15,31 +14,17 @@ export default function ErrorSnackbar({onChange, message = '', isOpen = false}: 
     if (onChange) onChange(false);
   };
 
-  const action = (
-    <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-      <CloseIcon />
-    </IconButton>
-  );
-
   return (
     <>
       <Snackbar
         open={isOpen}
-        autoHideDuration={6000}
+        autoHideDuration={10000}
         onClose={handleClose}
-        action={action}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        style={{marginTop: '8rem'}}>
         <Box sx={{maxWidth: '512px'}}>
-          <Alert severity="error" style={{paddingRight: '48px'}}>
+          <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
             {message}
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleClose}
-              style={{position: 'absolute', top: '4px', right: '4px'}}>
-              <CloseIcon />
-            </IconButton>
           </Alert>
         </Box>
       </Snackbar>
