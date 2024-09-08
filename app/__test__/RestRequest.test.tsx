@@ -3,7 +3,6 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import {jest} from '@jest/globals';
 import RestRequest from '~/components/RESTfullClient/RestRequest/RestRequest';
 import {HTTPMethods} from '~/components/RESTfullClient/RestRequest/models/HTTPMethods';
-import {fetchRestData} from '~/routes/api_.rest';
 import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
 import {RequestParams} from '~/components/RESTfullClient/models/RequestParams';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
@@ -36,7 +35,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 jest.mock('@remix-run/react', () => ({
-  useNavigate: jest.fn(() => jest.fn()), // Return a mock function
+  useNavigate: jest.fn(() => jest.fn()),
 }));
 
 jest.mock('@fontsource/roboto-mono', () => {});
