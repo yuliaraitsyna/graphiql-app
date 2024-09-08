@@ -1,5 +1,6 @@
 import {Box, Button, Container, Input, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
-import React, {useState, useTransition} from 'react';
+import React, {useState} from 'react';
+import {useNavigate} from '@remix-run/react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
@@ -8,7 +9,6 @@ import {RESTAction} from './models/RESTAction';
 import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
 import {RequestParams} from '../models/RequestParams';
 import {fetchRestData} from '~/routes/api_.rest';
-import {useNavigate} from '@remix-run/react';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 import {useTranslation} from 'react-i18next';
@@ -50,6 +50,7 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
 
     try {
       const response = await fetchRestData(params);
+      console.log(response);
       onSendRequest(response);
       navigate(`/${method}/${encodedURL}`, {replace: true});
     } catch (error) {
