@@ -8,5 +8,6 @@ export default {
   moduleNameMapper: {
     '\\.(css|scss)$': 'identity-obj-proxy',
     '^~/(.*)$': '<rootDir>/app/$1',
+    '\\.(svg)$': '<rootDir>/app/__test__/__mocks__/svgMock.ts',
   },
 };

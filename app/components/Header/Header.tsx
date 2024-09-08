@@ -93,7 +93,7 @@ export function Header() {
           </Box>
         </Toolbar>
         <Box display={{xs: 'flex', md: 'none'}}>
-          <MobileMenu anchorEl={anchorEl} open={open} onClose={handleMenuClose} />
+          <MobileMenu data-testid="mobile-menu-btn" anchorEl={anchorEl} open={open} onClose={handleMenuClose} />
         </Box>
       </Container>
     </AppBar>
