@@ -1,12 +1,14 @@
-import {Alert, Box, Snackbar, SnackbarCloseReason} from '@mui/material';
+import {Alert, AlertTitle, Box, Snackbar, SnackbarCloseReason} from '@mui/material';
+import {ReactNode} from 'react';
 
 type Props = {
-  message: string;
+  title: string;
   isOpen: boolean;
   onChange: (v: boolean) => void;
+  children: ReactNode;
 };
 
-export default function ErrorSnackbar({onChange, message = '', isOpen = false}: Partial<Props>) {
+export default function ErrorSnackbar({children, onChange, title = '', isOpen = false}: Partial<Props>) {
   const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return;
@@ -24,7 +26,8 @@ export default function ErrorSnackbar({onChange, message = '', isOpen = false}: 
         style={{marginTop: '8rem'}}>
         <Box sx={{maxWidth: '512px'}}>
           <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
-            {message}
+            <AlertTitle>{title}</AlertTitle>
+            {children}
           </Alert>
         </Box>
       </Snackbar>
