@@ -1,6 +1,10 @@
 export default {
   common: {
     altAppLogo: 'App logo',
+    show: 'Show',
+    hide: 'Hide',
+    variables: 'Variables',
+    headers: 'Headers',
   },
   page: {
     main: {
@@ -57,6 +61,8 @@ export default {
       placeholderEndpointUrl: 'Enter endpoint URL',
       sdlUrl: 'SDL URL',
       placeholderSdlUrl: 'Enter SDL URL',
+      queryEditor: 'Query',
+      format: 'Format',
     },
   },
   links: {

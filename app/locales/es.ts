@@ -1,4 +1,11 @@
 export default {
+  common: {
+    altAppLogo: 'Logotipo de la aplicación',
+    show: 'Mostrar',
+    hide: 'Ocultar',
+    variables: 'Variables',
+    headers: 'Cabeceras',
+  },
   page: {
     main: {
       welcome: 'Bienvenido',
@@ -55,6 +62,8 @@ export default {
       placeholderEndpointUrl: 'Introduzca la URL del punto final',
       sdlUrl: 'LDE Url',
       placeholderSdlUrl: 'Introduzca la URL de LDE',
+      queryEditor: 'Consulta',
+      format: 'Formato',
     },
   },
   links: {

@@ -6,16 +6,16 @@ import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {SendRequestButton} from './SendRequestButton';
 import {Url} from './Url';
 import useGraphqlData from '~/hooks/useGraphqlData';
-import {Documentation} from '../Documentation';
-import JsonEditor from '~/components/JsonEditor/JsonEditor';
+import {QueryEditor} from '~/components/QueryEditor';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
   const {
     errors,
-    sdl,
     endpointUrl,
     sdlUrl,
+    query,
+    schema,
     handleEndpointUrlChange,
     handleEndpointUrlBlur,
     handleSDLChange,
@@ -48,8 +48,8 @@ export const GraphiqlRequest: React.FC = () => {
             placeholder={t('page.graphiql.placeholderSdlUrl')}
           />
         </Box>
+        <QueryEditor schema={schema} value={query} onChange={handleQueryChange} />
         <HeadersEditor />
-        <JsonEditor defaultValue="" type="JSON" mode="edit" onChange={handleQueryChange} />
         <VariablesEditor />
       </div>
     </Container>

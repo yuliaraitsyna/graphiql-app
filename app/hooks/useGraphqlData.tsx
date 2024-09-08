@@ -4,6 +4,7 @@ import {transformGraphUrl} from '../utils/transformGraphUrl';
 import {emptySchema} from '../utils/emptyGraphiQLSchema';
 import useGraphqlErrors from './useGraphqlErrors';
 import {useTranslation} from 'react-i18next';
+import {GraphQLSchema} from 'graphql';
 
 const useGraphqlData = () => {
   const {t} = useTranslation();
@@ -18,6 +19,7 @@ const useGraphqlData = () => {
     schema: emptySchema,
     introspection: {data: null, endpoint: ''},
     response: {},
+    sdl: emptySchema,
   });
 
   const handleEndpointUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,15 +52,21 @@ const useGraphqlData = () => {
     }));
   };
 
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = (value: string) => {
     setGraphqlData(prevState => ({
       ...prevState,
-      query: event.target.value,
+      query: value,
+    }));
+    //transformGraphUrl('query', value, graphqlData);
+  };
+  const handleUpdateSchema = (value: GraphQLSchema) => {
+    setGraphqlData(prevState => ({
+      ...prevState,
+      schema: value,
     }));
   };
 
   const handleSendRequest = async () => {
-    console.log(window.location);
     const apiUrl = `${window.location.protocol}//${window.location.host}/api/graphql`;
     const queryData = new FormData();
     //formData.append('endpointUrl', graphqlData.endpointUrl);
@@ -107,6 +115,14 @@ const useGraphqlData = () => {
       });
       const result = await response.json();
       console.log(result);
+      // console.log(printSchema(result.data.schema));
+      setGraphqlData(prevState => ({
+        ...prevState,
+        sdl: result.data.schema,
+      }));
+
+      console.log(result.data.schema);
+      console.log(graphqlData.sdl);
     } catch (error) {
       console.log('error', error);
     }
@@ -121,6 +137,7 @@ const useGraphqlData = () => {
     handleSDLChange,
     handleSendRequest,
     handleQueryChange,
+    handleUpdateSchema,
   };
 };
 
