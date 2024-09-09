@@ -1,9 +1,18 @@
 import {LoaderFunctionArgs, json} from '@vercel/remix';
-import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData} from '@remix-run/react';
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+  useRouteLoaderData,
+  LiveReload,
+} from '@remix-run/react';
 import i18nServer, {localeCookie} from './i18n.server';
 import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
-import {Header} from './components/Header/Header';
+import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 
 export function links() {
@@ -17,9 +26,10 @@ export async function loader({request}: LoaderFunctionArgs) {
   return json({locale}, {headers: {'Set-Cookie': await localeCookie.serialize(locale)}});
 }
 
-export function Layout({children}: {children: React.ReactNode}) {
+export default function App() {
   const loaderData = useRouteLoaderData<typeof loader>('root');
-
+  const {locale} = useLoaderData<typeof loader>();
+  useChangeLanguage(locale);
   return (
     <html lang={loaderData?.locale ?? 'en'}>
       <head>
@@ -30,17 +40,14 @@ export function Layout({children}: {children: React.ReactNode}) {
       </head>
       <body>
         <Header />
-        <main>{children}</main>
+        <main>
+          <Outlet />
+        </main>
         <Footer />
         <ScrollRestoration />
         <Scripts />
+        <LiveReload />
       </body>
     </html>
   );
-}
-
-export default function App() {
-  const {locale} = useLoaderData<typeof loader>();
-  useChangeLanguage(locale);
-  return <Outlet />;
 }

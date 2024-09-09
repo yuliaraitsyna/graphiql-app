@@ -3,26 +3,14 @@ import i18nServer from '../i18n.server';
 import {AboutTeam} from '~/components/AboutTeam/AboutTeam';
 import {AboutApp} from '~/components/AboutApp/AboutApp';
 import {Welcome} from '~/components/Welcome/Welcome';
-import ErrorSnackbar from '~/components/ErrorSnackbar/ErrorSnackbar';
-import {isRouteErrorResponse, useRouteError} from '@remix-run/react';
-import {useState} from 'react';
 import {StartOverLink} from '~/components/CustomLinks';
+import {ErrorBoundaryWrapper} from '~/components/ErrorBoundary/ErrorBoundary';
 
 export function ErrorBoundary() {
-  const [open, setOpen] = useState(true);
-  const handleChange = (v: boolean) => {
-    setOpen(v);
-  };
-  const error = useRouteError();
-  const message = isRouteErrorResponse(error)
-    ? error.statusText
-    : error instanceof Error
-      ? error.message
-      : 'unknown error';
   return (
-    <ErrorSnackbar title={message} isOpen={open} onChange={handleChange}>
+    <ErrorBoundaryWrapper>
       <StartOverLink message="You can start over" />
-    </ErrorSnackbar>
+    </ErrorBoundaryWrapper>
   );
 }
 
