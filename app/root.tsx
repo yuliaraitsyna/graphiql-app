@@ -1,14 +1,5 @@
 import {LoaderFunctionArgs, json} from '@vercel/remix';
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-  useRouteLoaderData,
-  LiveReload,
-} from '@remix-run/react';
+import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData} from '@remix-run/react';
 import i18nServer, {localeCookie} from './i18n.server';
 import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
@@ -46,7 +37,6 @@ export default function App() {
         <Footer />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
