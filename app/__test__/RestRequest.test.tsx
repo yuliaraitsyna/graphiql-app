@@ -78,7 +78,7 @@ describe('RestRequest Component', () => {
         .join('&');
     }
 
-    const expectedUrl = `${btoa(params.endpointUrl)}${queryParams ? `?${queryParams}` : ''}`;
+    const expectedUrl = `/${params.method}/${btoa(params.endpointUrl)}${queryParams ? `?${queryParams}` : ''}`;
     const result = createRestEncodedURL(params);
 
     expect(result).toBe(expectedUrl);
@@ -100,7 +100,7 @@ describe('RestRequest Component', () => {
       .map(header => `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`)
       .join('&');
 
-    const expectedUrl = `${btoa(params.endpointUrl)}${queryParams ? `?${queryParams}` : ''}`;
+    const expectedUrl = `/${params.method}/${btoa(params.endpointUrl)}${queryParams ? `?${queryParams}` : ''}`;
     const result = createRestEncodedURL(params);
 
     expect(result).toBe(expectedUrl);

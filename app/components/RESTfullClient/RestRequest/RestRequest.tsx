@@ -1,6 +1,6 @@
 import {Box, Button, Container, Input, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
-import React, {useEffect, useState} from 'react';
-import {useLocation, useNavigate, useParams} from '@remix-run/react';
+import React, {useState} from 'react';
+import {useNavigate} from '@remix-run/react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
@@ -12,8 +12,6 @@ import {fetchRestData} from '~/routes/api_.rest';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 import {useTranslation} from 'react-i18next';
-import {decodeRestEncodedURL} from '~/utils/decodeRestEncodedURL';
-import {Header} from '~/components/HeadersEditor/models/header';
 
 interface RestRequestParams {
   onSendRequest: (response: Response) => void;
