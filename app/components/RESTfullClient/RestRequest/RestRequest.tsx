@@ -1,6 +1,6 @@
 import {Box, Button, Container, Input, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
-import React, {useState} from 'react';
-import {useNavigate} from '@remix-run/react';
+import React, {useEffect, useState} from 'react';
+import {useLocation, useNavigate} from '@remix-run/react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
@@ -12,6 +12,8 @@ import {fetchRestData} from '~/routes/api_.rest';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 import {useTranslation} from 'react-i18next';
+import {decodeRestEncodedURL} from '~/utils/decodeRestEncodedURL';
+import {Header} from '~/components/HeadersEditor/models/header';
 
 interface RestRequestParams {
   onSendRequest: (response: Response) => void;
@@ -22,8 +24,30 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
   const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [body, setBody] = useState<string>('');
   const [URL, setURL] = useState<string>('');
+  const [headers, setHeaders] = useState<Header[]>([]);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    setMethod(pathname.slice(1) as HTTPMethods);
+    const search = window.location.search;
+    const hash = window.location.hash;
+
+    if (search) {
+      const fullUrl = `${pathname}${search}${hash}`;
+      const params = decodeRestEncodedURL(fullUrl);
+
+      setMethod(params.method);
+      setBody(params.method);
+      setURL(params.endpointUrl);
+
+      if (params.headers) {
+        setHeaders(params.headers);
+      }
+    }
+  }, [location]);
 
   const handleSendingRequest = async () => {
     const storedHeaders = localStorage.getItem('headers');
@@ -58,7 +82,9 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
   };
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
-    setMethod(event.target.value as HTTPMethods);
+    const method = event.target.value;
+    window.location.pathname = `/${method}`;
+    setMethod(method as HTTPMethods);
   };
 
   const handleToggleRESTAction = () => {

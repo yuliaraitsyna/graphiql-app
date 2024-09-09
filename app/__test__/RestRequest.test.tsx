@@ -11,6 +11,10 @@ jest.mock('@remix-run/react', () => ({
   useNavigate: jest.fn(),
 }));
 
+jest.mock('@remix-run/react', () => ({
+  useLocation: jest.fn(),
+}));
+
 jest.mock('~/routes/api_.rest', () => ({
   fetchRestData: jest.fn(),
 }));
@@ -36,6 +40,7 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('@remix-run/react', () => ({
   useNavigate: jest.fn(() => jest.fn()),
+  useLocation: jest.fn(() => jest.fn()),
 }));
 
 jest.mock('@fontsource/roboto-mono', () => {});
