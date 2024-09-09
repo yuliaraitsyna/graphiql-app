@@ -3,9 +3,12 @@ import {useTranslation} from 'react-i18next';
 import {Box, Button, Typography} from '@mui/material';
 import {formatting} from './utils/formattingJson';
 import styles from './QueryEditor.module.css';
-import {useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {GraphQLSchema} from 'graphql';
 import {styleOverrides, basicSetup, myTheme} from './QueryEditorSettings';
+import {graphql} from './utils/graphqlLinter';
+// import { diagnosticCount } from '@codemirror/lint';
+import {updateSchema} from 'cm6-graphql';
 
 interface QueryEditorProps {
   schema: GraphQLSchema;
@@ -13,22 +16,33 @@ interface QueryEditorProps {
   onChange: (value: string) => void;
 }
 
-export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange}) => {
+export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema}) => {
   const {t} = useTranslation();
   const queryRef = useRef<ReactCodeMirrorRef | null>(null);
-
-  const handleChange = (value: string) => {
-    onChange(value);
-  };
 
   const handleFormatQuery = () => {
     onChange(formatting(value));
   };
+  useEffect(() => {
+    if (queryRef.current?.view) {
+      updateSchema(queryRef.current.view, schema);
+    }
+  }, [schema]);
 
-  const extensionsArray = [styleOverrides];
+  const handleChange = (value: string) => {
+    // const editorState = queryRef.current?.view?.state;
+
+    // if (editorState) {
+    //   const isError = !!diagnosticCount(editorState);
+    //   console.log(isError);
+    // }
+    onChange(value);
+  };
+
+  const extensionsArray = [styleOverrides, graphql(schema)];
 
   return (
-    <Box>
+    <Box sx={{marginBottom: 3}}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{marginBottom: 1}}>
         <Typography component={'h6'} variant="h6">
           {t('page.graphiql.queryEditor')}
