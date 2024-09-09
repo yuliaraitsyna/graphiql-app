@@ -22,17 +22,16 @@ const fetchGraphQLData = async ({endpointUrl, query, variables}: FetchGraphQLDat
     },
     body: JSON.stringify({query, variables}),
   });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
   const responseData = await response.json();
-
-  // if (responseData.errors) {
-  //   return { ...response, data: responseData.errors, };
-  // }
+  if (responseData.error) {
+    return {
+      status: response.status,
+      data: responseData.error,
+    };
+  }
   return {
     status: response.status,
-    data: responseData.data,
+    data: responseData,
   };
 };
 
@@ -48,9 +47,6 @@ const fetchGraphQLIntrospectionData = async ({sdlUrl}: FetchGraphQLIntrospection
       query: getIntrospectionQuery(),
     }),
   });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
   const responseData = await response.json();
   return responseData.data;
 };
@@ -72,13 +68,19 @@ export const action = async ({request}: ActionFunctionArgs): Promise<Response> =
         apiResponse = await fetchGraphQLData({endpointUrl, query, variables});
         return cors(
           request,
-          json({message: 'Getting data from the endpoint URL', method: request.method, data: apiResponse}),
+          json(
+            {message: 'Getting data from the endpoint URL', method: request.method, data: apiResponse},
+            {status: apiResponse.status},
+          ),
         );
       case 'SDL': {
         apiResponse = await fetchGraphQLIntrospectionData({sdlUrl});
         return cors(
           request,
-          json({message: 'Getting sdl from the endpoint URL', method: request.method, data: apiResponse}),
+          json(
+            {message: 'Getting sdl from the endpoint URL', method: request.method, data: apiResponse},
+            {status: apiResponse.status},
+          ),
         );
       }
       default:
@@ -87,7 +89,7 @@ export const action = async ({request}: ActionFunctionArgs): Promise<Response> =
   } catch (error) {
     return cors(
       request,
-      json({error: error instanceof Error ? error.message : 'An unknown error occurred'}, {status: 500}),
+      json({error: error instanceof Error ? error.message : 'An unknown error occurred', data: apiResponse}),
     );
   }
 };

@@ -64,10 +64,8 @@ export const GraphiqlRequest: React.FC = () => {
         <AccordionBlock label={t('common.variables')}>
           <VariablesEditor />
         </AccordionBlock>
-        {/* {JSON.stringify(sdl)}
-        {printSchema(sdl)} */}
         {response.status ? <p>HTTP status: {response.status}</p> : null}
-        {response.data ? <JsonEditor mode="view" defaultValue={JSON.stringify(response.data)} /> : null}
+        <JsonEditor mode="view" defaultValue={JSON.stringify(response.data)} />
         <p>SDL Documentation</p>
         <ToastContainer />
         <ErrorHandler errors={errors} />

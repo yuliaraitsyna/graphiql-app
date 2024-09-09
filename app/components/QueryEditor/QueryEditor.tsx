@@ -7,7 +7,6 @@ import {useEffect, useRef} from 'react';
 import {GraphQLSchema} from 'graphql';
 import {styleOverrides, basicSetup, myTheme} from './QueryEditorSettings';
 import {graphql} from './utils/graphqlLinter';
-// import { diagnosticCount } from '@codemirror/lint';
 import {updateSchema} from 'cm6-graphql';
 
 interface QueryEditorProps {
@@ -23,6 +22,7 @@ export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema
   const handleFormatQuery = () => {
     onChange(formatting(value));
   };
+
   useEffect(() => {
     if (queryRef.current?.view) {
       updateSchema(queryRef.current.view, schema);
@@ -30,12 +30,6 @@ export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema
   }, [schema]);
 
   const handleChange = (value: string) => {
-    // const editorState = queryRef.current?.view?.state;
-
-    // if (editorState) {
-    //   const isError = !!diagnosticCount(editorState);
-    //   console.log(isError);
-    // }
     onChange(value);
   };
 

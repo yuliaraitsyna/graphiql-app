@@ -80,6 +80,8 @@ export default {
       endpoint: 'Comprobar url de punto final!',
       sdl: 'Comprobar url LDE!',
       sendRequest: '¡No se puede enviar la solicitud! Compruebe los campos',
+      responseError: 'No se pueden obtener datos!',
+      responseErrorStatus: 'No se pueden obtener datos. Estado: ',
     },
   },
 };

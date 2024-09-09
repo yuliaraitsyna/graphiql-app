@@ -79,6 +79,8 @@ export default {
       endpoint: 'Check endpoint url!',
       sdl: 'Check sdl url!',
       sendRequest: 'Unable to send request! Check fields!',
+      responseError: 'Unable to get data! Error occurs!',
+      responseErrorStatus: 'Unable to get data! Status: ',
     },
   },
 };

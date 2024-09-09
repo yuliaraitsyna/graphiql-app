@@ -19,7 +19,7 @@ const useGraphqlData = () => {
     schema: emptySchema,
     introspection: {data: null, endpoint: ''},
     response: {
-      status: 0,
+      status: '',
       data: {},
     },
     sdl: emptySchema,
@@ -52,12 +52,12 @@ const useGraphqlData = () => {
 
   const handleSDLUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    //clearError(event.target.name);
+    clearError(event.target.name);
     if (isValidURL(value)) {
-      // clearError(event.target.name);
+      clearError(event.target.name);
     } else {
       if (value !== '') {
-        //setError(event.target.name, t('errors.graphql.sdl'));
+        setError(event.target.name, t('errors.graphql.sdl'));
       }
     }
   };
@@ -78,6 +78,7 @@ const useGraphqlData = () => {
   };
 
   const handleSendRequest = async () => {
+    clearError('response');
     const apiUrl = `${window.location.protocol}//${window.location.host}/api/graphql`;
     if (graphqlData.endpointUrl) {
       const queryData = new FormData();
@@ -93,14 +94,20 @@ const useGraphqlData = () => {
           redirect: 'follow',
         });
         const result = await response.json();
-        clearError('response');
         setGraphqlData(prevState => ({
           ...prevState,
-          response: result,
+          response: result.data,
         }));
+        if (result.data.status !== 200) {
+          setError('response', t('errors.graphql.responseErrorStatus') + result.data.status);
+        }
       } catch (error) {
         if (error) {
-          setError('response', t('errors.graphql.endpoint'));
+          setGraphqlData(prevState => ({
+            ...prevState,
+            response: {status: '', data: {}},
+          }));
+          setError('response', t('errors.graphql.responseError'));
         }
       }
     } else {
@@ -117,16 +124,24 @@ const useGraphqlData = () => {
           redirect: 'follow',
         });
         const result = await response.json();
-        setGraphqlData(prevState => ({
-          ...prevState,
-          schema: buildClientSchema(result.data),
-        }));
+        if (result.data) {
+          setGraphqlData(prevState => ({
+            ...prevState,
+            schema: buildClientSchema(result.data),
+          }));
+        } else {
+          setGraphqlData(prevState => ({
+            ...prevState,
+            schema: emptySchema,
+          }));
+        }
       } catch (error) {
-        setGraphqlData(prevState => ({
-          ...prevState,
-          schema: emptySchema,
-        }));
-        console.log('error', error);
+        if (error) {
+          setGraphqlData(prevState => ({
+            ...prevState,
+            schema: emptySchema,
+          }));
+        }
       }
     }
   };

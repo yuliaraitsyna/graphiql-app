@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import '@fontsource/roboto-mono';
 import styles from './JsonEditor.module.css';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Box, Button, Typography} from '@mui/material';
 import {EditIcon, VisibleIcon} from '../Icons';
 import prettifyJson from '~/utils/prettifyJson';
@@ -28,6 +28,10 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
       onChange(v);
     }
   };
+
+  useEffect(() => {
+    setContent(prettifyJson(defaultValue));
+  }, [defaultValue]);
 
   const formatJson = () => {
     const fC = prettifyJson(content);
