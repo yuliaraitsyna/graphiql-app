@@ -1,6 +1,6 @@
 import {type ActionFunctionArgs, json} from '@vercel/remix';
 import {cors} from 'remix-utils/cors';
-import {buildClientSchema, getIntrospectionQuery} from 'graphql';
+import {getIntrospectionQuery} from 'graphql';
 
 type FetchGraphQLDataParams = {
   endpointUrl: string;
@@ -26,6 +26,10 @@ const fetchGraphQLData = async ({endpointUrl, query, variables}: FetchGraphQLDat
     throw new Error('Network response was not ok');
   }
   const responseData = await response.json();
+
+  // if (responseData.errors) {
+  //   return { ...response, data: responseData.errors, };
+  // }
   return {
     status: response.status,
     data: responseData.data,
@@ -48,11 +52,7 @@ const fetchGraphQLIntrospectionData = async ({sdlUrl}: FetchGraphQLIntrospection
     throw new Error('Network response was not ok');
   }
   const responseData = await response.json();
-  return {
-    status: response.status,
-    data: responseData.data,
-    schema: buildClientSchema(responseData.data),
-  };
+  return responseData.data;
 };
 
 export const loader = async () => {

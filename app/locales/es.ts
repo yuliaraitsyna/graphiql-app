@@ -78,6 +78,8 @@ export default {
   errors: {
     graphql: {
       endpoint: 'Comprobar url de punto final!',
+      sdl: 'Comprobar url LDE!',
+      sendRequest: '¡No se puede enviar la solicitud! Compruebe los campos',
     },
   },
 };

@@ -56,7 +56,7 @@ export default {
       ],
     },
     graphiql: {
-      sendButton: 'Send',
+      sendButton: 'Send request',
       endpointUrl: 'Endpoint URL',
       placeholderEndpointUrl: 'Enter endpoint URL',
       sdlUrl: 'SDL URL',
@@ -77,6 +77,8 @@ export default {
   errors: {
     graphql: {
       endpoint: 'Check endpoint url!',
+      sdl: 'Check sdl url!',
+      sendRequest: 'Unable to send request! Check fields!',
     },
   },
 };

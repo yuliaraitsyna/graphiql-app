@@ -17,6 +17,6 @@ export default defineConfig({
   ],
   server: {port: 3000},
   ssr: {
-    noExternal: ['@uiw/react-codemirror'],
+    noExternal: ['@uiw/react-codemirror', 'cm6-graphql'],
   },
 });

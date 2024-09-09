@@ -1,10 +1,10 @@
 import {useState} from 'react';
-// import { buildClientSchema, GraphQLSchema, parse } from 'graphql';
 import {transformGraphUrl} from '../utils/transformGraphUrl';
 import {emptySchema} from '../utils/emptyGraphiQLSchema';
 import useGraphqlErrors from './useGraphqlErrors';
 import {useTranslation} from 'react-i18next';
-import {GraphQLSchema} from 'graphql';
+import {isValidURL} from '~/utils/isValidUrl';
+import {buildClientSchema} from 'graphql';
 
 const useGraphqlData = () => {
   const {t} = useTranslation();
@@ -31,7 +31,7 @@ const useGraphqlData = () => {
 
   const handleEndpointUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    if (URL.canParse(value)) {
+    if (isValidURL(value)) {
       transformGraphUrl('endpoint', value, graphqlData);
       clearError(event.target.name);
       if (graphqlData.sdlUrl === '') {
@@ -41,7 +41,21 @@ const useGraphqlData = () => {
         }));
       }
     } else {
-      setError(event.target.name, t('errors.graphql.endpoint'));
+      if (value !== '') {
+        setError(event.target.name, t('errors.graphql.endpoint'));
+      }
+    }
+  };
+
+  const handleSDLUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    //clearError(event.target.name);
+    if (isValidURL(value)) {
+      // clearError(event.target.name);
+    } else {
+      if (value !== '') {
+        //setError(event.target.name, t('errors.graphql.sdl'));
+      }
     }
   };
 
@@ -57,74 +71,60 @@ const useGraphqlData = () => {
       ...prevState,
       query: value,
     }));
-    //transformGraphUrl('query', value, graphqlData);
-  };
-  const handleUpdateSchema = (value: GraphQLSchema) => {
-    setGraphqlData(prevState => ({
-      ...prevState,
-      schema: value,
-    }));
+    transformGraphUrl('query', value, graphqlData);
   };
 
   const handleSendRequest = async () => {
     const apiUrl = `${window.location.protocol}//${window.location.host}/api/graphql`;
-    const queryData = new FormData();
-    //formData.append('endpointUrl', graphqlData.endpointUrl);
-    queryData.append('endpointUrl', 'https://countries.trevorblades.com/');
-    //formData.append('sdlUrl', graphqlData.sdlUrl);
-    queryData.append('sdlUrl', '');
-    queryData.append(
-      'query',
-      `query {
-  countries {
-    name
-  }
-}`,
-    );
-    queryData.append('variables', '');
-    queryData.append('headers', '');
-    queryData.append('_action', 'QUERY');
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: queryData,
-        redirect: 'follow',
-      });
-      const result = await response.json();
-      clearError('response');
-      setGraphqlData(prevState => ({
-        ...prevState,
-        response: result,
-      }));
-    } catch (error) {
-      if (error) {
-        setError('response', t('errors.graphql.endpoint'));
+    if (graphqlData.endpointUrl) {
+      const queryData = new FormData();
+      queryData.append('endpointUrl', graphqlData.endpointUrl);
+      queryData.append('query', graphqlData.query);
+      queryData.append('variables', JSON.stringify(graphqlData.variables));
+      queryData.append('headers', JSON.stringify(graphqlData.headers));
+      queryData.append('_action', 'QUERY');
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          body: queryData,
+          redirect: 'follow',
+        });
+        const result = await response.json();
+        clearError('response');
+        setGraphqlData(prevState => ({
+          ...prevState,
+          response: result,
+        }));
+      } catch (error) {
+        if (error) {
+          setError('response', t('errors.graphql.endpoint'));
+        }
       }
+    } else {
+      setError('request', t('errors.graphql.sendRequest'));
     }
-
-    const introspectionData = new FormData();
-    introspectionData.append('_action', 'SDL');
-    introspectionData.append('sdlUrl', 'https://countries.trevorblades.com/?sdl');
-
-    //schema, introspection
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: introspectionData,
-        redirect: 'follow',
-      });
-      const result = await response.json();
-      console.log(result);
-      // console.log(printSchema(result.data.schema));
-      setGraphqlData(prevState => ({
-        ...prevState,
-        sdl: result.data.schema,
-      }));
-
-      console.log(result.data.schema);
-      console.log(graphqlData.sdl);
-    } catch (error) {
-      console.log('error', error);
+    if (graphqlData.sdlUrl) {
+      const introspectionData = new FormData();
+      introspectionData.append('_action', 'SDL');
+      introspectionData.append('sdlUrl', graphqlData.sdlUrl);
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          body: introspectionData,
+          redirect: 'follow',
+        });
+        const result = await response.json();
+        setGraphqlData(prevState => ({
+          ...prevState,
+          schema: buildClientSchema(result.data),
+        }));
+      } catch (error) {
+        setGraphqlData(prevState => ({
+          ...prevState,
+          schema: emptySchema,
+        }));
+        console.log('error', error);
+      }
     }
   };
 
@@ -137,7 +137,7 @@ const useGraphqlData = () => {
     handleSDLChange,
     handleSendRequest,
     handleQueryChange,
-    handleUpdateSchema,
+    handleSDLUrlBlur,
   };
 };
 
