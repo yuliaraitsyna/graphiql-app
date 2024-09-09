@@ -25,13 +25,13 @@ export function transformGraphUrl(urlPartToChange: UrlPartToChange, value: strin
       encodedEndpoint = btoa(value);
       break;
     case 'query':
-      encodedQuery = btoa(query);
+      encodedQuery = btoa(value);
       break;
     case 'headers':
       headersString = encodeHeaders(value);
       break;
     case 'variables':
-      encodedVariables = JSON.stringify(JSON.parse(value));
+      encodedVariables = value ? JSON.stringify(JSON.parse(value)) : '';
       break;
   }
   const encodedBody = btoa(JSON.stringify({encodedQuery, encodedVariables}));

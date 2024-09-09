@@ -7,6 +7,10 @@ import {SendRequestButton} from './SendRequestButton';
 import {Url} from './Url';
 import useGraphqlData from '~/hooks/useGraphqlData';
 import {QueryEditor} from '~/components/QueryEditor';
+import {AccordionBlock} from '~/components/UI/AccordionBlock';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ErrorHandler from '~/components/UI/ErrorHandler';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
@@ -21,17 +25,19 @@ export const GraphiqlRequest: React.FC = () => {
     handleSDLChange,
     handleSendRequest,
     handleQueryChange,
+    handleSDLUrlBlur,
   } = useGraphqlData();
+
+  const isDisabledSend = Object.prototype.hasOwnProperty.call(errors, 'endpoint');
 
   return (
     <Container maxWidth="xl">
-      {errors ? Object.entries(errors).map(([key, value]) => <div key={key}>Errors: {value as string}</div>) : null}
       <Typography component={'h4'} variant="h4" textAlign={'center'}>
         {t('links.graphqlClient')}
       </Typography>
       <div>
         <Box sx={{flexGrow: 1, padding: 2}}>
-          <SendRequestButton handleRequest={handleSendRequest} />
+          <SendRequestButton handleRequest={handleSendRequest} isDisabled={isDisabledSend} />
           <Url
             label={t('page.graphiql.endpointUrl')}
             name="endpoint"
@@ -46,11 +52,20 @@ export const GraphiqlRequest: React.FC = () => {
             value={sdlUrl}
             onChange={handleSDLChange}
             placeholder={t('page.graphiql.placeholderSdlUrl')}
+            onBlur={handleSDLUrlBlur}
           />
         </Box>
         <QueryEditor schema={schema} value={query} onChange={handleQueryChange} />
-        <HeadersEditor />
-        <VariablesEditor />
+        <AccordionBlock label={t('common.headers')}>
+          <HeadersEditor />
+        </AccordionBlock>
+        <AccordionBlock label={t('common.variables')}>
+          <VariablesEditor />
+        </AccordionBlock>
+        {/* {JSON.stringify(sdl)}
+        {printSchema(sdl)} */}
+        <ToastContainer />
+        <ErrorHandler errors={errors} />
       </div>
     </Container>
   );
