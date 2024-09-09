@@ -23,16 +23,22 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
   const [formattable, setFormattable] = useState(false);
 
   useEffect(() => {
-    const message = prettifyJson(content).error?.message ?? '';
-    setErrorMessage(message);
-  }, [content]);
+    if (type === 'JSON') {
+      const message = prettifyJson(content).error?.message ?? '';
+      setErrorMessage(message);
+    }
+  }, [content, type]);
+
+  useEffect(() => setContent(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue), [defaultValue, type]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
-    const message = prettifyJson(v).error?.message ?? '';
-    setErrorMessage(message);
+    if (type === 'JSON') {
+      const message = prettifyJson(v).error?.message ?? '';
+      setErrorMessage(message);
+      setFormattable(v !== prettifyJson(v).json && !message);
+    }
     setContent(v);
-    setFormattable(v !== prettifyJson(v).json && !message);
     if (onChange) {
       onChange(v);
     }
@@ -68,15 +74,19 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
           </Button>
         )}
       </Box>
-      <Box component="div" className={styles.wrapper}>
-        {type === 'JSON' && <StrNum content={content} />}
-        <Box>
-          <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
-            <textarea value={content} onChange={handleChange} disabled={mode === 'view'}></textarea>
+      <Box component="div" className={styles.body}>
+        <Box component="div" className={styles.wrapper}>
+          {type === 'JSON' && <StrNum content={content} />}
+          <Box>
+            <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
+              <textarea value={content} onChange={handleChange} disabled={mode === 'view'}></textarea>
+            </Box>
           </Box>
         </Box>
       </Box>
-      <FormHelperText style={{height: '1.5rem', marginLeft: '8px', fontSize: '14px', color: theme.palette.error.main}}>
+      <FormHelperText
+        className={styles.helper}
+        style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px'}}>
         {errorMessage}
       </FormHelperText>
     </Box>

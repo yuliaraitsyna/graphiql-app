@@ -5,6 +5,8 @@ import {AboutApp} from '~/components/AboutApp/AboutApp';
 import {Welcome} from '~/components/Welcome/Welcome';
 import {StartOverLink} from '~/components/CustomLinks';
 import {ErrorBoundaryWrapper} from '~/components/ErrorBoundary/ErrorBoundary';
+import JsonEditor from '~/components/JsonEditor/JsonEditor';
+import {Box} from '@mui/material';
 
 export function ErrorBoundary() {
   return (

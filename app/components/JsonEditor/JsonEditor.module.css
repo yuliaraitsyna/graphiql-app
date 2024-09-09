@@ -1,15 +1,18 @@
 .editor {
   position: relative;
   min-width: 256px;
+  max-height: inherit;
+  height: 100%;
 }
 
 .heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: 14px;
   padding: 0 8px;
   user-select: none;
+  height: 2rem;
 }
 
 .marker {
@@ -22,19 +25,26 @@
   color: #666;
 }
 
+.body {
+  padding: 20px 0 0 0.5em;
+  background-color: #eee;
+  border-radius: 0.5rem;
+  height: calc(100% - 56px);
+  overflow: hidden;
+}
+
 .wrapper {
   display: flex;
-  overflow-y: auto;
-  background-color: #eee;
   font-size: 14px;
-  padding: 1em;
-  border-radius: 0.5rem;
   height: 100%;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  padding-bottom: 0.5em;
 }
 
 .numeration {
   width: auto;
-  height: 100%;
+  height: fit-content;
   text-align: end;
   line-height: normal;
   padding-right: 0.25rem;
@@ -71,4 +81,9 @@
   font-size: inherit;
   background-color: #eee;
   grid-area: 1 / 1 / 2 / 2;
+}
+
+.helper {
+  height: 1.5rem;
+  font-size: 14px;
 }
