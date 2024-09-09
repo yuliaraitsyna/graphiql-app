@@ -11,11 +11,13 @@ import {AccordionBlock} from '~/components/UI/AccordionBlock';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ErrorHandler from '~/components/UI/ErrorHandler';
+import JsonEditor from '~/components/JsonEditor/JsonEditor';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
   const {
     errors,
+    response,
     endpointUrl,
     sdlUrl,
     query,
@@ -64,6 +66,9 @@ export const GraphiqlRequest: React.FC = () => {
         </AccordionBlock>
         {/* {JSON.stringify(sdl)}
         {printSchema(sdl)} */}
+        {response.status ? <p>HTTP status: {response.status}</p> : null}
+        {response.data ? <JsonEditor mode="view" defaultValue={JSON.stringify(response.data)} /> : null}
+        <p>SDL Documentation</p>
         <ToastContainer />
         <ErrorHandler errors={errors} />
       </div>

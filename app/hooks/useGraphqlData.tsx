@@ -18,7 +18,10 @@ const useGraphqlData = () => {
     headers: [],
     schema: emptySchema,
     introspection: {data: null, endpoint: ''},
-    response: {},
+    response: {
+      status: 0,
+      data: {},
+    },
     sdl: emptySchema,
   });
 
