@@ -1,13 +1,15 @@
 import CodeMirror, {ReactCodeMirrorRef} from '@uiw/react-codemirror';
 import {useTranslation} from 'react-i18next';
 import {Box, Button, Typography} from '@mui/material';
-import {formatting} from './utils/formattingJson';
 import styles from './QueryEditor.module.css';
 import {useEffect, useRef} from 'react';
 import {GraphQLSchema} from 'graphql';
 import {styleOverrides, basicSetup, myTheme} from './QueryEditorSettings';
 import {graphql} from './utils/graphqlLinter';
 import {updateSchema} from 'cm6-graphql';
+import * as prettier from 'prettier/standalone';
+import * as parserBabel from 'prettier/parser-babel';
+import * as prettierPluginGraphql from 'prettier/plugins/graphql';
 
 interface QueryEditorProps {
   schema: GraphQLSchema;
@@ -19,8 +21,18 @@ export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema
   const {t} = useTranslation();
   const queryRef = useRef<ReactCodeMirrorRef | null>(null);
 
-  const handleFormatQuery = () => {
-    onChange(formatting(value));
+  const handleFormatQuery = async () => {
+    try {
+      const formattedCode = prettier.format(value, {
+        parser: 'graphql',
+        plugins: [parserBabel, prettierPluginGraphql],
+      });
+      onChange(await formattedCode);
+    } catch (err) {
+      if (err) {
+        onChange(value);
+      }
+    }
   };
 
   useEffect(() => {
@@ -28,11 +40,9 @@ export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema
       updateSchema(queryRef.current.view, schema);
     }
   }, [schema]);
-
   const handleChange = (value: string) => {
     onChange(value);
   };
-
   const extensionsArray = [styleOverrides, graphql(schema)];
 
   return (
