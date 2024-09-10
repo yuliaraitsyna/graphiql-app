@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 interface HeaderProps {
+  decodedHeaders: Header[];
   setStoredHeaders: (headers: Header[]) => void;
 }
 
@@ -28,18 +29,27 @@ const initialHeader: Header = {
   checked: false,
 };
 
-const HeadersEditor: React.FC<HeaderProps> = ({setStoredHeaders}) => {
+const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}) => {
   const [headers, setHeaders] = useState<Header[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    if (decodedHeaders.length > 0) {
+      setHeaders(decodedHeaders);
+    } else {
+      const storedHeaders = localStorage.getItem('headers');
+      if (storedHeaders) {
+        setHeaders(JSON.parse(storedHeaders));
+      }
+    }
+  }, [decodedHeaders]);
+
+  useEffect(() => {
     const storedHeaders = localStorage.getItem('headers');
     if (storedHeaders) {
-      const parsedHeaders = JSON.parse(storedHeaders);
-      setHeaders(parsedHeaders);
-      setStoredHeaders(parsedHeaders);
+      setHeaders(JSON.parse(storedHeaders));
     }
-  }, [setStoredHeaders]);
+  }, []);
 
   useEffect(() => {
     if (headers.length > 0) {
@@ -49,7 +59,6 @@ const HeadersEditor: React.FC<HeaderProps> = ({setStoredHeaders}) => {
 
   const handleHeaderAddition = () => {
     setHeaders([...headers, initialHeader]);
-    setStoredHeaders([...headers, initialHeader]);
   };
 
   const handleEditClick = (index: number) => {
