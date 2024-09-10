@@ -115,7 +115,12 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
         {t('page.rest.title')}
       </Typography>
       <Box sx={{border: `1px solid ${grey[400]}`, borderRadius: '5px', display: 'flex', width: '100%'}}>
-        <Select fullWidth value={method} onChange={handleMethodSelection} sx={{maxWidth: '150px'}}>
+        <Select
+          fullWidth
+          value={method}
+          onChange={handleMethodSelection}
+          sx={{maxWidth: '150px'}}
+          aria-label="select-method">
           {Object.values(HTTPMethods).map((value, index) => (
             <MenuItem key={index} value={value}>
               {value}

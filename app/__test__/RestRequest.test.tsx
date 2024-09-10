@@ -1,14 +1,18 @@
 import '@testing-library/jest-dom';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import {jest} from '@jest/globals';
 import RestRequest from '~/components/RESTfullClient/RestRequest/RestRequest';
 import {HTTPMethods} from '~/components/RESTfullClient/RestRequest/models/HTTPMethods';
 import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
 import {RequestParams} from '~/components/RESTfullClient/models/RequestParams';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
+import {decodeRestEncodedURL} from '~/utils/decodeRestEncodedURL';
+import userEvent from '@testing-library/user-event';
+
+const mockNavigate = jest.fn();
 
 jest.mock('@remix-run/react', () => ({
-  useNavigate: jest.fn(),
+  useNavigate: () => mockNavigate,
 }));
 
 jest.mock('@remix-run/react', () => ({
@@ -83,7 +87,7 @@ describe('RestRequest Component', () => {
         .join('&');
     }
 
-    const expectedUrl = `/${params.method}/${btoa(params.endpointUrl)}${queryParams ? `?${queryParams}` : ''}`;
+    const expectedUrl = `/${params.method}/${btoa(params.endpointUrl)}${queryParams ? `?headers=${queryParams}` : ''}`;
     const result = createRestEncodedURL(params);
 
     expect(result).toBe(expectedUrl);
@@ -105,7 +109,7 @@ describe('RestRequest Component', () => {
       .map(header => `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`)
       .join('&');
 
-    const expectedUrl = `/${params.method}/${btoa(params.endpointUrl)}${queryParams ? `?${queryParams}` : ''}`;
+    const expectedUrl = `/${params.method}/${btoa(params.endpointUrl)}${queryParams ? `?headers=${queryParams}` : ''}`;
     const result = createRestEncodedURL(params);
 
     expect(result).toBe(expectedUrl);
@@ -126,5 +130,18 @@ describe('RestRequest Component', () => {
     fireEvent.click(screen.getByText('Send'));
 
     expect(replaceVariablesInURL).toHaveBeenCalledWith('https://{url}/api/resource/{id}', mockVariables);
+  });
+
+  test('should correctly decode URL', () => {
+    const params: RequestParams = {
+      endpointUrl: 'https://example.com/api/resource',
+      method: HTTPMethods.GET,
+      headers: [{key: 'Content-Type', value: 'application/json', checked: true}],
+      variables: [{name: 'url', value: 'https://example.com', checked: true}],
+      body: undefined,
+    };
+    const encodedURL = createRestEncodedURL(params);
+    const decodedParams = decodeRestEncodedURL(encodedURL);
+    expect(decodedParams).toEqual(params);
   });
 });
