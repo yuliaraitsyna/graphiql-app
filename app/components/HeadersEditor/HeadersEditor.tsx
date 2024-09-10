@@ -34,6 +34,12 @@ const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    return () => {
+      localStorage.removeItem('headers');
+    };
+  }, []);
+
+  useEffect(() => {
     if (decodedHeaders.length > 0) {
       setHeaders(decodedHeaders);
     } else {
