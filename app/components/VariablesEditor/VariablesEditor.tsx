@@ -20,6 +20,7 @@ import {Variable} from './models/variable';
 import {variableNamePattern, variableValuePattern} from './models/regex';
 
 interface VariableProps {
+  decodedVariables: Variable[];
   setStoredVariables: (headers: Variable[]) => void;
 }
 
@@ -29,9 +30,26 @@ const initialVariable: Variable = {
   checked: false,
 };
 
-const VariablesEditor: React.FC<VariableProps> = ({setStoredVariables}) => {
+const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVariables}) => {
   const [variables, setVariables] = useState<Variable[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('variables');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (decodedVariables.length > 0) {
+      setVariables(decodedVariables);
+    } else {
+      const storedHeaders = localStorage.getItem('variables');
+      if (storedHeaders) {
+        setVariables(JSON.parse(storedHeaders));
+      }
+    }
+  }, [decodedVariables]);
 
   useEffect(() => {
     const storedVariables = localStorage.getItem('variables');
