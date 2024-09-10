@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {toast} from 'react-toastify';
 
 interface Errors {
@@ -11,12 +11,17 @@ interface Props {
 }
 
 const ErrorHandler: React.FC<Props> = ({errors, clearError}) => {
+  const prevErrorsRef = useRef(errors);
+
   useEffect(() => {
-    const lastErrorKey = Object.keys(errors).pop();
-    if (lastErrorKey && errors[lastErrorKey]) {
-      toast.error(errors[lastErrorKey], {
-        onClose: () => clearError(lastErrorKey),
-      });
+    if (errors !== prevErrorsRef.current) {
+      const lastErrorKey = Object.keys(errors).pop();
+      if (lastErrorKey && errors[lastErrorKey]) {
+        toast.error(errors[lastErrorKey], {
+          onClose: () => clearError(lastErrorKey),
+        });
+      }
+      prevErrorsRef.current = errors;
     }
   }, [errors, clearError]);
 
