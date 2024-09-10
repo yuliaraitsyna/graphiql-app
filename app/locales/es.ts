@@ -64,6 +64,8 @@ export default {
       placeholderSdlUrl: 'Introduzca la URL de LDE',
       queryEditor: 'Consulta',
       format: 'Formato',
+      response: 'Respuesta',
+      httpStatus: 'Estado HTTP',
     },
   },
   links: {
@@ -82,6 +84,8 @@ export default {
       sendRequest: '¡No se puede enviar la solicitud! Compruebe los campos',
       responseError: 'No se pueden obtener datos!',
       responseErrorStatus: 'No se pueden obtener datos. Estado: ',
+      notValidEndpoint: 'Proporcione la URL correcta del punto final.',
+      notValidSdlUrl: 'Proporcione la URL sdl correcta',
     },
   },
 };

@@ -4,14 +4,13 @@ import styles from './SendRequestButton.module.css';
 
 interface SendRequestButtonProps {
   handleRequest: React.MouseEventHandler<HTMLButtonElement>;
-  isDisabled: boolean;
 }
 
-export const SendRequestButton: React.FC<SendRequestButtonProps> = ({handleRequest, isDisabled}) => {
+export const SendRequestButton: React.FC<SendRequestButtonProps> = ({handleRequest}) => {
   const {t} = useTranslation();
   return (
     <div className={styles.sendRequestBtnWrap}>
-      <Button variant="contained" onClick={handleRequest} disabled={isDisabled}>
+      <Button variant="contained" onClick={handleRequest}>
         {t('page.graphiql.sendButton')}
       </Button>
     </div>

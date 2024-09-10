@@ -7,15 +7,18 @@ interface Errors {
 
 interface Props {
   errors: Errors;
+  clearError: (name: string) => void;
 }
 
-const ErrorHandler: React.FC<Props> = ({errors}) => {
+const ErrorHandler: React.FC<Props> = ({errors, clearError}) => {
   useEffect(() => {
     const lastErrorKey = Object.keys(errors).pop();
     if (lastErrorKey && errors[lastErrorKey]) {
-      toast.error(errors[lastErrorKey]);
+      toast.error(errors[lastErrorKey], {
+        onClose: () => clearError(lastErrorKey),
+      });
     }
-  }, [errors]);
+  }, [errors, clearError]);
 
   return null;
 };

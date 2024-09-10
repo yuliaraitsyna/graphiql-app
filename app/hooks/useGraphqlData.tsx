@@ -8,7 +8,7 @@ import {buildClientSchema} from 'graphql';
 
 const useGraphqlData = () => {
   const {t} = useTranslation();
-  const {errors, setError, clearError} = useGraphqlErrors();
+  const {errors, setError, clearError, clearAllErrors} = useGraphqlErrors();
 
   const [graphqlData, setGraphqlData] = useState({
     endpointUrl: '',
@@ -36,28 +36,11 @@ const useGraphqlData = () => {
     const value = event.target.value;
     if (isValidURL(value)) {
       transformGraphUrl('endpoint', value, graphqlData);
-      clearError(event.target.name);
       if (graphqlData.sdlUrl === '') {
         setGraphqlData(prevState => ({
           ...prevState,
           sdlUrl: value + '?sdl',
         }));
-      }
-    } else {
-      if (value !== '') {
-        setError(event.target.name, t('errors.graphql.endpoint'));
-      }
-    }
-  };
-
-  const handleSDLUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    clearError(event.target.name);
-    if (isValidURL(value)) {
-      clearError(event.target.name);
-    } else {
-      if (value !== '') {
-        setError(event.target.name, t('errors.graphql.sdl'));
       }
     }
   };
@@ -79,8 +62,12 @@ const useGraphqlData = () => {
 
   const handleSendRequest = async () => {
     clearError('response');
+    clearError('request');
     const apiUrl = `${window.location.protocol}//${window.location.host}/api/graphql`;
-    if (graphqlData.endpointUrl) {
+    if (!graphqlData.endpointUrl && !graphqlData.sdlUrl) {
+      setError('request', t('errors.graphql.sendRequest'));
+    }
+    if (graphqlData.endpointUrl && isValidURL(graphqlData.endpointUrl)) {
       const queryData = new FormData();
       queryData.append('endpointUrl', graphqlData.endpointUrl);
       queryData.append('query', graphqlData.query);
@@ -111,9 +98,9 @@ const useGraphqlData = () => {
         }
       }
     } else {
-      setError('request', t('errors.graphql.sendRequest'));
+      setError('response', t('errors.graphql.notValidEndpoint'));
     }
-    if (graphqlData.sdlUrl) {
+    if (graphqlData.sdlUrl && isValidURL(graphqlData.sdlUrl)) {
       const introspectionData = new FormData();
       introspectionData.append('_action', 'SDL');
       introspectionData.append('sdlUrl', graphqlData.sdlUrl);
@@ -155,7 +142,8 @@ const useGraphqlData = () => {
     handleSDLChange,
     handleSendRequest,
     handleQueryChange,
-    handleSDLUrlBlur,
+    clearAllErrors,
+    clearError,
   };
 };
 

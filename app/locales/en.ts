@@ -63,6 +63,8 @@ export default {
       placeholderSdlUrl: 'Enter SDL URL',
       queryEditor: 'Query',
       format: 'Format',
+      response: 'Response',
+      httpStatus: 'HTTP status',
     },
   },
   links: {
@@ -81,6 +83,8 @@ export default {
       sendRequest: 'Unable to send request! Check fields!',
       responseError: 'Unable to get data! Error occurs!',
       responseErrorStatus: 'Unable to get data! Status: ',
+      notValidEndpoint: 'Provide correct endpoint URL!',
+      notValidSdlUrl: 'Provide correct sdl URL!',
     },
   },
 };
