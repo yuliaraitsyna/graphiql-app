@@ -11,16 +11,22 @@ export const createRestEncodedURL = (params: RequestParams): string => {
     finalUrl += `/${encodedBody}`;
   }
 
-  const queryParams = params.headers
-    ?.map(header => {
-      if (header.checked) {
-        return `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`;
-      }
-    })
+  const headerParams = params.headers
+    ?.filter(header => header.checked)
+    .map(header => `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`)
     .join('&');
 
-  if (queryParams) {
-    finalUrl += `?${queryParams}`;
+  const variableParams = params.variables
+    ?.filter(header => header.checked)
+    .map(variable => `${encodeURIComponent(variable.name)}=${encodeURIComponent(variable.value)}`)
+    .join('&');
+
+  const queryParams = [];
+  if (headerParams) queryParams.push(`headers=${headerParams}`);
+  if (variableParams) queryParams.push(`variables=${variableParams}`);
+
+  if (queryParams.length > 0) {
+    finalUrl += `?${queryParams.join('&')}`;
   }
 
   return finalUrl;

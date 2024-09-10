@@ -14,6 +14,7 @@ import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 import {useTranslation} from 'react-i18next';
 import {decodeRestEncodedURL} from '~/utils/decodeRestEncodedURL';
 import {Header} from '~/components/HeadersEditor/models/header';
+import {Variable} from '~/components/models/variable';
 
 interface RestRequestParams {
   onSendRequest: (response: Response) => void;
@@ -25,13 +26,13 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
   const [body, setBody] = useState<string>('');
   const [URL, setURL] = useState<string>('');
   const [headers, setHeaders] = useState<Header[]>([]);
+  const [variables, setVariables] = useState<Variable[]>([]);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const pathname = window.location.pathname;
-    setMethod(pathname.slice(1) as HTTPMethods);
     const search = window.location.search;
     const hash = window.location.hash;
 
@@ -40,11 +41,15 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
       const params = decodeRestEncodedURL(fullUrl);
 
       setMethod(params.method);
-      setBody(params.method);
+      setBody(params.body || '');
       setURL(params.endpointUrl);
 
       if (params.headers) {
         setHeaders(params.headers);
+      }
+
+      if (params.variables) {
+        setVariables(params.variables);
       }
     }
   }, [location]);
@@ -59,8 +64,9 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
     const endpointURL = replaceVariablesInURL(URL, variables);
 
     let parsedBody = null;
+    parsedBody = body && isValidJson(body) ? JSON.parse(body) : null;
 
-    parsedBody = body ? JSON.parse(body) : null;
+    console.log(parsedBody);
 
     const params: RequestParams = {
       endpointUrl: endpointURL,
@@ -71,6 +77,9 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
     };
 
     const encodedURL = createRestEncodedURL(params);
+    console.log('ENCODE', encodedURL);
+    const decodedURL = decodeRestEncodedURL(encodedURL);
+    console.log('DECODE', decodedURL);
 
     try {
       const response = await fetchRestData(params);
@@ -83,7 +92,6 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
     const method = event.target.value;
-    window.location.pathname = `/${method}`;
     setMethod(method as HTTPMethods);
   };
 
@@ -98,7 +106,6 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
   };
 
   const handleBodyChange = (body: string) => {
-    console.log(body);
     setBody(body);
   };
 
@@ -133,6 +140,15 @@ const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
       <JsonEditor mode="edit" type="JSON" defaultValue="" onChange={handleBodyChange}></JsonEditor>
     </Container>
   );
+};
+
+const isValidJson = (str: string): boolean => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 export default RestRequest;
