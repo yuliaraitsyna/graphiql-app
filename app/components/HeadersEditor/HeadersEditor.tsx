@@ -34,34 +34,16 @@ const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    return () => {
-      localStorage.removeItem('headers');
-    };
-  }, []);
+    if (headers.length > 0 && JSON.stringify(headers) !== JSON.stringify(decodedHeaders)) {
+      setStoredHeaders(headers);
+    }
+  }, [headers, setStoredHeaders, decodedHeaders]);
 
   useEffect(() => {
     if (decodedHeaders.length > 0) {
       setHeaders(decodedHeaders);
-    } else {
-      const storedHeaders = localStorage.getItem('headers');
-      if (storedHeaders) {
-        setHeaders(JSON.parse(storedHeaders));
-      }
     }
   }, [decodedHeaders]);
-
-  useEffect(() => {
-    const storedHeaders = localStorage.getItem('headers');
-    if (storedHeaders) {
-      setHeaders(JSON.parse(storedHeaders));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (headers.length > 0) {
-      localStorage.setItem('headers', JSON.stringify(headers));
-    }
-  }, [headers]);
 
   const handleHeaderAddition = () => {
     setHeaders([...headers, initialHeader]);
@@ -76,7 +58,6 @@ const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}
       const updatedHeaders = [...headers];
       updatedHeaders[editingIndex] = {...updatedHeaders[editingIndex], [field]: value};
       setHeaders(updatedHeaders);
-      setStoredHeaders(updatedHeaders);
     }
   };
 
@@ -84,7 +65,6 @@ const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}
     const updatedHeaders = [...headers];
     updatedHeaders[index].checked = !updatedHeaders[index].checked;
     setHeaders(updatedHeaders);
-    setStoredHeaders(updatedHeaders);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -96,11 +76,7 @@ const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}
 
   const handleDelete = (index: number) => {
     const updatedHeaders = headers.filter((_, i) => i !== index);
-    if (updatedHeaders.length === 0) {
-      localStorage.removeItem('headers');
-    }
     setHeaders(updatedHeaders);
-    setStoredHeaders(updatedHeaders);
   };
 
   return (
