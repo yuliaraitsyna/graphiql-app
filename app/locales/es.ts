@@ -50,6 +50,14 @@ export default {
       altAppLogo: 'Logotipo de la aplicación',
     },
   },
+  editors: {
+    headersTitle: 'Encabezados',
+    variablesTitle: 'Variables',
+    keyTitle: 'Clave',
+    valueTitle: 'Valor',
+    nameTitle: 'Nombre',
+    add: 'Añadir',
+  },
   links: {
     signIn: 'Iniciar sesión',
     signOut: 'Cerrar sesión',
