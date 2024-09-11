@@ -21,7 +21,7 @@ import {variableNamePattern, variableValuePattern} from './models/regex';
 
 interface VariableProps {
   decodedVariables: Variable[];
-  setStoredVariables: (headers: Variable[]) => void;
+  setStoredVariables: (variables: Variable[]) => void;
 }
 
 const initialVariable: Variable = {
@@ -35,40 +35,19 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    return () => {
-      localStorage.removeItem('variables');
-    };
-  }, []);
+    if (variables.length > 0 && JSON.stringify(variables) !== JSON.stringify(decodedVariables)) {
+      setStoredVariables(variables);
+    }
+  }, [variables, setStoredVariables, decodedVariables]);
 
   useEffect(() => {
     if (decodedVariables.length > 0) {
       setVariables(decodedVariables);
-    } else {
-      const storedHeaders = localStorage.getItem('variables');
-      if (storedHeaders) {
-        setVariables(JSON.parse(storedHeaders));
-      }
     }
   }, [decodedVariables]);
 
-  useEffect(() => {
-    const storedVariables = localStorage.getItem('variables');
-    if (storedVariables) {
-      const parsedVariables = JSON.parse(storedVariables);
-      setVariables(parsedVariables);
-      setStoredVariables(parsedVariables);
-    }
-  }, [setStoredVariables]);
-
-  useEffect(() => {
-    if (variables.length > 0) {
-      localStorage.setItem('variables', JSON.stringify(variables));
-    }
-  }, [variables]);
-
-  const handleVariablerAddition = () => {
+  const handleVariableAddition = () => {
     setVariables([...variables, initialVariable]);
-    setStoredVariables([...variables, initialVariable]);
   };
 
   const handleEditClick = (index: number) => {
@@ -83,7 +62,6 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
         const updatedVariables = [...variables];
         updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
         setVariables(updatedVariables);
-        setStoredVariables(updatedVariables);
       }
     }
   };
@@ -92,7 +70,6 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
     const updatedVariables = [...variables];
     updatedVariables[index].checked = !updatedVariables[index].checked;
     setVariables(updatedVariables);
-    setStoredVariables(updatedVariables);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -103,12 +80,8 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
   };
 
   const handleDelete = (index: number) => {
-    const updatedVariables = variables.filter((_, i) => i !== index);
-    if (!updatedVariables.length) {
-      localStorage.removeItem('variables');
-    }
-    setVariables(updatedVariables);
-    setStoredVariables(updatedVariables);
+    const updatedHeaders = variables.filter((_, i) => i !== index);
+    setVariables(updatedHeaders);
   };
 
   return (
@@ -117,7 +90,7 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
         <Typography component={'h6'} variant="h6">
           Variables
         </Typography>
-        <Button variant="contained" onClick={handleVariablerAddition}>
+        <Button variant="contained" onClick={handleVariableAddition}>
           Add
         </Button>
       </Box>
