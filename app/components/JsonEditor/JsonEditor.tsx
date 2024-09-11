@@ -24,19 +24,21 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
 
   useEffect(() => {
     if (type === 'JSON') {
-      const message = prettifyJson(content).error?.message ?? '';
+      const message = content ? (prettifyJson(content).error?.message ?? '') : '';
       setErrorMessage(message);
     }
   }, [content, type]);
 
-  useEffect(() => setContent(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue), [defaultValue, type]);
+  useEffect(() => setContent(defaultValue), [defaultValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
+    console.log(v);
     if (type === 'JSON') {
-      const message = prettifyJson(v).error?.message ?? '';
+      const message = v ? (prettifyJson(v).error?.message ?? '') : '';
       setErrorMessage(message);
-      setFormattable(v !== prettifyJson(v).json && !message);
+      console.log(message);
+      setFormattable(!!v && v !== prettifyJson(v).json && !message);
     }
     setContent(v);
     if (onChange) {
@@ -59,9 +61,9 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
     <Box component="section" className={styles.editor}>
       <Box component="div" className={styles.marker}>
         {mode === 'view' ? (
-          <VisibleIcon style={{width: '12px', height: '12px'}} />
+          <VisibleIcon style={{width: '16px', height: '16px'}} />
         ) : (
-          <EditIcon style={{width: '12px', height: '12px'}} />
+          <EditIcon style={{width: '16px', height: '16px'}} />
         )}
       </Box>
       <Box component="div" className={styles.heading}>
@@ -86,7 +88,7 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
       </Box>
       <FormHelperText
         className={styles.helper}
-        style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px'}}>
+        style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px', fontSize: '14px'}}>
         {errorMessage}
       </FormHelperText>
     </Box>

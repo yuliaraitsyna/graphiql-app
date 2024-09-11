@@ -4,7 +4,7 @@ import {HTTPMethods} from '~/components/RESTfullClient/RestRequest/models/HTTPMe
 
 export const fetchRestData = async (params: RequestParams) => {
   const headersObj: HeadersInit = {};
-
+  console.log('fetch'); // clear line later
   if (params.headers) {
     params.headers.forEach(header => {
       headersObj[header.key] = header.value;
@@ -44,10 +44,10 @@ export const fetchRestData = async (params: RequestParams) => {
       return {headers: response.headers};
     }
 
-    const data = await response.json();
+    const data = await response.json(); // any
     return data;
   } catch (error) {
-    console.error('Fetch error:', error);
+    console.error('Fetch error:', error); // delete later
     throw error;
   }
 };
@@ -64,6 +64,7 @@ export const loader: LoaderFunction = async ({params}: LoaderFunctionArgs) => {
 
   if (method === HTTPMethods.GET) {
     const response = await fetchRestData({
+      // fetchRestData returns data not response
       endpointUrl: decodedURL,
       method,
     });
@@ -73,7 +74,7 @@ export const loader: LoaderFunction = async ({params}: LoaderFunctionArgs) => {
 
   if (method === HTTPMethods.HEAD) {
     const response = await fetch(decodedURL, {
-      method: HTTPMethods.HEAD,
+      method: HTTPMethods.HEAD, // why not method
       headers: (await fetchRestData({endpointUrl: decodedURL, method: HTTPMethods.HEAD})).headers,
     });
 

@@ -26,7 +26,7 @@
 }
 
 .body {
-  padding: 20px 0 0 0.5em;
+  padding: 24px 0 0 0.5em;
   background-color: #eee;
   border-radius: 0.5rem;
   height: calc(100% - 56px);
@@ -85,5 +85,4 @@
 
 .helper {
   height: 1.5rem;
-  font-size: 14px;
 }

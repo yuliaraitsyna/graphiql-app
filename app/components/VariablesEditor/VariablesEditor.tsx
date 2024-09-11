@@ -25,24 +25,31 @@ const initialVariable: Variable = {
   checked: false,
 };
 
-const VariablesEditor: React.FC = () => {
-  const [variables, setVariables] = useState<Variable[]>([]);
+type Props = {
+  onVariablesChange: (variables: Variable[]) => void;
+  vars: Variable[];
+};
+
+const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []}) => {
+  const [variables, setVariables] = useState<Variable[]>(vars);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    const storedVariables = localStorage.getItem('variables');
-    if (storedVariables) {
-      setVariables(JSON.parse(storedVariables));
-    }
-  }, []);
+  useEffect(() => setVariables(vars), [vars]);
 
-  useEffect(() => {
-    if (variables.length > 0) {
-      localStorage.setItem('variables', JSON.stringify(variables));
-    }
-  }, [variables]);
+  // useEffect(() => {
+  //   const storedVariables = localStorage.getItem('variables');
+  //   if (storedVariables) {
+  //     setVariables(JSON.parse(storedVariables));
+  //   }
+  // }, []);
 
-  const handleVariablerAddition = () => {
+  // useEffect(() => {
+  //   if (variables.length > 0) {
+  //     localStorage.setItem('variables', JSON.stringify(variables));
+  //   }
+  // }, [variables]);
+
+  const handleVariableAddition = () => {
     setVariables([...variables, initialVariable]);
   };
 
@@ -58,6 +65,7 @@ const VariablesEditor: React.FC = () => {
         const updatedVariables = [...variables];
         updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
         setVariables(updatedVariables);
+        onVariablesChange?.(updatedVariables);
       }
     }
   };
@@ -66,6 +74,7 @@ const VariablesEditor: React.FC = () => {
     const updatedVariables = [...variables];
     updatedVariables[index].checked = !updatedVariables[index].checked;
     setVariables(updatedVariables);
+    onVariablesChange?.(updatedVariables);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -77,10 +86,11 @@ const VariablesEditor: React.FC = () => {
 
   const handleDelete = (index: number) => {
     const updatedVariables = variables.filter((_, i) => i !== index);
-    if (!updatedVariables.length) {
-      localStorage.removeItem('variables');
-    }
+    // if (!updatedVariables.length) {
+    //   localStorage.removeItem('variables');
+    // }
     setVariables(updatedVariables);
+    onVariablesChange?.(updatedVariables);
   };
 
   return (
@@ -89,7 +99,7 @@ const VariablesEditor: React.FC = () => {
         <Typography component={'h6'} variant="h6">
           Variables
         </Typography>
-        <Button variant="contained" onClick={handleVariablerAddition}>
+        <Button variant="contained" onClick={handleVariableAddition}>
           Add
         </Button>
       </Box>
