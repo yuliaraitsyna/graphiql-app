@@ -32,6 +32,7 @@ export const GraphiqlRequest: React.FC = () => {
     handleQueryChange,
     clearError,
     handleVariablesChange,
+    handleQueryBlur,
   } = useGraphqlData();
 
   return (
@@ -60,7 +61,7 @@ export const GraphiqlRequest: React.FC = () => {
             placeholder={t('page.graphiql.placeholderSdlUrl')}
           />
         </Box>
-        <QueryEditor schema={schema} value={query} onChange={handleQueryChange} />
+        <QueryEditor schema={schema} value={query} onBlur={handleQueryBlur} onChange={handleQueryChange} />
         <AccordionBlock label={t('common.variables')}>
           <GraphqlVariablesEditor value={variables} onChange={handleVariablesChange} />
         </AccordionBlock>

@@ -15,9 +15,10 @@ interface QueryEditorProps {
   schema: GraphQLSchema;
   value: string;
   onChange: (value: string) => void;
+  onBlur: () => void;
 }
 
-export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema}) => {
+export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema, onBlur}) => {
   const {t} = useTranslation();
   const queryRef = useRef<ReactCodeMirrorRef | null>(null);
 
@@ -62,6 +63,7 @@ export const QueryEditor: React.FC<QueryEditorProps> = ({value, onChange, schema
         theme={myTheme}
         value={value}
         onChange={handleChange}
+        onBlur={onBlur}
         extensions={extensionsArray}
         basicSetup={basicSetup}
       />

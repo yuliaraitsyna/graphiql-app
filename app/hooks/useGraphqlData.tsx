@@ -43,7 +43,8 @@ const useGraphqlData = () => {
 
   useEffect(() => {
     transformGraphUrl(graphqlData, headersParams);
-  }, [graphqlData, headersParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [headersParams, graphqlData.variables]);
 
   const handleEndpointUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGraphqlData(prevState => ({
@@ -77,6 +78,9 @@ const useGraphqlData = () => {
       ...prevState,
       query: value,
     }));
+  };
+
+  const handleQueryBlur = () => {
     transformGraphUrl(graphqlData, headersParams);
   };
 
@@ -91,7 +95,6 @@ const useGraphqlData = () => {
     clearError('response');
     clearError('request');
     let encodedHeaders: Record<string, string> = {};
-
     if (headersParams) {
       encodedHeaders = headersParams.reduce<Record<string, string>>((acc, header) => {
         if (header.checked) {
@@ -193,6 +196,7 @@ const useGraphqlData = () => {
     clearError,
     handleVariablesChange,
     setGraphqlData,
+    handleQueryBlur,
   };
 };
 
