@@ -1,46 +1,36 @@
-import encodeHeaders from './encodeHeaders';
+import encodeHeaders from './encodeGraphqlHeaders';
+import {Header} from '../components/HeadersEditor/models/header';
+import {processGraphQLQuery} from './processGraphqlQuery';
 
 interface Url {
   endpointUrl: string;
   query: string;
-  headers: object;
-  variables: object;
+  variables: string;
 }
-type UrlPartToChange = 'endpoint' | 'query' | 'headers' | 'variables';
+type encodedHValue = Record<string, string>;
 
-export function transformGraphUrl(urlPartToChange: UrlPartToChange, value: string, data: Url): void {
-  const {endpointUrl, query, headers, variables} = data;
+export function transformGraphUrl(data: Url, headers: Header[]): void {
+  const {endpointUrl, query, variables} = data;
+
   const method = 'GRAPHQL';
-  let encodedEndpoint,
-    encodedQuery,
-    encodedVariables = '';
-  encodedEndpoint = endpointUrl ? btoa(endpointUrl) : '';
-  encodedVariables = variables ? JSON.stringify(variables) : '';
-  encodedQuery = query ? btoa(query) : '';
-
-  let headersString = encodeHeaders(JSON.stringify(headers));
-
-  switch (urlPartToChange) {
-    case 'endpoint':
-      encodedEndpoint = btoa(value);
-      break;
-    case 'query':
-      encodedQuery = btoa(value);
-      break;
-    case 'headers':
-      headersString = encodeHeaders(value);
-      break;
-    case 'variables':
-      encodedVariables = value ? JSON.stringify(JSON.parse(value)) : '';
-      break;
+  let encodedHeaders = {};
+  let encodedHeadersUrl: string = '';
+  const encodedEndpoint = endpointUrl ? `${btoa(endpointUrl)}/` : '';
+  if (headers) {
+    encodedHeaders = headers.reduce<encodedHValue>((acc, header) => {
+      if (header.checked) {
+        acc[header.key] = header.value;
+      }
+      return acc;
+    }, {});
+    encodedHeadersUrl = encodeHeaders(JSON.stringify(encodedHeaders)) as string;
   }
-  const encodedBody = btoa(JSON.stringify({encodedQuery, encodedVariables}));
-
+  const encodedBody = btoa(processGraphQLQuery(query, variables));
   const urlParts = [
     `${method}/`,
-    encodedEndpoint ? `${encodedEndpoint}/` : '',
-    encodedBody ? `${encodedBody}/` : '',
-    headersString ? `?${headersString}` : '',
+    `${encodedEndpoint}`,
+    encodedBody ? `${encodedBody}` : '',
+    encodedHeadersUrl ? `?${encodedHeadersUrl}` : '',
   ];
   const newUrl = `/${urlParts.join('')}`;
   window.history.replaceState({}, '', newUrl);
