@@ -27,7 +27,6 @@
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.0.14",
     "@fontsource/roboto-mono": "^5.0.19",
-    "@graphiql/react": "^0.26.2",
     "@graphql-tools/schema": "^10.0.6",
     "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.16.7",
