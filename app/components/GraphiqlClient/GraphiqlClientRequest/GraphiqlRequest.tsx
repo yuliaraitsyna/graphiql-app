@@ -2,7 +2,6 @@
 import {Box, Container, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
-import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 import {SendRequestButton} from './SendRequestButton';
 import {Url} from './Url';
 import useGraphqlData from '~/hooks/useGraphqlData';
@@ -12,27 +11,33 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import ErrorHandler from '~/components/UI/ErrorHandler';
+import {GraphqlVariablesEditor} from './GraphqlVariablesEditor';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
   const {
     errors,
     response,
+    variables,
     endpointUrl,
     sdlUrl,
+    headersParams,
     query,
     schema,
     handleEndpointUrlChange,
     handleEndpointUrlBlur,
     handleSDLChange,
+    setHeaders,
     handleSendRequest,
     handleQueryChange,
     clearError,
+    handleVariablesChange,
   } = useGraphqlData();
 
   return (
     <Container maxWidth="xl">
-      {JSON.stringify(errors)}
+      <ToastContainer />
+      <ErrorHandler errors={errors} clearError={clearError} />
       <Typography component={'h4'} variant="h4" textAlign={'center'}>
         {t('links.graphqlClient')}
       </Typography>
@@ -56,25 +61,21 @@ export const GraphiqlRequest: React.FC = () => {
           />
         </Box>
         <QueryEditor schema={schema} value={query} onChange={handleQueryChange} />
-        <AccordionBlock label={t('common.headers')}>
-          <HeadersEditor />
-        </AccordionBlock>
         <AccordionBlock label={t('common.variables')}>
-          <VariablesEditor />
+          <GraphqlVariablesEditor value={variables} onChange={handleVariablesChange} />
+        </AccordionBlock>
+        <AccordionBlock label={t('common.headers')}>
+          <HeadersEditor decodedHeaders={headersParams} setStoredHeaders={setHeaders} />
         </AccordionBlock>
         <Typography component={'h4'} variant="h4" textAlign={'center'}>
-          {t('page.graphql.response')}
+          {t('page.graphiql.response')}
         </Typography>
         {response.status ? (
           <p>
-            {t('page.graphql.httpStatus')}: {response.status}
+            {t('page.graphiql.httpStatus')}: {response.status}
           </p>
         ) : null}
         <JsonEditor mode="view" defaultValue={JSON.stringify(response.data)} />
-        <p>SDL Documentation</p>
-        <p>{JSON.stringify(schema)}</p>
-        <ToastContainer />
-        <ErrorHandler errors={errors} clearError={clearError} />
       </div>
     </Container>
   );

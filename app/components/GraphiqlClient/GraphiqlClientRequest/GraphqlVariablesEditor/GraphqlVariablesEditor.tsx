@@ -1,8 +1,8 @@
 import CodeMirror, {ReactCodeMirrorRef} from '@uiw/react-codemirror';
 import {Box} from '@mui/material';
-import styles from '../../../QueryEditor/QueryEditor.module.css';
+import styles from '~/components/QueryEditor/QueryEditor.module.css';
 import {useRef} from 'react';
-import {styleOverrides, basicSetup, myTheme} from '../../../QueryEditor/QueryEditorSettings';
+import {styleOverrides, basicSetup, myTheme} from '~/components/QueryEditor/QueryEditorSettings';
 
 interface VariablesEditorProps {
   value: string;
