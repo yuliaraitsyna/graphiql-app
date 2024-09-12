@@ -6,19 +6,24 @@ type FetchGraphQLDataParams = {
   endpointUrl: string;
   query: string;
   variables: string;
-  //headers: string;
+  headers: string;
 };
 
 type FetchGraphQLIntrospectionParams = {
   sdlUrl: string;
 };
 
-const fetchGraphQLData = async ({endpointUrl, query, variables}: FetchGraphQLDataParams) => {
+const fetchGraphQLData = async ({endpointUrl, query, variables, headers}: FetchGraphQLDataParams) => {
+  const headersObject = headers ? JSON.parse(headers) : '';
+  variables = variables ? JSON.parse(variables) : '';
+  const mainHeaders = {
+    'Content-Type': 'application/json',
+  };
   const response = await fetch(endpointUrl, {
     method: 'POST',
-    //headers
     headers: {
-      'Content-Type': 'application/json',
+      ...mainHeaders,
+      ...headersObject,
     },
     body: JSON.stringify({query, variables}),
   });
@@ -38,9 +43,7 @@ const fetchGraphQLData = async ({endpointUrl, query, variables}: FetchGraphQLDat
 const fetchGraphQLIntrospectionData = async ({sdlUrl}: FetchGraphQLIntrospectionParams) => {
   const response = await fetch(sdlUrl, {
     method: 'POST',
-    //headers
     headers: {
-      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -60,12 +63,12 @@ export const action = async ({request}: ActionFunctionArgs): Promise<Response> =
     return new Response('Method Not Allowed', {status: 405});
   }
   const data = Object.fromEntries(await request.formData()) as Record<string, string>;
-  const {endpointUrl, sdlUrl, query, variables, _action} = data;
+  const {endpointUrl, sdlUrl, query, headers, variables, _action} = data;
   let apiResponse;
   try {
     switch (_action) {
       case 'QUERY':
-        apiResponse = await fetchGraphQLData({endpointUrl, query, variables});
+        apiResponse = await fetchGraphQLData({endpointUrl, query, variables, headers});
         return cors(
           request,
           json(
