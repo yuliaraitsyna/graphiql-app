@@ -1,29 +1,49 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {transformGraphUrl} from '../utils/transformGraphUrl';
 import {emptySchema} from '../utils/emptyGraphiQLSchema';
 import useGraphqlErrors from './useGraphqlErrors';
 import {useTranslation} from 'react-i18next';
-import {isValidURL} from '~/utils/isValidUrl';
+import {isValidURL} from '../utils/isValidUrl';
 import {buildClientSchema} from 'graphql';
+import {useLocation} from '@remix-run/react';
+import {parseGraphQLUrl} from '../utils/parseGraphqlUrl';
+import {Header} from '../components/HeadersEditor/models/header';
+import {saveGraphqlDataToLS} from '../utils/saveGraphqlDataToLS';
 
 const useGraphqlData = () => {
   const {t} = useTranslation();
+  const [headersParams, setHeaders] = useState<Header[]>([]);
   const {errors, setError, clearError, clearAllErrors} = useGraphqlErrors();
-
   const [graphqlData, setGraphqlData] = useState({
     endpointUrl: '',
     sdlUrl: '',
     query: '',
-    variables: [],
-    headers: [],
+    variables: '{\n\n}',
     schema: emptySchema,
-    introspection: {data: null, endpoint: ''},
+    sdl: emptySchema,
     response: {
       status: '',
       data: {},
     },
-    sdl: emptySchema,
   });
+
+  const location = useLocation();
+  useEffect(() => {
+    const result = parseGraphQLUrl(window.location.href);
+    if (result) {
+      setGraphqlData(prevState => ({
+        ...prevState,
+        endpointUrl: result.endpoint,
+        query: result.query,
+        variables: result.variables,
+      }));
+      setHeaders(result.headerParams);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    transformGraphUrl(graphqlData, headersParams);
+  }, [graphqlData, headersParams]);
 
   const handleEndpointUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGraphqlData(prevState => ({
@@ -35,7 +55,7 @@ const useGraphqlData = () => {
   const handleEndpointUrlBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (isValidURL(value)) {
-      transformGraphUrl('endpoint', value, graphqlData);
+      transformGraphUrl(graphqlData, headersParams);
       if (graphqlData.sdlUrl === '') {
         setGraphqlData(prevState => ({
           ...prevState,
@@ -57,12 +77,29 @@ const useGraphqlData = () => {
       ...prevState,
       query: value,
     }));
-    transformGraphUrl('query', value, graphqlData);
+    transformGraphUrl(graphqlData, headersParams);
+  };
+
+  const handleVariablesChange = (value: string) => {
+    setGraphqlData(prevState => ({
+      ...prevState,
+      variables: value,
+    }));
   };
 
   const handleSendRequest = async () => {
     clearError('response');
     clearError('request');
+    let encodedHeaders: Record<string, string> = {};
+
+    if (headersParams) {
+      encodedHeaders = headersParams.reduce<Record<string, string>>((acc, header) => {
+        if (header.checked) {
+          acc[header.key] = header.value;
+        }
+        return acc;
+      }, {});
+    }
     const apiUrl = `${window.location.protocol}//${window.location.host}/api/graphql`;
     if (!graphqlData.endpointUrl && !graphqlData.sdlUrl) {
       setError('request', t('errors.graphql.sendRequest'));
@@ -71,8 +108,8 @@ const useGraphqlData = () => {
       const queryData = new FormData();
       queryData.append('endpointUrl', graphqlData.endpointUrl);
       queryData.append('query', graphqlData.query);
-      queryData.append('variables', JSON.stringify(graphqlData.variables));
-      queryData.append('headers', JSON.stringify(graphqlData.headers));
+      queryData.append('variables', graphqlData.variables);
+      queryData.append('headers', JSON.stringify(encodedHeaders) !== '{}' ? JSON.stringify(encodedHeaders) : '');
       queryData.append('_action', 'QUERY');
       try {
         const response = await fetch(apiUrl, {
@@ -97,6 +134,14 @@ const useGraphqlData = () => {
           setError('response', t('errors.graphql.responseError'));
         }
       }
+      const saveData = {
+        endpoint: graphqlData.endpointUrl,
+        sdl: graphqlData.sdlUrl,
+        body: graphqlData.query,
+        variables: graphqlData.variables,
+        headers: headersParams,
+      };
+      saveGraphqlDataToLS(saveData);
     } else {
       setError('response', t('errors.graphql.notValidEndpoint'));
     }
@@ -135,6 +180,8 @@ const useGraphqlData = () => {
 
   return {
     errors,
+    headersParams,
+    setHeaders,
     graphqlData,
     ...graphqlData,
     handleEndpointUrlChange,
@@ -144,6 +191,8 @@ const useGraphqlData = () => {
     handleQueryChange,
     clearAllErrors,
     clearError,
+    handleVariablesChange,
+    setGraphqlData,
   };
 };
 
