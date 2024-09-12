@@ -16,8 +16,14 @@ import {blue, grey} from '@mui/material/colors';
 import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {Variable} from '../models/variable';
-import {variableNamePattern, variableValuePattern} from '../models/regex';
+import {Variable} from './models/variable';
+import {variableNamePattern, variableValuePattern} from './models/regex';
+import {useTranslation} from 'react-i18next';
+
+interface VariableProps {
+  decodedVariables: Variable[];
+  setStoredVariables: (variables: Variable[]) => void;
+}
 
 const initialVariable: Variable = {
   name: '',
@@ -25,24 +31,24 @@ const initialVariable: Variable = {
   checked: false,
 };
 
-const VariablesEditor: React.FC = () => {
+const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVariables}) => {
+  const {t} = useTranslation();
   const [variables, setVariables] = useState<Variable[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    const storedVariables = localStorage.getItem('variables');
-    if (storedVariables) {
-      setVariables(JSON.parse(storedVariables));
+    if (variables.length > 0 && JSON.stringify(variables) !== JSON.stringify(decodedVariables)) {
+      setStoredVariables(variables);
     }
-  }, []);
+  }, [variables, setStoredVariables, decodedVariables]);
 
   useEffect(() => {
-    if (variables.length > 0) {
-      localStorage.setItem('variables', JSON.stringify(variables));
+    if (decodedVariables.length > 0) {
+      setVariables(decodedVariables);
     }
-  }, [variables]);
+  }, [decodedVariables]);
 
-  const handleVariablerAddition = () => {
+  const handleVariableAddition = () => {
     setVariables([...variables, initialVariable]);
   };
 
@@ -76,21 +82,18 @@ const VariablesEditor: React.FC = () => {
   };
 
   const handleDelete = (index: number) => {
-    const updatedVariables = variables.filter((_, i) => i !== index);
-    if (!updatedVariables.length) {
-      localStorage.removeItem('variables');
-    }
-    setVariables(updatedVariables);
+    const updatedHeaders = variables.filter((_, i) => i !== index);
+    setVariables(updatedHeaders);
   };
 
   return (
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
-          Variables
+          {t('editors.variablesTitle')}
         </Typography>
-        <Button variant="contained" onClick={handleVariablerAddition}>
-          Add
+        <Button variant="contained" onClick={handleVariableAddition}>
+          {t('editors.add')}
         </Button>
       </Box>
       <TableContainer sx={{width: '100%', border: '1px solid', borderColor: grey[200]}}>
@@ -106,7 +109,7 @@ const VariablesEditor: React.FC = () => {
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Name</b>
+                <b>{t('editors.nameTitle')}</b>
               </TableCell>
               <TableCell
                 sx={{
@@ -116,7 +119,7 @@ const VariablesEditor: React.FC = () => {
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Value</b>
+                <b>{t('editors.valueTitle')}</b>
               </TableCell>
               <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '160px'}}></TableCell>
             </TableRow>

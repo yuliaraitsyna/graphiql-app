@@ -52,6 +52,14 @@ export default {
       ],
     },
   },
+  editors: {
+    headersTitle: 'Headers',
+    variablesTitle: 'Variables',
+    keyTitle: 'Key',
+    valueTitle: 'Value',
+    nameTitle: 'Name',
+    add: 'Add',
+  },
   links: {
     signIn: 'Sign in',
     signOut: 'Sign out',
