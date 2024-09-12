@@ -67,6 +67,14 @@ export default {
       httpStatus: 'HTTP status',
     },
   },
+  editors: {
+    headersTitle: 'Headers',
+    variablesTitle: 'Variables',
+    keyTitle: 'Key',
+    valueTitle: 'Value',
+    nameTitle: 'Name',
+    add: 'Add',
+  },
   links: {
     signIn: 'Sign in',
     signOut: 'Sign out',
