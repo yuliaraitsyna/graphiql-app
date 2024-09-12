@@ -3,7 +3,7 @@ interface Data {
   sdl: string;
   body: string;
   headers: object;
-  variables: object;
+  variables: string;
 }
 export function saveGraphqlDataToLS(data: Data) {
   const existingData = localStorage.getItem('history');
@@ -15,7 +15,7 @@ export function saveGraphqlDataToLS(data: Data) {
     headers: data.headers,
     body: data.body,
     variables: data.variables,
-    url: window.location.pathname,
+    url: `${window.location.pathname}${window.location.search}`,
   };
   historyData.push(localStorageData);
   localStorage.setItem('history', JSON.stringify(historyData));
