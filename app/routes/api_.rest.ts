@@ -1,6 +1,6 @@
 import {ActionFunction, json, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node';
 import {RequestParams} from '~/components/RESTfullClient/models/RequestParams';
-import {HTTPMethods} from '~/components/RESTfullClient/RestRequest/models/HTTPMethods';
+import {HTTPMethods} from '~/components/RESTfullClient/RestClient/models/HTTPMethods';
 
 export const fetchRestData = async (params: RequestParams) => {
   const headersObj: HeadersInit = {};

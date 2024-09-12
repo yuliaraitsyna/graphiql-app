@@ -1,6 +1,6 @@
-import {Variable} from '~/components/models/variable';
+import {QueryParam} from '~/components/models/queryParams';
 
-export default function getVariablesFromUri(uri: string): Variable[] {
+export default function getParamsFromUri(uri: string): QueryParam[] {
   let params = new URLSearchParams();
   try {
     params = new URL(uri).searchParams;

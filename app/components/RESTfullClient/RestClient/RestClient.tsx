@@ -27,13 +27,15 @@ import {useTranslation} from 'react-i18next';
 import {Variable} from '~/components/models/variable';
 import {Header} from '~/components/HeadersEditor/models/header';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
-import {getStringFromVariablesParams} from '~/utils/getStringFromParams';
-import getVariablesFromUri from '~/utils/getVariablesFromUri';
+import {getStringFromParams} from '~/utils/getStringFromParams';
 import prettifyJson from '~/utils/prettifyJson';
+import QueryParamsEditor from '~/components/QueryParamsEditor/QueryParamsEditor';
+import {QueryParam} from '~/components/models/queryParams';
+import getParamsFromUri from '~/utils/getParamsFromUri';
 
-interface RestRequestParams {
-  onSendRequest: (response: Response) => void;
-}
+// interface RestRequestParams {
+//   onSendRequest: (response: Response) => void;
+// }
 
 type Tabs = 'Headers' | 'Variables' | 'Body' | 'Response';
 
@@ -66,24 +68,28 @@ function a11yProps(index: number) {
 }
 
 // const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
-const RestRequest: React.FC<RestRequestParams> = () => {
-  const {t} = useTranslation();
+const RestClient: React.FC = () => {
   const location = useLocation();
   const pathMethod = location.pathname.slice(1).toUpperCase() as HTTPMethods;
   const isValidMethod = Object.values(HTTPMethods).includes(pathMethod);
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (!isValidMethod) navigate('/GET');
+  // }, [isValidMethod, navigate]);
+
+  const {t} = useTranslation();
   // const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   // const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [method, setMethod] = useState<HTTPMethods>(isValidMethod ? pathMethod : HTTPMethods.GET);
   const [body, setBody] = useState<string>('');
   const [headers, setHeaders] = useState<Header[]>([]);
   const [variables, setVariables] = useState<Variable[]>([]);
+  const [params, setParams] = useState<QueryParam[]>([]);
   const [url, setUrl] = useState<string>('');
   const [uri, setUri] = useState<string>('');
   const theme = useTheme();
   const [errorUriMessage, setErrorMessage] = useState('');
   const [errorJsonMessage, setErrorJsonMessage] = useState('');
-
-  const navigate = useNavigate();
 
   const handleHeadersChange = (updatedHeaders: Header[]) => {
     setHeaders(updatedHeaders);
@@ -98,7 +104,13 @@ const RestRequest: React.FC<RestRequestParams> = () => {
 
   const handleVariablesChange = (updatedVariables: Variable[]) => {
     setVariables(updatedVariables);
-    const params = getStringFromVariablesParams(updatedVariables);
+    // const params = getStringFromVariablesParams(updatedVariables);
+    // setUri(params ? url + params : url);
+  };
+
+  const handleParamsChange = (updatedParams: QueryParam[]) => {
+    setParams(updatedParams);
+    const params = getStringFromParams(updatedParams);
     setUri(params ? url + params : url);
   };
 
@@ -118,7 +130,7 @@ const RestRequest: React.FC<RestRequestParams> = () => {
       uri,
       method,
       headers,
-      variables,
+      params,
       body,
       type: 'rest',
     };
@@ -148,7 +160,7 @@ const RestRequest: React.FC<RestRequestParams> = () => {
   };
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
-    navigate(`/${event.target.value}`);
+    navigate(`/rest/${event.target.value}`);
     setMethod(event.target.value as HTTPMethods);
   };
 
@@ -175,7 +187,7 @@ const RestRequest: React.FC<RestRequestParams> = () => {
     setUrl(newUrlStr);
     const uri = newUrlStr + searchStr;
     setUri(uri);
-    setVariables(getVariablesFromUri(uri));
+    setParams(getParamsFromUri(uri));
   };
 
   const handleBodyChange = (body: string) => {
@@ -236,18 +248,22 @@ const RestRequest: React.FC<RestRequestParams> = () => {
         <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
           <Tabs value={tab} onChange={handleTabChange} centered>
             <Tab label="Variables" {...a11yProps(0)} />
-            <Tab label="Headers" {...a11yProps(1)} />
-            <Tab label="Body" {...a11yProps(2)} />
-            <Tab label="Response" {...a11yProps(3)} />
+            <Tab label="Query" {...a11yProps(1)} />
+            <Tab label="Headers" {...a11yProps(2)} />
+            <Tab label="Body" {...a11yProps(3)} />
+            <Tab label="Response" {...a11yProps(4)} />
           </Tabs>
         </Box>
         <CustomTabPanel value={tab} index={0}>
           <VariablesEditor onVariablesChange={handleVariablesChange} vars={variables} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={1}>
-          <HeadersEditor onHeadersChange={handleHeadersChange} header={headers} />
+          <QueryParamsEditor onParamsChange={handleParamsChange} queryParams={params} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={2}>
+          <HeadersEditor onHeadersChange={handleHeadersChange} header={headers} />
+        </CustomTabPanel>
+        <CustomTabPanel value={tab} index={3}>
           <JsonEditor
             mode={
               method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT
@@ -302,4 +318,4 @@ const RestRequest: React.FC<RestRequestParams> = () => {
   );
 };
 
-export default RestRequest;
+export default RestClient;

@@ -1,5 +1,5 @@
 import {RequestData} from '~/components/RESTfullClient/models/RequestParams';
-import {HTTPMethods} from '~/components/RESTfullClient/RestRequest/models/HTTPMethods';
+import {HTTPMethods} from '~/components/RESTfullClient/RestClient/models/HTTPMethods';
 import {getStringFromHeadersParams} from './getStringFromParams';
 
 // export const createRestEncodedURL = (params: RequestParams): string => {

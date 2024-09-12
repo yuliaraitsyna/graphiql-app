@@ -1,8 +1,8 @@
 import {Header} from '~/components/HeadersEditor/models/header';
-import {Variable} from '~/components/models/variable';
+import {QueryParam} from '~/components/models/queryParams';
 
-export function getStringFromVariablesParams(vars: Variable[]) {
-  const checked = vars.filter(v => v.checked);
+export function getStringFromParams(params: QueryParam[]) {
+  const checked = params.filter(p => p.checked);
   return checked.length ? checked.reduce((a, v, i) => a + (i > 0 ? '&' : '') + v.name + '=' + v.value, '?') : '';
 }
 

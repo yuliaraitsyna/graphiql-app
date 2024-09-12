@@ -8,7 +8,7 @@
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
     "app/routes/$method.$url.tsx",
-    "app/routes/$method.tsx"
+    "app/routes/rest.$method.tsx"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],

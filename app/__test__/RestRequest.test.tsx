@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import {render, screen, fireEvent} from '@testing-library/react';
 import {jest} from '@jest/globals';
-import RestRequest from '~/components/RESTfullClient/RestRequest/RestRequest';
-// import {HTTPMethods} from '~/components/RESTfullClient/RestRequest/models/HTTPMethods';
+import RestClient from '~/components/RESTfullClient/RestClient/RestClient';
+// import {HTTPMethods} from '~/components/RESTfullClient/RestClient/models/HTTPMethods';
 // import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
 // import {RequestParams} from '~/components/RESTfullClient/models/RequestParams';
 import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
@@ -40,14 +40,15 @@ jest.mock('@remix-run/react', () => ({
 
 jest.mock('@fontsource/roboto-mono', () => {});
 
-describe.skip('RestRequest Component', () => {
+describe.skip('RestClient Component', () => {
   beforeEach(() => {
     localStorage.clear();
     jest.clearAllMocks();
   });
 
   test('Component elements render with translation', () => {
-    render(<RestRequest onSendRequest={() => {}} />);
+    // render(<RestClient onSendRequest={() => {}} />);
+    render(<RestClient />);
 
     expect(screen.getByText('REST Client')).toBeInTheDocument();
     expect(screen.getByText('Set Variables')).toBeInTheDocument();
@@ -107,7 +108,8 @@ describe.skip('RestRequest Component', () => {
   // });
 
   test('should allow using variables in the URL', async () => {
-    render(<RestRequest onSendRequest={() => {}} />);
+    // render(<RestClient onSendRequest={() => {}} />);
+    render(<RestClient />);
 
     const mockVariables = [
       {name: 'url', value: 'https://example.com', checked: true},
