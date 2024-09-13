@@ -104,6 +104,24 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   useEffect(() => {
+    return () => {
+      localStorage.removeItem('history');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (location.state) {
+      const request: RestHistoryData = location.state as RestHistoryData;
+
+      setMethod(request.method);
+      setUrl(request.uri);
+      setHeaders(request.headers);
+      setBody(request.body);
+      setParams(request.params);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     if (method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT) {
       const message = body ? (prettifyJson(body).error?.message ?? '') : '';
       setErrorJsonMessage(message);
