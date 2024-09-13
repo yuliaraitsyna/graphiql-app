@@ -5,7 +5,6 @@ import RestClient from '~/components/RESTfullClient/RestClient/RestClient';
 // import {HTTPMethods} from '~/components/RESTfullClient/RestClient/models/HTTPMethods';
 // import {createRestEncodedURL} from '~/utils/createRestEncodedURL';
 // import {RequestParams} from '~/components/RESTfullClient/models/RequestParams';
-import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 
 jest.mock('@remix-run/react', () => ({
   useNavigate: jest.fn(),
@@ -13,10 +12,6 @@ jest.mock('@remix-run/react', () => ({
 
 jest.mock('~/routes/api_.rest', () => ({
   fetchRestData: jest.fn(),
-}));
-
-jest.mock('~/utils/replaceVariablesInURL', () => ({
-  replaceVariablesInURL: jest.fn(),
 }));
 
 jest.mock('react-i18next', () => ({
@@ -106,22 +101,4 @@ describe.skip('RestClient Component', () => {
 
   //   expect(result).toBe(expectedUrl);
   // });
-
-  test('should allow using variables in the URL', async () => {
-    // render(<RestClient onSendRequest={() => {}} />);
-    render(<RestClient />);
-
-    const mockVariables = [
-      {name: 'url', value: 'https://example.com', checked: true},
-      {name: 'id', value: '123', checked: true},
-    ];
-
-    localStorage.setItem('variables', JSON.stringify(mockVariables));
-
-    const urlField = screen.getByPlaceholderText('Enter URL');
-    fireEvent.change(urlField, {target: {value: 'https://{url}/api/resource/{id}'}});
-    fireEvent.click(screen.getByText('Send'));
-
-    expect(replaceVariablesInURL).toHaveBeenCalledWith('https://{url}/api/resource/{id}', mockVariables);
-  });
 });

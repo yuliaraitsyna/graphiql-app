@@ -1,6 +1,6 @@
 import {Variable} from '~/components/models/variable';
 
-export const replaceVariablesInURL = (url: string, variables: Variable[]): string => {
+export const replaceVariables = (body: string, variables: Variable[]): string => {
   const variableMap: Record<string, string> = variables.reduce(
     (acc, variable) => {
       if (variable.checked) {
@@ -11,7 +11,7 @@ export const replaceVariablesInURL = (url: string, variables: Variable[]): strin
     {} as Record<string, string>,
   );
 
-  return url.replace(/{(.*?)}/g, (_, variable) => {
-    return variableMap[variable] || `{${variable}}`;
+  return body.replace(/{{(.*?)}}/g, (_, variable) => {
+    return `"${variableMap[variable]}"` || `{{${variable}}}`;
   });
 };
