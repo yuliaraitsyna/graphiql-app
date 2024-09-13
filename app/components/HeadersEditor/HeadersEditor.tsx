@@ -17,6 +17,7 @@ import React, {useEffect, useState} from 'react';
 import {Header} from './models/header';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import {t} from 'i18next';
 
 const initialHeader: Header = {
   key: '',
@@ -92,10 +93,10 @@ const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []})
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
-          Headers
+          {t('editors.headersTitle')}
         </Typography>
         <Button variant="contained" onClick={handleHeaderAddition}>
-          Add
+          {t('editors.add')}
         </Button>
       </Box>
       <TableContainer sx={{width: '100%', border: '1px solid', borderColor: grey[200]}}>
@@ -111,7 +112,7 @@ const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []})
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Key</b>
+                <b>{t('editors.keyTitle')}</b>
               </TableCell>
               <TableCell
                 sx={{
@@ -121,7 +122,7 @@ const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []})
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Value</b>
+                <b>{t('editors.valueTitle')}</b>
               </TableCell>
               <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '160px'}}></TableCell>
             </TableRow>

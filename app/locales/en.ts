@@ -62,6 +62,23 @@ export default {
       placeholder: 'Endpoint URL',
     },
   },
+  editors: {
+    paramsTitle: 'Params',
+    headersTitle: 'Headers',
+    variablesTitle: 'Variables',
+    queryTitle: 'Query',
+    bodyTitle: 'Body',
+    responseTitle: 'Response',
+    keyTitle: 'Key',
+    valueTitle: 'Value',
+    nameTitle: 'Name',
+    add: 'Add',
+  },
+  response: {
+    status: 'Status',
+    size: 'Size',
+    time: 'Time',
+  },
   links: {
     signIn: 'Sign in',
     signOut: 'Sign out',

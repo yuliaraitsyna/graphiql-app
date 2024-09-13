@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {QueryParam} from '../models/queryParams';
 import {variableNamePattern, variableValuePattern} from '../models/regex';
+import {useTranslation} from 'react-i18next';
 
 const initialVariable: QueryParam = {
   name: '',
@@ -31,6 +32,7 @@ type Props = {
 };
 
 const QueryParamsEditor: React.FC<Partial<Props>> = ({onParamsChange, queryParams = []}) => {
+  const {t} = useTranslation();
   const [params, setParams] = useState<QueryParam[]>(queryParams);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -81,10 +83,10 @@ const QueryParamsEditor: React.FC<Partial<Props>> = ({onParamsChange, queryParam
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
-          Params
+          {t('editors.paramsTitle')}
         </Typography>
         <Button variant="contained" onClick={handleParamAddition}>
-          Add
+          {t('editors.add')}
         </Button>
       </Box>
       <TableContainer sx={{width: '100%', border: '1px solid', borderColor: grey[200]}}>
@@ -100,7 +102,7 @@ const QueryParamsEditor: React.FC<Partial<Props>> = ({onParamsChange, queryParam
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Name</b>
+                <b>{t('editors.nameTitle')}</b>
               </TableCell>
               <TableCell
                 sx={{
@@ -110,7 +112,7 @@ const QueryParamsEditor: React.FC<Partial<Props>> = ({onParamsChange, queryParam
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Value</b>
+                <b>{t('editors.valueTitle')}</b>
               </TableCell>
               <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '160px'}}></TableCell>
             </TableRow>

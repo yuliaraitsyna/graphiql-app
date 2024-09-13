@@ -60,6 +60,23 @@ export default {
       placeholder: 'URL del punto de acceso',
     },
   },
+  editors: {
+    paramsTitle: 'Parámetros',
+    headersTitle: 'Encabezados',
+    variablesTitle: 'Variables',
+    queryTitle: 'Consulta',
+    bodyTitle: 'Cuerpo',
+    responseTitle: 'Respuesta',
+    keyTitle: 'Clave',
+    valueTitle: 'Valor',
+    nameTitle: 'Nombre',
+    add: 'Añadir',
+  },
+  response: {
+    status: 'Estado',
+    size: 'Tamaño',
+    time: 'Tiempo',
+  },
   links: {
     signIn: 'Iniciar sesión',
     signOut: 'Cerrar sesión',

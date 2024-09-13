@@ -255,11 +255,11 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
       <Box sx={{width: '100%'}}>
         <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
           <Tabs value={tab} onChange={handleTabChange} centered>
-            <Tab label="Variables" {...a11yProps(0)} />
-            <Tab label="Query" {...a11yProps(1)} />
-            <Tab label="Headers" {...a11yProps(2)} />
-            <Tab label="Body" {...a11yProps(3)} />
-            <Tab label="Response" {...a11yProps(4)} />
+            <Tab label={t('editors.variablesTitle')} {...a11yProps(0)} />
+            <Tab label={t('editors.queryTitle')} {...a11yProps(1)} />
+            <Tab label={t('editors.headersTitle')} {...a11yProps(2)} />
+            <Tab label={t('editors.bodyTitle')} {...a11yProps(3)} />
+            <Tab label={t('editors.responseTitle')} {...a11yProps(4)} />
           </Tabs>
         </Box>
         <CustomTabPanel value={tab} index={0}>

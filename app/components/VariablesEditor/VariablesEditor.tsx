@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {Variable} from '../models/variable';
 import {variableNamePattern, variableValuePattern} from '../models/regex';
+import {useTranslation} from 'react-i18next';
 
 const initialVariable: Variable = {
   name: '',
@@ -31,6 +32,7 @@ type Props = {
 };
 
 const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []}) => {
+  const {t} = useTranslation();
   const [variables, setVariables] = useState<Variable[]>(vars);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -97,10 +99,10 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
-          Variables
+          {t('editors.variablesTitle')}
         </Typography>
         <Button variant="contained" onClick={handleVariableAddition}>
-          Add
+          {t('editors.add')}
         </Button>
       </Box>
       <TableContainer sx={{width: '100%', border: '1px solid', borderColor: grey[200]}}>
@@ -116,7 +118,7 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Name</b>
+                <b>{t('editors.nameTitle')}</b>
               </TableCell>
               <TableCell
                 sx={{
@@ -126,7 +128,7 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Value</b>
+                <b>{t('editors.valueTitle')}</b>
               </TableCell>
               <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '160px'}}></TableCell>
             </TableRow>
