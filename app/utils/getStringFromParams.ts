@@ -1,5 +1,5 @@
 import {Header} from '~/components/HeadersEditor/models/header';
-import {QueryParam} from '~/components/models/queryParams';
+import {QueryParam} from '~/components/QueryParamsEditor/models/queryParams';
 
 export function getStringFromParams(params: QueryParam[]) {
   const checked = params.filter(p => p.checked);

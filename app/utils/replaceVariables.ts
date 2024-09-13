@@ -1,4 +1,4 @@
-import {Variable} from '~/components/models/variable';
+import {Variable} from '~/components/VariablesEditor/models/variable';
 
 export const replaceVariables = (body: string, variables: Variable[]): string => {
   const variableMap: Record<string, string> = variables.reduce(

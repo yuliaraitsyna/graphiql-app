@@ -16,9 +16,9 @@ import {blue, grey} from '@mui/material/colors';
 import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {QueryParam} from '../models/queryParams';
-import {variableNamePattern, variableValuePattern} from '../models/regex';
 import {useTranslation} from 'react-i18next';
+import {QueryParam} from './models/queryParams';
+import {variableNamePattern, variableValuePattern} from '../VariablesEditor/models/regex';
 
 const initialVariable: QueryParam = {
   name: '',

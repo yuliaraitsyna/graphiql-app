@@ -17,7 +17,12 @@ import React, {useEffect, useState} from 'react';
 import {Header} from './models/header';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
+
+interface HeaderProps {
+  decodedHeaders: Header[];
+  setStoredHeaders: (headers: Header[]) => void;
+}
 
 const initialHeader: Header = {
   key: '',
@@ -25,29 +30,22 @@ const initialHeader: Header = {
   checked: false,
 };
 
-type Props = {
-  onHeadersChange: (headers: Header[]) => void;
-  header: Header[];
-};
-
-const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []}) => {
+const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}) => {
+  const {t} = useTranslation();
   const [headers, setHeaders] = useState<Header[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  useEffect(() => setHeaders(header), [header]);
+  useEffect(() => {
+    if (headers.length > 0 && JSON.stringify(headers) !== JSON.stringify(decodedHeaders)) {
+      setStoredHeaders(headers);
+    }
+  }, [headers, setStoredHeaders, decodedHeaders]);
 
-  // useEffect(() => {
-  //   const storedHeaders = localStorage.getItem('headers');
-  //   if (storedHeaders) {
-  //     setHeaders(JSON.parse(storedHeaders));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (headers.length > 0) {
-  //     localStorage.setItem('headers', JSON.stringify(headers));
-  //   }
-  // }, [headers]);
+  useEffect(() => {
+    if (decodedHeaders.length > 0) {
+      setHeaders(decodedHeaders);
+    }
+  }, [decodedHeaders]);
 
   const handleHeaderAddition = () => {
     setHeaders([...headers, initialHeader]);
@@ -62,7 +60,6 @@ const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []})
       const updatedHeaders = [...headers];
       updatedHeaders[editingIndex] = {...updatedHeaders[editingIndex], [field]: value};
       setHeaders(updatedHeaders);
-      onHeadersChange?.(updatedHeaders);
     }
   };
 
@@ -70,7 +67,6 @@ const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []})
     const updatedHeaders = [...headers];
     updatedHeaders[index].checked = !updatedHeaders[index].checked;
     setHeaders(updatedHeaders);
-    onHeadersChange?.(updatedHeaders);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -82,11 +78,7 @@ const HeadersEditor: React.FC<Partial<Props>> = ({onHeadersChange, header = []})
 
   const handleDelete = (index: number) => {
     const updatedHeaders = headers.filter((_, i) => i !== index);
-    // if (updatedHeaders.length === 0) {
-    //   localStorage.removeItem('headers');
-    // }
     setHeaders(updatedHeaders);
-    onHeadersChange?.(updatedHeaders);
   };
 
   return (

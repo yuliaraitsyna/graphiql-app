@@ -24,14 +24,14 @@ import {RestHistoryData} from '../models/RequestParams';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 // import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 import {useTranslation} from 'react-i18next';
-import {Variable} from '~/components/models/variable';
 import {Header} from '~/components/HeadersEditor/models/header';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
 import {getStringFromParams} from '~/utils/getStringFromParams';
 import prettifyJson from '~/utils/prettifyJson';
 import QueryParamsEditor from '~/components/QueryParamsEditor/QueryParamsEditor';
-import {QueryParam} from '~/components/models/queryParams';
 import getParamsFromUri from '~/utils/getParamsFromUri';
+import {Variable} from '~/components/VariablesEditor/models/variable';
+import {QueryParam} from '~/components/QueryParamsEditor/models/queryParams';
 
 // interface RestRequestParams {
 //   onSendRequest: (response: Response) => void;
@@ -263,13 +263,13 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
           </Tabs>
         </Box>
         <CustomTabPanel value={tab} index={0}>
-          <VariablesEditor onVariablesChange={handleVariablesChange} vars={variables} />
+          <VariablesEditor setStoredVariables={handleVariablesChange} decodedVariables={variables} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={1}>
           <QueryParamsEditor onParamsChange={handleParamsChange} queryParams={params} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={2}>
-          <HeadersEditor onHeadersChange={handleHeadersChange} header={headers} />
+          <HeadersEditor setStoredHeaders={handleHeadersChange} decodedHeaders={headers} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={3}>
           <JsonEditor
