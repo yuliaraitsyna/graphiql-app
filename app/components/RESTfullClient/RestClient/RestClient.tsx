@@ -12,14 +12,14 @@ import {
   FormHelperText,
   useTheme,
 } from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {useLocation, useNavigate} from '@remix-run/react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
 // import {RESTAction} from './models/RESTAction';
 import createRestEncodedUri from '~/utils/createRestEncodedURL';
-import {RequestData} from '../models/RequestParams';
+import {RestHistoryData} from '../models/RequestParams';
 // import {fetchRestData} from '~/routes/api_.rest';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 // import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
@@ -45,6 +45,13 @@ interface TabPanelProps {
   value: number;
 }
 
+type Props = {
+  children: ReactNode;
+  initialBody: string;
+  initialHeaders: Header[];
+  initialUri: string;
+};
+
 function CustomTabPanel(props: TabPanelProps) {
   const {children, value, index, ...other} = props;
 
@@ -68,26 +75,27 @@ function a11yProps(index: number) {
 }
 
 // const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
-const RestClient: React.FC = () => {
+const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initialUri = '', initialHeaders = []}) => {
   const location = useLocation();
   const pathMethod = location.pathname.slice(1).toUpperCase() as HTTPMethods;
   const isValidMethod = Object.values(HTTPMethods).includes(pathMethod);
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!isValidMethod) navigate('/GET');
-  // }, [isValidMethod, navigate]);
+  useEffect(() => {
+    if (location.pathname.split('/').length > 3) setTab(4);
+  }, [location]);
 
   const {t} = useTranslation();
   // const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
   // const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [method, setMethod] = useState<HTTPMethods>(isValidMethod ? pathMethod : HTTPMethods.GET);
-  const [body, setBody] = useState<string>('');
-  const [headers, setHeaders] = useState<Header[]>([]);
+  const [body, setBody] = useState<string>(initialBody);
+  const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [variables, setVariables] = useState<Variable[]>([]);
   const [params, setParams] = useState<QueryParam[]>([]);
   const [url, setUrl] = useState<string>('');
-  const [uri, setUri] = useState<string>('');
+  const [uri, setUri] = useState<string>(initialUri);
   const theme = useTheme();
+  const [tab, setTab] = React.useState(0);
   const [errorUriMessage, setErrorMessage] = useState('');
   const [errorJsonMessage, setErrorJsonMessage] = useState('');
 
@@ -126,7 +134,7 @@ const RestClient: React.FC = () => {
 
     // parsedBody = body ? JSON.parse(body) : null;
 
-    const requestData: RequestData = {
+    const requestData: RestHistoryData = {
       uri,
       method,
       headers,
@@ -134,11 +142,12 @@ const RestClient: React.FC = () => {
       body,
       type: 'rest',
     };
-    const encodedURL = createRestEncodedUri(requestData);
-    const history: RequestData[] = JSON.parse(localStorage.getItem('history') || '[]');
+    const encodedUri = createRestEncodedUri(requestData);
+    const history: RestHistoryData[] = JSON.parse(localStorage.getItem('history') || '[]');
     history.push(requestData);
     localStorage.setItem('history', JSON.stringify(history));
-    navigate(encodedURL);
+    navigate(encodedUri);
+    setTab(4);
     // const params: RequestParams = {
     //   endpointUrl: uri,
     //   method: method,
@@ -194,7 +203,6 @@ const RestClient: React.FC = () => {
     console.log(body); // remove later
     setBody(body);
   };
-  const [tab, setTab] = React.useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newTab: number) => {
     setTab(newTab);
@@ -274,8 +282,8 @@ const RestClient: React.FC = () => {
             defaultValue={body}
           />
         </CustomTabPanel>
-        <CustomTabPanel value={tab} index={3}>
-          <JsonEditor mode="view" />
+        <CustomTabPanel value={tab} index={4}>
+          {children}
         </CustomTabPanel>
       </Box>
     </Container>

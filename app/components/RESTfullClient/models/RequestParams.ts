@@ -10,11 +10,14 @@ import {QueryParam} from '~/components/models/queryParams';
 //   body?: string;
 // }
 
-export interface RequestData {
+export interface RestRequestData {
   uri: string;
   method: HTTPMethods;
   headers: Header[];
-  params: QueryParam[];
   body: string;
-  type: string;
+}
+
+export interface RestHistoryData extends RestRequestData {
+  params: QueryParam[];
+  type: 'rest' | 'graphql';
 }

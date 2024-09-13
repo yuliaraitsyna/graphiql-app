@@ -1,4 +1,4 @@
-import {RequestData} from '~/components/RESTfullClient/models/RequestParams';
+import {RestRequestData} from '~/components/RESTfullClient/models/RequestParams';
 import {HTTPMethods} from '~/components/RESTfullClient/RestClient/models/HTTPMethods';
 import {getStringFromHeadersParams} from './getStringFromParams';
 
@@ -27,7 +27,7 @@ import {getStringFromHeadersParams} from './getStringFromParams';
 // };
 //  http://localhost:5137/POST/9tL3Bvc3Rz/eyJ0aXRsZSI6lIn0=?Content-Type=application%2Fjson
 
-export default function createRestEncodedUri(requestData: RequestData) {
+export default function createRestEncodedUri(requestData: RestRequestData) {
   const uriSegment = btoa(requestData.uri);
   const isBodyNecessary =
     !!requestData.body &&
