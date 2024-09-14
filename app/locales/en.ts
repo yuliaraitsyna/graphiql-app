@@ -71,4 +71,12 @@ export default {
     restClient: 'Rest Client',
     graphqlClient: 'GraphiQL Client',
   },
+  jsonEditor: {
+    format: 'Format',
+    text: 'Text',
+    JSON: 'JSON',
+    enter: 'Enter',
+    jsonContent: 'JSON content',
+    textContent: 'Text content',
+  },
 };

@@ -7,16 +7,16 @@ export type ResponseData = {
   status: number;
   statusText: string;
   size: number;
-  start: number;
+  time: number;
 };
 
-const NullResponse: ResponseData = {
+const ErrorResponse: ResponseData = {
   headers: new Headers(),
   payload: '',
-  status: 999,
-  statusText: '',
+  status: NaN,
+  statusText: 'Unknown Error',
   size: 0,
-  start: 0,
+  time: 0,
 };
 
 export default async function fetchRestData(
@@ -28,24 +28,11 @@ export default async function fetchRestData(
   const headersArr = Array.from(new URLSearchParams(queryParams)).map(h => h.map(v => decodeURIComponent(v)));
   const headers: Record<string, string> = Object.fromEntries(headersArr);
 
-  // if (headers.length) {
-  //   headers.forEach(header => {
-  //     headersObj[header[]] = header.value;
-  //   });
-  // }
-
   if (!headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
 
   const uri = atob(encodedUri);
-  // if (data.params && data.method === HTTPMethods.GET) {
-  //   const queryParams = new URLSearchParams();
-  //   data.params.forEach(param => {
-  //     queryParams.append(param.name, param.value);
-  //   });
-  //   uri += `?${queryParams.toString()}`;
-  // }
 
   const body = atob(encodedBody);
 
@@ -55,33 +42,30 @@ export default async function fetchRestData(
   };
 
   if ([HTTPMethods.POST, HTTPMethods.PUT, HTTPMethods.PATCH].includes(method)) {
-    fetchOptions.body = JSON.stringify(body || {});
+    fetchOptions.body = body || '{}';
   }
-  // return {uri, fetchOptions}
   const start = Date.now();
   try {
     const response = await fetch(uri, fetchOptions);
-
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! status: ${response.status}`);
-    // }
-
     const cloneResponse = response.clone();
     const blob = await cloneResponse.blob();
-    const responseObj: object = await response.json();
-    const payload = prettifyJson(JSON.stringify(responseObj)).json;
     const headers = response.headers;
+    let payload = '';
+    if (headers.get('content-type')?.includes('json')) {
+      const responseObj: object = await response.json();
+      payload = prettifyJson(JSON.stringify(responseObj)).json;
+    }
+    if (headers.get('content-type')?.includes('text')) {
+      payload = await response.text();
+    }
     const status = response.status;
     const statusText = response.statusText;
     const size = blob.size;
-    // if (method === HTTPMethods.HEAD) {
-    //   return {headers, };
-    // }
-    return {headers, payload, status, statusText, size, start};
+    return {headers, payload, status, statusText, size, time: start};
   } catch (error) {
     console.error('Fetch error:', error);
-    const data = NullResponse;
-    data.start = start;
+    const data = ErrorResponse;
+    data.time = start;
     return data;
   }
 }

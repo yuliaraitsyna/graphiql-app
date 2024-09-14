@@ -15,8 +15,13 @@ type Routes = {
   params: string;
 };
 
+interface LoaderResponseData extends ResponseData {
+  isText: boolean;
+}
+
 type LoaderData = {
-  data: ResponseData;
+  loaderData: LoaderResponseData;
+  routes: Routes;
 };
 
 export function ErrorBoundary() {
@@ -37,17 +42,27 @@ export async function loader({params, request}: LoaderFunctionArgs) {
     params: url.search ?? '',
   };
   const data = await fetchRestData(routes.method, routes.uri, routes.body, routes.params);
-  return json({routes, data});
+  data.time = Date.now() - data.time;
+  const headersObj = Object.fromEntries(data.headers.entries());
+  const isText = headersObj['content-type']?.includes('text') ?? false;
+  const loaderData: LoaderResponseData = {...data, isText};
+
+  return json({routes, loaderData});
 }
 
 export default function RESTMethodRoute() {
-  const {data} = useLoaderData<LoaderData>();
-  console.log(data.payload);
+  const {loaderData, routes} = useLoaderData<LoaderData>();
+  console.log(routes);
   return (
     <>
-      <ResponseBar status={data.status} statusText={data.statusText} size={data.size} time={Date.now() - data.start} />
+      <ResponseBar
+        status={loaderData.status}
+        statusText={loaderData.statusText}
+        size={loaderData.size}
+        time={loaderData.time}
+      />
       <Box sx={{marginTop: '1rem'}}>
-        <JsonEditor mode="view" defaultValue={data.payload} />
+        <JsonEditor mode="view" defaultValue={loaderData.payload} type={loaderData.isText ? 'text' : 'JSON'} />
       </Box>
     </>
   );

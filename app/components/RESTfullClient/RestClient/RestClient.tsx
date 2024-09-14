@@ -17,12 +17,9 @@ import {useLocation, useNavigate} from '@remix-run/react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
 import VariablesEditor from '~/components/VariablesEditor/VariablesEditor';
-// import {RESTAction} from './models/RESTAction';
 import createRestEncodedUri from '~/utils/createRestEncodedURL';
 import {RestHistoryData} from '../models/RequestParams';
-// import {fetchRestData} from '~/routes/api_.rest';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
-// import {replaceVariablesInURL} from '~/utils/replaceVariablesInURL';
 import {useTranslation} from 'react-i18next';
 import {Variable} from '~/components/models/variable';
 import {Header} from '~/components/HeadersEditor/models/header';
@@ -32,10 +29,6 @@ import prettifyJson from '~/utils/prettifyJson';
 import QueryParamsEditor from '~/components/QueryParamsEditor/QueryParamsEditor';
 import {QueryParam} from '~/components/models/queryParams';
 import getParamsFromUri from '~/utils/getParamsFromUri';
-
-// interface RestRequestParams {
-//   onSendRequest: (response: Response) => void;
-// }
 
 type Tabs = 'Headers' | 'Variables' | 'Body' | 'Response';
 
@@ -74,7 +67,6 @@ function a11yProps(index: number) {
   };
 }
 
-// const RestRequest: React.FC<RestRequestParams> = ({onSendRequest}) => {
 const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initialUri = '', initialHeaders = []}) => {
   const location = useLocation();
   const pathMethod = location.pathname.slice(1).toUpperCase() as HTTPMethods;
@@ -85,10 +77,11 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   }, [location]);
 
   const {t} = useTranslation();
-  // const [method, setMethod] = useState<HTTPMethods>(HTTPMethods.GET);
-  // const [action, setAction] = useState<RESTAction>(RESTAction.SET_HEADERS);
   const [method, setMethod] = useState<HTTPMethods>(isValidMethod ? pathMethod : HTTPMethods.GET);
+  const [mode, setMode] = useState<'edit' | 'view'>('view');
   const [body, setBody] = useState<string>(initialBody);
+  const [editorMode, setEditorMode] = useState<'JSON' | 'text'>('JSON');
+  const [prevBody, setPrevBody] = useState<string>(initialBody);
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [variables, setVariables] = useState<Variable[]>([]);
   const [params, setParams] = useState<QueryParam[]>([]);
@@ -104,6 +97,12 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   useEffect(() => {
+    setMode(
+      method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT ? 'edit' : 'view',
+    );
+  }, [method]);
+
+  useEffect(() => {
     if (method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT) {
       const message = body ? (prettifyJson(body).error?.message ?? '') : '';
       setErrorJsonMessage(message);
@@ -112,8 +111,6 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
 
   const handleVariablesChange = (updatedVariables: Variable[]) => {
     setVariables(updatedVariables);
-    // const params = getStringFromVariablesParams(updatedVariables);
-    // setUri(params ? url + params : url);
   };
 
   const handleParamsChange = (updatedParams: QueryParam[]) => {
@@ -123,17 +120,6 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   const handleSendingRequest = async () => {
-    // const storedHeaders = localStorage.getItem('headers');
-    // const headers: Header[] | null = storedHeaders ? JSON.parse(storedHeaders) : null;
-
-    // const storedVariables = localStorage.getItem('variables');
-    // const variables: Variable[] | null = storedVariables ? JSON.parse(storedVariables) : null;
-    // const endpointURL = variables ? replaceVariablesInURL(url, variables) : url;
-
-    // let parsedBody = null;
-
-    // parsedBody = body ? JSON.parse(body) : null;
-
     const requestData: RestHistoryData = {
       uri,
       method,
@@ -148,36 +134,12 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     localStorage.setItem('history', JSON.stringify(history));
     navigate(encodedUri);
     setTab(4);
-    // const params: RequestParams = {
-    //   endpointUrl: uri,
-    //   method: method,
-    //   headers: headers,
-    //   variables: variables,
-    //   body: parsedBody,
-    // };
-
-    //   const encodedURL = createRestEncodedURL(params);
-
-    //   try {
-    //     const response = await fetchRestData(params);
-    //     console.log(response);
-    //     onSendRequest(response);
-    //     navigate(`/${method}/${encodedURL}`, {replace: true});
-    //   } catch (error) {
-    //     console.error('Error sending request:', error);
-    //   }
   };
 
   const handleMethodSelection = (event: SelectChangeEvent) => {
     navigate(`/rest/${event.target.value}`);
     setMethod(event.target.value as HTTPMethods);
   };
-
-  // const handleToggleRESTAction = () => {
-  //   setAction(prevAction =>
-  //     prevAction === RESTAction.SET_HEADERS ? RESTAction.SET_VARIABLES : RESTAction.SET_HEADERS,
-  //   );
-  // };
 
   const handleUrlChange = (value: string) => {
     let urlStr = '';
@@ -200,8 +162,23 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   const handleBodyChange = (body: string) => {
-    console.log(body); // remove later
     setBody(body);
+  };
+
+  const handleJsonClick = () => {
+    if (editorMode === 'text') {
+      setPrevBody(body);
+      setBody(prevBody);
+      setEditorMode('JSON');
+    }
+  };
+
+  const handleTextClick = () => {
+    if (editorMode === 'JSON') {
+      setPrevBody(body);
+      setBody(prevBody);
+      setEditorMode('text');
+    }
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newTab: number) => {
@@ -272,57 +249,19 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
           <HeadersEditor onHeadersChange={handleHeadersChange} header={headers} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={3}>
-          <JsonEditor
-            mode={
-              method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT
-                ? 'edit'
-                : 'view'
-            }
-            onChange={handleBodyChange}
-            defaultValue={body}
-          />
+          <Button onClick={handleJsonClick} disabled={mode === 'view'}>
+            JSON
+          </Button>
+          <Button onClick={handleTextClick} disabled={mode === 'view'}>
+            {t('jsonEditor.text')}
+          </Button>
+          <JsonEditor mode={mode} type={editorMode} onChange={handleBodyChange} defaultValue={body} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={4}>
           {children}
         </CustomTabPanel>
       </Box>
     </Container>
-    // <Container sx={{width: '80%'}}>
-    //   <Typography component={'h4'} variant="h4" textAlign={'left'}>
-    //     {t('page.rest.title')}
-    //   </Typography>
-    //   <Box
-    //     sx={{
-    //       border: `1px solid ${grey[400]}`,
-    //       borderRadius: '5px',
-    //       display: 'flex',
-    //       width: '100%',
-    //       textAlign: 'center',
-    //     }}>
-    //     <Select fullWidth value={method} onChange={handleMethodSelection} sx={{maxWidth: '120px'}}>
-    //       {Object.values(HTTPMethods).map((value, index) => (
-    //         <MenuItem key={index} value={value}>
-    //           {value}
-    //         </MenuItem>
-    //       ))}
-    //     </Select>
-    //     <Input
-    //       placeholder={t('page.rest.placeholder')}
-    //       sx={{width: '80%', margin: '5px'}}
-    //       disableUnderline
-    //       value={URL}
-    //       onChange={e => handleURLChange(e.target.value)}
-    //     />
-    //     <Button variant="contained" onClick={handleSendingRequest}>
-    //       {t('page.rest.send')}
-    //     </Button>
-    //   </Box>
-    //   <Button onClick={handleToggleRESTAction}>
-    //     {action === RESTAction.SET_HEADERS ? t('page.rest.setVariables') : t('page.rest.setHeaders')}
-    //   </Button>
-    //   {action === RESTAction.SET_HEADERS ? <HeadersEditor></HeadersEditor> : <VariablesEditor></VariablesEditor>}
-    //   <JsonEditor mode="edit" type="JSON" defaultValue="" onChange={handleBodyChange}></JsonEditor>
-    // </Container>
   );
 };
 

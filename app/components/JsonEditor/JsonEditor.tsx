@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {Box, Button, FormHelperText, Typography, useTheme} from '@mui/material';
 import {EditIcon, VisibleIcon} from '../Icons';
 import prettifyJson from '~/utils/prettifyJson';
+import {useTranslation} from 'react-i18next';
 
 type EditorProps = {
   mode: 'view' | 'edit';
@@ -21,6 +22,7 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
   const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue);
   const [errorMessage, setErrorMessage] = useState('');
   const [formattable, setFormattable] = useState(false);
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (type === 'JSON') {
@@ -33,11 +35,9 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
-    console.log(v);
     if (type === 'JSON') {
       const message = v ? (prettifyJson(v).error?.message ?? '') : '';
       setErrorMessage(message);
-      console.log(message);
       setFormattable(!!v && v !== prettifyJson(v).json && !message);
     }
     setContent(v);
@@ -68,11 +68,11 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
       </Box>
       <Box component="div" className={styles.heading}>
         <Typography variant="subtitle1" component="p">
-          {type === 'JSON' ? 'JSON ' : 'Text '} Content
+          {type === 'JSON' ? t('jsonEditor.jsonContent') : t('jsonEditor.textContent')}
         </Typography>
         {type === 'JSON' && (
           <Button size="small" onClick={formatJson} disabled={!formattable}>
-            Format
+            {t('jsonEditor.format')}
           </Button>
         )}
       </Box>
@@ -81,7 +81,11 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
           {type === 'JSON' && <StrNum content={content} />}
           <Box>
             <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
-              <textarea value={content} onChange={handleChange} disabled={mode === 'view'}></textarea>
+              <textarea
+                value={content}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                placeholder={mode === 'edit' ? `${t('jsonEditor.enter')} ${t(`jsonEditor.${type}`)}` : ''}></textarea>
             </Box>
           </Box>
         </Box>

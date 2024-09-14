@@ -4,6 +4,17 @@ import {userEvent} from '@testing-library/user-event';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 
 jest.mock('@fontsource/roboto-mono', () => {});
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'jsonEditor.format': 'Format',
+        'jsonEditor.jsonContent': 'JSON Content',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
 
 describe('Testing JSON-Editor component', () => {
   it('renders without props with default values', async () => {
