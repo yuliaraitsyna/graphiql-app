@@ -49,6 +49,12 @@ export default {
       ],
       altAppLogo: 'Logotipo de la aplicación',
     },
+    history: {
+      title: 'Historia',
+      noRequests: 'No has ejecutado ninguna petición. ',
+      tryRequests: 'Está vacío. Inténtalo:',
+      historyRequests: 'Historial de solicitudes',
+    },
   },
   links: {
     signIn: 'Iniciar sesión',

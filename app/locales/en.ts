@@ -51,6 +51,12 @@ export default {
         },
       ],
     },
+    history: {
+      title: 'History',
+      noRequests: "You haven't executed any request.",
+      tryRequests: "It's empty here. Try:",
+      historyRequests: 'History requests',
+    },
   },
   links: {
     signIn: 'Sign in',
