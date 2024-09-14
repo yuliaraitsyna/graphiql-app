@@ -103,30 +103,26 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     setHeaders(updatedHeaders);
   };
 
-  useEffect(() => {
-    const updateUrl = () => {
-      if (!errorUriMessage) {
-        if (url) {
-          const requestData: RestHistoryData = {
-            uri,
-            method,
-            headers,
-            params,
-            body,
-            type: 'rest',
-          };
+  const updateUrl = () => {
+    if (!errorUriMessage) {
+      if (url) {
+        const requestData: RestHistoryData = {
+          uri,
+          method,
+          headers,
+          params,
+          body,
+          type: 'rest',
+        };
 
-          const encodedUri = createRestEncodedUri(requestData);
-          const updatedUrl = `${window.location.origin}${window.location.pathname}?${encodedUri}`;
-          window.history.replaceState({}, '', updatedUrl);
-        }
-      } else {
-        window.history.replaceState({}, '', window.location.origin + window.location.pathname);
+        const encodedUri = createRestEncodedUri(requestData);
+        const updatedUrl = `${window.location.origin}${window.location.pathname}?${encodedUri}`;
+        window.history.replaceState({}, '', updatedUrl);
       }
-    };
-
-    updateUrl();
-  }, [body, errorUriMessage, headers, location, method, navigate, params, uri, url]);
+    } else {
+      window.history.replaceState({}, '', window.location.origin + window.location.pathname);
+    }
+  };
 
   useEffect(() => {
     if (location.state) {
@@ -209,6 +205,10 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   const handleMethodSelection = (event: SelectChangeEvent) => {
     navigate(`/rest/${event.target.value}`);
     setMethod(event.target.value as HTTPMethods);
+  };
+
+  const handleFocusOut = () => {
+    updateUrl();
   };
 
   // const handleToggleRESTAction = () => {
@@ -318,6 +318,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
             }
             onChange={handleBodyChange}
             defaultValue={body}
+            onBlur={handleFocusOut}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={4}>
