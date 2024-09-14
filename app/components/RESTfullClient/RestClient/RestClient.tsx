@@ -104,12 +104,6 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   useEffect(() => {
-    return () => {
-      localStorage.removeItem('history');
-    };
-  }, []);
-
-  useEffect(() => {
     if (location.state) {
       const request: RestHistoryData = location.state as RestHistoryData;
 
