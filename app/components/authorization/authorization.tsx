@@ -9,10 +9,12 @@ import {auth} from '~/utils/firebaseConfig';
 import {FormAction} from './models/formAction';
 import {useNavigate, useLocation} from '@remix-run/react';
 import {red} from '@mui/material/colors';
+import {useAuth} from 'hooks/Authorization/useAuth';
 
 const Authorization: React.FC = () => {
   const location = useLocation();
   const initialAction = location.pathname === '/sign-up' ? FormAction.SIGN_UP : FormAction.SIGN_IN;
+  const {login} = useAuth();
 
   const [action, setAction] = useState<FormAction>(initialAction);
   const [authError, setAuthError] = useState<string>('');
@@ -28,18 +30,14 @@ const Authorization: React.FC = () => {
     try {
       if (action === FormAction.SIGN_IN) {
         const userCredentials = await signInWithEmailAndPassword(auth, data.email, data.password);
-
-        localStorage.setItem('user', JSON.stringify(userCredentials));
-
+        login(userCredentials);
         setAuthError('');
         navigate('/');
       } else if (action === FormAction.SIGN_UP) {
         const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
-
+        login(userCredentials);
         setAuthError('');
         navigate('/');
-
-        localStorage.setItem('user', JSON.stringify(userCredentials));
       }
     } catch (error) {
       console.error('Authentication error:', error);

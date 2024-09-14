@@ -5,6 +5,7 @@ import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
 import {Header} from './components/Header/Header';
 import {Footer} from './components/Footer';
+import {AuthProvider} from 'hooks/Authorization/AuthProvider';
 export function links() {
   return [{rel: 'stylesheet', href: './app/styles/global.css'}];
 }
@@ -28,9 +29,11 @@ export function Layout({children}: {children: React.ReactNode}) {
         <Links />
       </head>
       <body>
-        <Header />
-        <main>{children}</main>
-         <Footer />
+        <AuthProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </AuthProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
