@@ -104,6 +104,31 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   useEffect(() => {
+    const updateUrl = () => {
+      if (!errorUriMessage) {
+        if (url) {
+          const requestData: RestHistoryData = {
+            uri,
+            method,
+            headers,
+            params,
+            body,
+            type: 'rest',
+          };
+
+          const encodedUri = createRestEncodedUri(requestData);
+          const updatedUrl = `${window.location.origin}${window.location.pathname}?${encodedUri}`;
+          window.history.replaceState({}, '', updatedUrl);
+        }
+      } else {
+        window.history.replaceState({}, '', window.location.origin + window.location.pathname);
+      }
+    };
+
+    updateUrl();
+  }, [body, errorUriMessage, headers, location, method, navigate, params, uri, url]);
+
+  useEffect(() => {
     if (location.state) {
       const request: RestHistoryData = location.state as RestHistoryData;
 
@@ -158,6 +183,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     const history: RestHistoryData[] = JSON.parse(localStorage.getItem('history') || '[]');
     history.push(requestData);
     localStorage.setItem('history', JSON.stringify(history));
+    window.history.replaceState({}, '', window.location.origin + window.location.pathname);
     navigate(encodedUri);
     setTab(4);
     // const params: RequestParams = {
