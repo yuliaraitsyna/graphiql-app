@@ -29,6 +29,7 @@ import QueryParamsEditor from '~/components/QueryParamsEditor/QueryParamsEditor'
 import getParamsFromUri from '~/utils/getParamsFromUri';
 import {Variable} from '~/components/VariablesEditor/models/variable';
 import {QueryParam} from '~/components/QueryParamsEditor/models/queryParams';
+import {replaceJsonVariables, replaceVariables} from '~/utils/replaceVariables';
 
 type Tabs = 'Headers' | 'Variables' | 'Body' | 'Response';
 
@@ -89,29 +90,29 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   const [uri, setUri] = useState<string>(initialUri);
   const theme = useTheme();
   const [tab, setTab] = React.useState(0);
-  const [errorUriMessage, setErrorMessage] = useState('');
+  const [errorUriMessage, setErrorUriMessage] = useState('');
   const [errorJsonMessage, setErrorJsonMessage] = useState('');
 
   const handleHeadersChange = (updatedHeaders: Header[]) => {
     setHeaders(updatedHeaders);
   };
 
-  const updateUrl = () => {
-    if (!errorUriMessage) {
-      if (url) {
-        const requestData: RestHistoryData = {
-          uri,
-          method,
-          headers,
-          params,
-          body,
-          type: 'rest',
-        };
+  const updateUri = () => {
+    console.log('a', errorUriMessage, errorJsonMessage);
+    if (!errorUriMessage && !errorJsonMessage) {
+      console.log('b');
+      const requestData: RestHistoryData = {
+        uri: replaceVariables(uri, variables),
+        method,
+        headers,
+        params,
+        body: replaceJsonVariables(body, variables),
+        type: 'rest',
+      };
 
-        const encodedUri = createRestEncodedUri(requestData);
-        const updatedUrl = `${window.location.origin}${window.location.pathname}?${encodedUri}`;
-        window.history.replaceState({}, '', updatedUrl);
-      }
+      const encodedUri = createRestEncodedUri(requestData);
+      const updatedUrl = `${window.location.origin}${window.location.pathname}/${encodedUri}`;
+      window.history.replaceState({}, '', updatedUrl);
     } else {
       window.history.replaceState({}, '', window.location.origin + window.location.pathname);
     }
@@ -135,15 +136,24 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     );
   }, [method]);
 
-  useEffect(() => {
-    if (method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT) {
-      const message = body ? (prettifyJson(body).error?.message ?? '') : '';
-      setErrorJsonMessage(message);
-    }
-  }, [body, method]);
-
   const handleVariablesChange = (updatedVariables: Variable[]) => {
     setVariables(updatedVariables);
+    let replacedBody = '';
+    try {
+      replacedBody = replaceJsonVariables(body, updatedVariables);
+      if (mode === 'edit') {
+        const message = replacedBody ? (prettifyJson(replacedBody).error?.message ?? '') : '';
+        setErrorJsonMessage(message);
+      }
+    } catch (error) {
+      if (error instanceof ReferenceError) setErrorJsonMessage(error.message);
+    }
+    try {
+      replaceVariables(uri, updatedVariables);
+      setErrorUriMessage('');
+    } catch (error) {
+      if (error instanceof ReferenceError) setErrorUriMessage(error.message);
+    }
   };
 
   const handleParamsChange = (updatedParams: QueryParam[]) => {
@@ -154,18 +164,17 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
 
   const handleSendingRequest = async () => {
     const requestData: RestHistoryData = {
-      uri,
+      uri: replaceVariables(uri, variables),
       method,
       headers,
       params,
-      body,
+      body: replaceJsonVariables(body, variables),
       type: 'rest',
     };
     const encodedUri = createRestEncodedUri(requestData);
     const history: RestHistoryData[] = JSON.parse(localStorage.getItem('history') || '[]');
     history.push(requestData);
     localStorage.setItem('history', JSON.stringify(history));
-    window.history.replaceState({}, '', window.location.origin + window.location.pathname);
     navigate(encodedUri);
     setTab(4);
   };
@@ -176,21 +185,23 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   const handleFocusOut = () => {
-    updateUrl();
+    updateUri();
   };
 
   const handleUrlChange = (value: string) => {
     let urlStr = '';
     let searchStr = '';
     try {
+      replaceVariables(value, variables);
       const url: URL = new URL(value);
       const {href, search} = url;
       searchStr = search;
       urlStr = search ? href.slice(0, -search.length) : href;
       if (value + '/' === urlStr) urlStr = value;
-      setErrorMessage('');
+      setErrorUriMessage('');
     } catch (error) {
-      if (error instanceof TypeError && !!value) setErrorMessage(error.message);
+      if (error instanceof ReferenceError) setErrorUriMessage(error.message);
+      if (error instanceof TypeError && !!value) setErrorUriMessage(error.message);
     }
     const newUrlStr = urlStr || value;
     setUrl(newUrlStr);
@@ -201,6 +212,16 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
 
   const handleBodyChange = (body: string) => {
     setBody(body);
+    let replacedBody = '';
+    try {
+      replacedBody = replaceJsonVariables(body, variables);
+      if (method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT) {
+        const message = replacedBody ? (prettifyJson(replacedBody).error?.message ?? '') : '';
+        setErrorJsonMessage(message);
+      }
+    } catch (error) {
+      if (error instanceof ReferenceError) setErrorJsonMessage(error.message);
+    }
   };
 
   const handleJsonClick = () => {
@@ -224,8 +245,8 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   return (
-    <Container sx={{width: '80%'}}>
-      <Typography component={'h4'} variant="h4" textAlign={'left'}>
+    <Container sx={{width: '80%', margin: '4rem auto'}}>
+      <Typography component={'h4'} variant="h4" textAlign={'left'} sx={{marginBottom: '2rem'}}>
         {t('page.rest.title')}
       </Typography>
       <Box
@@ -268,8 +289,8 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
         {errorUriMessage}
       </FormHelperText>
       <Box sx={{width: '100%'}}>
-        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-          <Tabs value={tab} onChange={handleTabChange} centered>
+        <Box sx={{borderBottom: 1, borderColor: 'divider', width: 'fit-content', margin: '1rem auto'}}>
+          <Tabs value={tab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             <Tab label={t('editors.variablesTitle')} {...a11yProps(0)} />
             <Tab label={t('editors.queryTitle')} {...a11yProps(1)} />
             <Tab label={t('editors.headersTitle')} {...a11yProps(2)} />
@@ -278,7 +299,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
           </Tabs>
         </Box>
         <CustomTabPanel value={tab} index={0}>
-          <VariablesEditor setStoredVariables={handleVariablesChange} decodedVariables={variables} />
+          <VariablesEditor onChange={handleVariablesChange} vars={variables} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={1}>
           <QueryParamsEditor onParamsChange={handleParamsChange} queryParams={params} />
@@ -299,6 +320,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
             onChange={handleBodyChange}
             defaultValue={body}
             onBlur={handleFocusOut}
+            errorMessage={errorJsonMessage}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={4}>

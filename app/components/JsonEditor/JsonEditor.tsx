@@ -10,6 +10,7 @@ type EditorProps = {
   mode: 'view' | 'edit';
   type: 'JSON' | 'text';
   defaultValue: string;
+  errorMessage: string;
   onChange: (v: string) => void;
   onBlur: () => void;
 };
@@ -23,29 +24,20 @@ export default function JsonEditor({
   mode = 'view',
   type = 'JSON',
   defaultValue = '',
+  errorMessage = '',
   onChange,
   onBlur,
 }: Partial<EditorProps>) {
   const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue);
-  const [errorMessage, setErrorMessage] = useState('');
   const [formattable, setFormattable] = useState(false);
   const {t} = useTranslation();
-
-  useEffect(() => {
-    if (type === 'JSON') {
-      const message = content ? (prettifyJson(content).error?.message ?? '') : '';
-      setErrorMessage(message);
-    }
-  }, [content, type]);
 
   useEffect(() => setContent(defaultValue), [defaultValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
     if (type === 'JSON') {
-      const message = v ? (prettifyJson(v).error?.message ?? '') : '';
-      setErrorMessage(message);
-      setFormattable(!!v && v !== prettifyJson(v).json && !message);
+      setFormattable(!!v && v !== prettifyJson(v).json && !errorMessage);
     }
     setContent(v);
     if (onChange) {

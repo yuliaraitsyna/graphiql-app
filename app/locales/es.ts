@@ -73,9 +73,9 @@ export default {
     add: 'Añadir',
   },
   response: {
-    status: 'Estado',
-    size: 'Tamaño',
-    time: 'Tiempo',
+    status: 'Estado:',
+    size: 'Tamaño:',
+    time: 'Tiempo:',
   },
   links: {
     signIn: 'Iniciar sesión',

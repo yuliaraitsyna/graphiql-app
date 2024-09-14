@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import {blue, grey} from '@mui/material/colors';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {useTranslation} from 'react-i18next';
@@ -21,8 +21,8 @@ import {Variable} from './models/variable';
 import {variableNamePattern, variableValuePattern} from './models/regex';
 
 interface VariableProps {
-  decodedVariables: Variable[];
-  setStoredVariables: (variables: Variable[]) => void;
+  onChange: (variables: Variable[]) => void;
+  vars: Variable[];
 }
 
 const initialVariable: Variable = {
@@ -31,25 +31,15 @@ const initialVariable: Variable = {
   checked: false,
 };
 
-const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVariables}) => {
+const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}) => {
   const {t} = useTranslation();
-  const [variables, setVariables] = useState<Variable[]>([]);
+  const [variables, setVariables] = useState<Variable[]>(vars);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (variables.length > 0 && JSON.stringify(variables) !== JSON.stringify(decodedVariables)) {
-      setStoredVariables(variables);
-    }
-  }, [variables, setStoredVariables, decodedVariables]);
-
-  useEffect(() => {
-    if (decodedVariables.length > 0) {
-      setVariables(decodedVariables);
-    }
-  }, [decodedVariables]);
-
   const handleVariableAddition = () => {
-    setVariables([...variables, initialVariable]);
+    const updatedVariables = [...variables, initialVariable];
+    setVariables(updatedVariables);
+    if (onChange) onChange(updatedVariables);
   };
 
   const handleEditClick = (index: number) => {
@@ -64,6 +54,7 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
         const updatedVariables = [...variables];
         updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
         setVariables(updatedVariables);
+        if (onChange) onChange(updatedVariables);
       }
     }
   };
@@ -72,6 +63,7 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
     const updatedVariables = [...variables];
     updatedVariables[index].checked = !updatedVariables[index].checked;
     setVariables(updatedVariables);
+    if (onChange) onChange(updatedVariables);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -82,8 +74,9 @@ const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVa
   };
 
   const handleDelete = (index: number) => {
-    const updatedHeaders = variables.filter((_, i) => i !== index);
-    setVariables(updatedHeaders);
+    const updatedVariables = variables.filter((_, i) => i !== index);
+    setVariables(updatedVariables);
+    if (onChange) onChange(updatedVariables);
   };
 
   return (

@@ -75,9 +75,9 @@ export default {
     add: 'Add',
   },
   response: {
-    status: 'Status',
-    size: 'Size',
-    time: 'Time',
+    status: 'Status:',
+    size: 'Size:',
+    time: 'Time:',
   },
   links: {
     signIn: 'Sign in',
