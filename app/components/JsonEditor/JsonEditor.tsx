@@ -11,6 +11,7 @@ type EditorProps = {
   type: 'JSON' | 'text';
   defaultValue: string;
   onChange: (v: string) => void;
+  onBlur: () => void;
 };
 
 function StrNum({content}: {content: string}) {
@@ -18,7 +19,13 @@ function StrNum({content}: {content: string}) {
   return <pre className={styles.numeration}>{numStr}</pre>;
 }
 
-export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue = '', onChange}: Partial<EditorProps>) {
+export default function JsonEditor({
+  mode = 'view',
+  type = 'JSON',
+  defaultValue = '',
+  onChange,
+  onBlur,
+}: Partial<EditorProps>) {
   const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue);
   const [errorMessage, setErrorMessage] = useState('');
   const [formattable, setFormattable] = useState(false);
@@ -81,11 +88,7 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
           {type === 'JSON' && <StrNum content={content} />}
           <Box>
             <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
-              <textarea
-                value={content}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-                placeholder={mode === 'edit' ? `${t('jsonEditor.enter')} ${t(`jsonEditor.${type}`)}` : ''}></textarea>
+              <textarea value={content} onChange={handleChange} onBlur={onBlur} disabled={mode === 'view'} />
             </Box>
           </Box>
         </Box>

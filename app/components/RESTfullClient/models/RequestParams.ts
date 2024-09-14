@@ -1,6 +1,6 @@
 import {Header} from '~/components/HeadersEditor/models/header';
 import {HTTPMethods} from '../RestClient/models/HTTPMethods';
-import {QueryParam} from '~/components/models/queryParams';
+import {QueryParam} from '~/components/QueryParamsEditor/models/queryParams';
 
 // export interface RequestParams {
 //   endpointUrl: string;

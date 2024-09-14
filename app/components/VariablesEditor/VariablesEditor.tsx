@@ -16,8 +16,14 @@ import {blue, grey} from '@mui/material/colors';
 import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {Variable} from '../models/variable';
-import {variableNamePattern, variableValuePattern} from '../models/regex';
+import {useTranslation} from 'react-i18next';
+import {Variable} from './models/variable';
+import {variableNamePattern, variableValuePattern} from './models/regex';
+
+interface VariableProps {
+  decodedVariables: Variable[];
+  setStoredVariables: (variables: Variable[]) => void;
+}
 
 const initialVariable: Variable = {
   name: '',
@@ -25,29 +31,22 @@ const initialVariable: Variable = {
   checked: false,
 };
 
-type Props = {
-  onVariablesChange: (variables: Variable[]) => void;
-  vars: Variable[];
-};
-
-const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []}) => {
-  const [variables, setVariables] = useState<Variable[]>(vars);
+const VariablesEditor: React.FC<VariableProps> = ({decodedVariables, setStoredVariables}) => {
+  const {t} = useTranslation();
+  const [variables, setVariables] = useState<Variable[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  useEffect(() => setVariables(vars), [vars]);
+  useEffect(() => {
+    if (variables.length > 0 && JSON.stringify(variables) !== JSON.stringify(decodedVariables)) {
+      setStoredVariables(variables);
+    }
+  }, [variables, setStoredVariables, decodedVariables]);
 
-  // useEffect(() => {
-  //   const storedVariables = localStorage.getItem('variables');
-  //   if (storedVariables) {
-  //     setVariables(JSON.parse(storedVariables));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (variables.length > 0) {
-  //     localStorage.setItem('variables', JSON.stringify(variables));
-  //   }
-  // }, [variables]);
+  useEffect(() => {
+    if (decodedVariables.length > 0) {
+      setVariables(decodedVariables);
+    }
+  }, [decodedVariables]);
 
   const handleVariableAddition = () => {
     setVariables([...variables, initialVariable]);
@@ -65,7 +64,6 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
         const updatedVariables = [...variables];
         updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
         setVariables(updatedVariables);
-        onVariablesChange?.(updatedVariables);
       }
     }
   };
@@ -74,7 +72,6 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
     const updatedVariables = [...variables];
     updatedVariables[index].checked = !updatedVariables[index].checked;
     setVariables(updatedVariables);
-    onVariablesChange?.(updatedVariables);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -85,22 +82,18 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
   };
 
   const handleDelete = (index: number) => {
-    const updatedVariables = variables.filter((_, i) => i !== index);
-    // if (!updatedVariables.length) {
-    //   localStorage.removeItem('variables');
-    // }
-    setVariables(updatedVariables);
-    onVariablesChange?.(updatedVariables);
+    const updatedHeaders = variables.filter((_, i) => i !== index);
+    setVariables(updatedHeaders);
   };
 
   return (
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
-          Variables
+          {t('editors.variablesTitle')}
         </Typography>
         <Button variant="contained" onClick={handleVariableAddition}>
-          Add
+          {t('editors.add')}
         </Button>
       </Box>
       <TableContainer sx={{width: '100%', border: '1px solid', borderColor: grey[200]}}>
@@ -116,7 +109,7 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Name</b>
+                <b>{t('editors.nameTitle')}</b>
               </TableCell>
               <TableCell
                 sx={{
@@ -126,7 +119,7 @@ const VariablesEditor: React.FC<Partial<Props>> = ({onVariablesChange, vars = []
                   minWidth: 'auto',
                   whiteSpace: 'nowrap',
                 }}>
-                <b>Value</b>
+                <b>{t('editors.valueTitle')}</b>
               </TableCell>
               <TableCell sx={{border: '1px solid', borderColor: grey[200], minWidth: '160px'}}></TableCell>
             </TableRow>

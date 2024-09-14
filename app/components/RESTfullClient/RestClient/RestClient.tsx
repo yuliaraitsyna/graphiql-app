@@ -21,14 +21,14 @@ import createRestEncodedUri from '~/utils/createRestEncodedURL';
 import {RestHistoryData} from '../models/RequestParams';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import {useTranslation} from 'react-i18next';
-import {Variable} from '~/components/models/variable';
 import {Header} from '~/components/HeadersEditor/models/header';
 import HeadersEditor from '~/components/HeadersEditor/HeadersEditor';
 import {getStringFromParams} from '~/utils/getStringFromParams';
 import prettifyJson from '~/utils/prettifyJson';
 import QueryParamsEditor from '~/components/QueryParamsEditor/QueryParamsEditor';
-import {QueryParam} from '~/components/models/queryParams';
 import getParamsFromUri from '~/utils/getParamsFromUri';
+import {Variable} from '~/components/VariablesEditor/models/variable';
+import {QueryParam} from '~/components/QueryParamsEditor/models/queryParams';
 
 type Tabs = 'Headers' | 'Variables' | 'Body' | 'Response';
 
@@ -96,6 +96,39 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     setHeaders(updatedHeaders);
   };
 
+  const updateUrl = () => {
+    if (!errorUriMessage) {
+      if (url) {
+        const requestData: RestHistoryData = {
+          uri,
+          method,
+          headers,
+          params,
+          body,
+          type: 'rest',
+        };
+
+        const encodedUri = createRestEncodedUri(requestData);
+        const updatedUrl = `${window.location.origin}${window.location.pathname}?${encodedUri}`;
+        window.history.replaceState({}, '', updatedUrl);
+      }
+    } else {
+      window.history.replaceState({}, '', window.location.origin + window.location.pathname);
+    }
+  };
+
+  useEffect(() => {
+    if (location.state) {
+      const request: RestHistoryData = location.state as RestHistoryData;
+
+      setMethod(request.method);
+      setUrl(request.uri);
+      setHeaders(request.headers);
+      setBody(request.body);
+      setParams(request.params);
+    }
+  }, [location.state]);
+
   useEffect(() => {
     setMode(
       method === HTTPMethods.PATCH || method === HTTPMethods.POST || method === HTTPMethods.PUT ? 'edit' : 'view',
@@ -132,6 +165,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     const history: RestHistoryData[] = JSON.parse(localStorage.getItem('history') || '[]');
     history.push(requestData);
     localStorage.setItem('history', JSON.stringify(history));
+    window.history.replaceState({}, '', window.location.origin + window.location.pathname);
     navigate(encodedUri);
     setTab(4);
   };
@@ -139,6 +173,10 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   const handleMethodSelection = (event: SelectChangeEvent) => {
     navigate(`/rest/${event.target.value}`);
     setMethod(event.target.value as HTTPMethods);
+  };
+
+  const handleFocusOut = () => {
+    updateUrl();
   };
 
   const handleUrlChange = (value: string) => {
@@ -232,21 +270,21 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
       <Box sx={{width: '100%'}}>
         <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
           <Tabs value={tab} onChange={handleTabChange} centered>
-            <Tab label="Variables" {...a11yProps(0)} />
-            <Tab label="Query" {...a11yProps(1)} />
-            <Tab label="Headers" {...a11yProps(2)} />
-            <Tab label="Body" {...a11yProps(3)} />
-            <Tab label="Response" {...a11yProps(4)} />
+            <Tab label={t('editors.variablesTitle')} {...a11yProps(0)} />
+            <Tab label={t('editors.queryTitle')} {...a11yProps(1)} />
+            <Tab label={t('editors.headersTitle')} {...a11yProps(2)} />
+            <Tab label={t('editors.bodyTitle')} {...a11yProps(3)} />
+            <Tab label={t('editors.responseTitle')} {...a11yProps(4)} />
           </Tabs>
         </Box>
         <CustomTabPanel value={tab} index={0}>
-          <VariablesEditor onVariablesChange={handleVariablesChange} vars={variables} />
+          <VariablesEditor setStoredVariables={handleVariablesChange} decodedVariables={variables} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={1}>
           <QueryParamsEditor onParamsChange={handleParamsChange} queryParams={params} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={2}>
-          <HeadersEditor onHeadersChange={handleHeadersChange} header={headers} />
+          <HeadersEditor setStoredHeaders={handleHeadersChange} decodedHeaders={headers} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={3}>
           <Button onClick={handleJsonClick} disabled={mode === 'view'}>
@@ -255,7 +293,13 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
           <Button onClick={handleTextClick} disabled={mode === 'view'}>
             {t('jsonEditor.text')}
           </Button>
-          <JsonEditor mode={mode} type={editorMode} onChange={handleBodyChange} defaultValue={body} />
+          <JsonEditor
+            mode={mode}
+            type={editorMode}
+            onChange={handleBodyChange}
+            defaultValue={body}
+            onBlur={handleFocusOut}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={4}>
           {children}

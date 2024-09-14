@@ -1,4 +1,4 @@
-import {QueryParam} from '~/components/models/queryParams';
+import {QueryParam} from '~/components/QueryParamsEditor/models/queryParams';
 
 export default function getParamsFromUri(uri: string): QueryParam[] {
   let params = new URLSearchParams();

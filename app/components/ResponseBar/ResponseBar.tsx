@@ -1,4 +1,5 @@
 import {List, ListItem, ListItemText, useTheme} from '@mui/material';
+import {useTranslation} from 'react-i18next';
 import formatBytes from '~/utils/formatBytes';
 import formatMs from '~/utils/formatMs';
 
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export default function ResponseBar({status, statusText, size, time}: Props) {
+  const {t} = useTranslation();
   const theme = useTheme();
   const statusColor =
     status < 300 ? theme.palette.success.main : status < 400 ? theme.palette.warning.main : theme.palette.error.main;
@@ -32,7 +34,7 @@ export default function ResponseBar({status, statusText, size, time}: Props) {
       }}>
       <ListItem sx={{gap: '8px', justifyContent: 'center'}}>
         <ListItemText
-          primary="Status:"
+          primary={t('response.status')}
           sx={{flexGrow: 0}}
           primaryTypographyProps={{
             fontWeight: 600,
@@ -55,7 +57,7 @@ export default function ResponseBar({status, statusText, size, time}: Props) {
       </ListItem>
       <ListItem sx={{gap: '8px', justifyContent: 'center'}}>
         <ListItemText
-          primary="Size:"
+          primary={t('response.size')}
           sx={{flexGrow: 0}}
           primaryTypographyProps={{
             fontWeight: 600,
@@ -71,7 +73,7 @@ export default function ResponseBar({status, statusText, size, time}: Props) {
       </ListItem>
       <ListItem sx={{gap: '8px', justifyContent: 'center'}}>
         <ListItemText
-          primary="Time:"
+          primary={t('response.time')}
           sx={{flexGrow: 0}}
           primaryTypographyProps={{
             fontWeight: 600,
