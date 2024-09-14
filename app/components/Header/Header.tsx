@@ -10,7 +10,7 @@ import Logo from '../../../public/logo.svg';
 import WhiteLink from '../UI/WhiteLink';
 import {MobileMenu} from '../MobileMenu/MobileMenu';
 import {pages} from '../../constants/index';
-import {useAuth} from 'hooks/Authorization/useAuth';
+import {useAuth} from '~/hooks/Authorization/useAuth';
 
 export function Header() {
   const {t} = useTranslation();

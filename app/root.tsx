@@ -5,7 +5,8 @@ import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
 import {Header} from './components/Header/Header';
 import {Footer} from './components/Footer';
-import {AuthProvider} from 'hooks/Authorization/AuthProvider';
+import {AuthProvider} from './hooks/Authorization/AuthProvider';
+
 export function links() {
   return [{rel: 'stylesheet', href: './app/styles/global.css'}];
 }

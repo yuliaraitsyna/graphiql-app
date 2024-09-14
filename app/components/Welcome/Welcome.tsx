@@ -1,12 +1,13 @@
 import {Box, Button, Container, Typography} from '@mui/material';
 import {Link as RemixLink} from '@remix-run/react';
-import {useAuth} from 'hooks/Authorization/useAuth';
 import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {pages} from '~/constants';
+import {useAuth} from '~/hooks/Authorization/useAuth';
+
 export function Welcome() {
   const {t} = useTranslation();
-  const [name, setName] = useState<string>('User');
+  const [name, setName] = useState<string>('');
   const {isLoggedIn, user} = useAuth();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export function Welcome() {
           boxShadow: 2,
         }}>
         <Typography component={'h2'} variant="h3" textAlign={'center'} style={{marginBottom: '24px'}}>
-          {`${t('page.main.welcome')} / ${t('page.main.welcomeBack')}, ${name}!`}
+          {!isLoggedIn ? `${t('page.main.welcome')}, User!` : `${t('page.main.welcomeBack')}, ${name}!`}
         </Typography>
         <Box
           display="flex"

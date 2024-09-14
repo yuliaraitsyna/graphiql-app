@@ -9,7 +9,7 @@ import {auth} from '~/utils/firebaseConfig';
 import {FormAction} from './models/formAction';
 import {useNavigate, useLocation} from '@remix-run/react';
 import {red} from '@mui/material/colors';
-import {useAuth} from 'hooks/Authorization/useAuth';
+import {useAuth} from '~/hooks/Authorization/useAuth';
 
 const Authorization: React.FC = () => {
   const location = useLocation();

@@ -3,6 +3,7 @@ import {Link as RemixLink} from '@remix-run/react';
 import WhiteButton from '../UI/WhiteButton';
 import {useTranslation} from 'react-i18next';
 import {pages} from '~/constants';
+import {useAuth} from '~/hooks/Authorization/useAuth';
 interface MobileMenuProps {
   anchorEl: null | HTMLElement;
   open: boolean;
@@ -11,6 +12,7 @@ interface MobileMenuProps {
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose}) => {
   const {t} = useTranslation();
+  const {isLoggedIn, logout} = useAuth();
   return (
     <Menu
       anchorEl={anchorEl}
@@ -28,21 +30,27 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose})
           {t(pages.main.translationKey)}
         </WhiteButton>
       </MenuItem>
-      <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to={pages.signOut.path}>
-          {t(pages.signOut.translationKey)}
-        </WhiteButton>
-      </MenuItem>
-      <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to={pages.signIn.path}>
-          {t(pages.signIn.translationKey)}
-        </WhiteButton>
-      </MenuItem>
-      <MenuItem onClick={onClose}>
-        <WhiteButton component={RemixLink} to={pages.signUp.path}>
-          {t(pages.signUp.translationKey)}
-        </WhiteButton>
-      </MenuItem>
+      {isLoggedIn && (
+        <MenuItem onClick={onClose}>
+          <WhiteButton component={RemixLink} to={pages.signOut.path} onClick={logout}>
+            {t(pages.signOut.translationKey)}
+          </WhiteButton>
+        </MenuItem>
+      )}
+      {!isLoggedIn && (
+        <MenuItem onClick={onClose}>
+          <WhiteButton component={RemixLink} to={pages.signIn.path}>
+            {t(pages.signIn.translationKey)}
+          </WhiteButton>
+        </MenuItem>
+      )}
+      {!isLoggedIn && (
+        <MenuItem onClick={onClose}>
+          <WhiteButton component={RemixLink} to={pages.signUp.path}>
+            {t(pages.signUp.translationKey)}
+          </WhiteButton>
+        </MenuItem>
+      )}
     </Menu>
   );
 };
