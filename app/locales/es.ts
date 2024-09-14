@@ -2,6 +2,13 @@ export default {
   title: 'Graphiql',
   description:
     'Una herramienta intuitiva para realizar solicitudes API REST y GraphQL, diseñada para simplificar la obtención de datos y la interacción con las API.',
+  common: {
+    altAppLogo: 'Logotipo de la aplicación',
+    show: 'Mostrar',
+    hide: 'Ocultar',
+    variables: 'Variables',
+    headers: 'Cabeceras',
+  },
   page: {
     main: {
       welcome: 'Bienvenido',
@@ -63,14 +70,25 @@ export default {
   editors: {
     paramsTitle: 'Parámetros',
     headersTitle: 'Encabezados',
-    variablesTitle: 'Variables',
-    queryTitle: 'Consulta',
-    bodyTitle: 'Cuerpo',
-    responseTitle: 'Respuesta',
     keyTitle: 'Clave',
     valueTitle: 'Valor',
     nameTitle: 'Nombre',
     add: 'Añadir',
+    variablesTitle: 'Variables',
+    queryTitle: 'Consulta',
+    bodyTitle: 'Cuerpo',
+    responseTitle: 'Respuesta',
+    graphiql: {
+      sendButton: 'Enviar',
+      endpointUrl: 'URL del punto final',
+      placeholderEndpointUrl: 'Introduzca la URL del punto final',
+      sdlUrl: 'LDE Url',
+      placeholderSdlUrl: 'Introduzca la URL de LDE',
+      queryEditor: 'Consulta',
+      format: 'Formato',
+      response: 'Respuesta',
+      httpStatus: 'Estado HTTP',
+    },
   },
   response: {
     status: 'Estado:',
@@ -93,5 +111,16 @@ export default {
     enter: 'Introducir',
     jsonContent: 'Contenido JSON',
     textContent: 'Contenido del texto',
+    errors: {
+      graphql: {
+        endpoint: 'Comprobar url de punto final!',
+        sdl: 'Comprobar url LDE!',
+        sendRequest: '¡No se puede enviar la solicitud! Compruebe los campos',
+        responseError: 'No se pueden obtener datos!',
+        responseErrorStatus: 'No se pueden obtener datos. Estado: ',
+        notValidEndpoint: 'Proporcione la URL correcta del punto final.',
+        notValidSdlUrl: 'Proporcione la URL sdl correcta',
+      },
+    },
   },
 };

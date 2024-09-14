@@ -90,6 +90,7 @@ export default function JsonEditor({
         style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px', fontSize: '14px'}}>
         {errorMessage}
       </FormHelperText>
+      feature/graphiql-request
     </Box>
   );
 }

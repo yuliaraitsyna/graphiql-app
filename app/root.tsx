@@ -7,7 +7,7 @@ import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 
 export function links() {
-  return [{rel: 'stylesheet', href: './app/styles/global.css'}];
+  return [{rel: 'stylesheet', href: '/app/styles/global.css'}];
 }
 
 export const handle = {i18n: ['translation']};

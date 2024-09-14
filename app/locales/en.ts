@@ -4,6 +4,10 @@ export default {
     'An intuitive tool for making REST API and GraphQL requests, designed to simplify data fetching and interaction with APIs.',
   common: {
     altAppLogo: 'App logo',
+    show: 'Show',
+    hide: 'Hide',
+    variables: 'Variables',
+    headers: 'Headers',
   },
   page: {
     main: {
@@ -63,16 +67,27 @@ export default {
     },
   },
   editors: {
+    keyTitle: 'Key',
+    valueTitle: 'Value',
+    nameTitle: 'Name',
+    add: 'Add',
     paramsTitle: 'Params',
     headersTitle: 'Headers',
     variablesTitle: 'Variables',
     queryTitle: 'Query',
     bodyTitle: 'Body',
     responseTitle: 'Response',
-    keyTitle: 'Key',
-    valueTitle: 'Value',
-    nameTitle: 'Name',
-    add: 'Add',
+    graphiql: {
+      sendButton: 'Send request',
+      endpointUrl: 'Endpoint URL',
+      placeholderEndpointUrl: 'Enter endpoint URL',
+      sdlUrl: 'SDL URL',
+      placeholderSdlUrl: 'Enter SDL URL',
+      queryEditor: 'Query',
+      format: 'Format',
+      response: 'Response',
+      httpStatus: 'HTTP status',
+    },
   },
   response: {
     status: 'Status:',
@@ -95,5 +110,16 @@ export default {
     enter: 'Enter',
     jsonContent: 'JSON content',
     textContent: 'Text content',
+    errors: {
+      graphql: {
+        endpoint: 'Check endpoint url!',
+        sdl: 'Check sdl url!',
+        sendRequest: 'Unable to send request! Check fields!',
+        responseError: 'Unable to get data! Error occurs!',
+        responseErrorStatus: 'Unable to get data! Status: ',
+        notValidEndpoint: 'Provide correct endpoint URL!',
+        notValidSdlUrl: 'Provide correct sdl URL!',
+      },
+    },
   },
 };
