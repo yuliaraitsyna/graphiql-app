@@ -151,10 +151,10 @@ const HeadersEditor: React.FC<HeaderProps> = ({decodedHeaders, setStoredHeaders}
                 </TableCell>
                 <TableCell sx={{border: '1px solid', borderColor: grey[200]}}>
                   <Box display={'flex'} alignItems={'center'}>
-                    <Button onClick={() => handleEditClick(index)}>
+                    <Button onClick={() => handleEditClick(index)} aria-label="Edit">
                       <EditIcon />
                     </Button>
-                    <Button onClick={() => handleDelete(index)}>
+                    <Button onClick={() => handleDelete(index)} aria-label="Delete">
                       <DeleteIcon />
                     </Button>
                   </Box>

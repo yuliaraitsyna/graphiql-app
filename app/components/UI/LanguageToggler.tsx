@@ -15,7 +15,7 @@ export default function LanguageToggler() {
     <ToggleButtonGroup
       color="primary"
       value={language}
-      exclusive
+      exclusive={true}
       onChange={handleChange}
       aria-label="Language"
       size="small"
