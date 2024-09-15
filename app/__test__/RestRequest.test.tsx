@@ -10,9 +10,9 @@ jest.mock('@remix-run/react', () => ({
   useNavigate: jest.fn(),
 }));
 
-jest.mock('~/routes/api_.rest', () => ({
-  fetchRestData: jest.fn(),
-}));
+// jest.mock('~/routes/api_.rest', () => ({
+//   fetchRestData: jest.fn(),
+// }));
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({

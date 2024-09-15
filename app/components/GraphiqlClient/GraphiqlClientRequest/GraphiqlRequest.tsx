@@ -12,6 +12,8 @@ import JsonEditor from '~/components/JsonEditor/JsonEditor';
 import ErrorHandler from '~/components/UI/ErrorHandler';
 import {GraphqlVariablesEditor} from './GraphqlVariablesEditor';
 import {CSSProperties, useState} from 'react';
+import ResponseBar from '~/components/ResponseBar/ResponseBar';
+import prettifyJson from '~/utils/prettifyJson';
 
 export const GraphiqlRequest: React.FC = () => {
   const {t} = useTranslation();
@@ -105,7 +107,12 @@ export const GraphiqlRequest: React.FC = () => {
             placeholder={t('page.graphiql.placeholderSdlUrl')}
           />
         </Box>
-        <SendRequestButton handleRequest={handleSendRequest} />
+        <SendRequestButton
+          handleRequest={() => {
+            handleSendRequest();
+            setTab(3);
+          }}
+        />
       </Box>
       <Box sx={{width: '100%'}}>
         <Box sx={{borderBottom: 1, borderColor: 'divider', width: 'fit-content', margin: '1rem auto'}}>
@@ -129,15 +136,15 @@ export const GraphiqlRequest: React.FC = () => {
           <HeadersEditor decodedHeaders={headersParams} setStoredHeaders={setHeaders} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={3}>
-          <Typography component={'h5'} variant="h6" textAlign={'left'}>
-            {t('page.graphiql.response')}
-          </Typography>
-          {response.status ? (
-            <p>
-              {t('page.graphiql.httpStatus')}: {response.status}
-            </p>
-          ) : null}
-          <JsonEditor mode="view" defaultValue={JSON.stringify(response.data)} />
+          <ResponseBar
+            status={Number(response.status)}
+            statusText={response.statusText}
+            size={response.size}
+            time={response.time}
+          />
+          <Box sx={{marginTop: '1rem'}}>
+            <JsonEditor mode="view" defaultValue={prettifyJson(JSON.stringify(response.data)).json} />
+          </Box>
         </CustomTabPanel>
       </Box>
     </Container>

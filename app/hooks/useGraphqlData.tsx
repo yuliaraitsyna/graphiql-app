@@ -23,7 +23,10 @@ const useGraphqlData = () => {
     sdl: emptySchema,
     response: {
       status: '',
+      statusText: '',
+      size: NaN,
       data: {},
+      time: NaN,
     },
   });
 
@@ -114,6 +117,7 @@ const useGraphqlData = () => {
       queryData.append('variables', graphqlData.variables);
       queryData.append('headers', JSON.stringify(encodedHeaders) !== '{}' ? JSON.stringify(encodedHeaders) : '');
       queryData.append('_action', 'QUERY');
+      const start = Date.now();
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -121,18 +125,25 @@ const useGraphqlData = () => {
           redirect: 'follow',
         });
         const result = await response.json();
+        const time = Date.now() - start;
+        const resultData = result.data;
+        const size = new TextEncoder().encode(JSON.stringify(result)).length;
+        resultData.time = time;
+        resultData.statusText = response.statusText;
+        resultData.size = size;
         setGraphqlData(prevState => ({
           ...prevState,
-          response: result.data,
+          response: resultData,
         }));
         if (result.data.status !== 200) {
           setError('response', t('errors.graphql.responseErrorStatus') + result.data.status);
         }
       } catch (error) {
         if (error) {
+          const time = Date.now() - start;
           setGraphqlData(prevState => ({
             ...prevState,
-            response: {status: '', data: {}},
+            response: {status: '', statusText: '', data: {}, time, size: NaN},
           }));
           setError('response', t('errors.graphql.responseError'));
         }
@@ -152,6 +163,7 @@ const useGraphqlData = () => {
       const introspectionData = new FormData();
       introspectionData.append('_action', 'SDL');
       introspectionData.append('sdlUrl', graphqlData.sdlUrl);
+      const start = Date.now();
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -159,10 +171,16 @@ const useGraphqlData = () => {
           redirect: 'follow',
         });
         const result = await response.json();
+        const time = Date.now() - start;
+        const size = new TextEncoder().encode(JSON.stringify(result)).length;
+        const resultData = result.data;
+        resultData.time = time;
+        resultData.statusText = response.statusText;
+        resultData.size = size;
         if (result.data) {
           setGraphqlData(prevState => ({
             ...prevState,
-            schema: buildClientSchema(result.data),
+            schema: buildClientSchema(resultData),
           }));
         } else {
           setGraphqlData(prevState => ({

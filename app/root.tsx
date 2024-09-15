@@ -29,7 +29,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body style={{overflowY: 'scroll'}}>
         <Header />
         <main>
           <Outlet />

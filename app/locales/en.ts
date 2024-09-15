@@ -122,4 +122,11 @@ export default {
       },
     },
   },
+  errorBoundary: {
+    startOver: 'You can start over',
+    orOver: 'or start over',
+    goBack: 'You can go back',
+    throw: 'Throw error',
+    nonExistence: 'non existence route',
+  },
 };
