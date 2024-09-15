@@ -11,7 +11,7 @@ exports[`RestClient Snapshot Tests renders correctly with default props 1`] = `
       REST Client
     </h4>
     <div
-      class="MuiBox-root css-9tqv8o"
+      class="MuiBox-root css-7vjabc"
     >
       <div
         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth  css-1ohborb-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
@@ -80,7 +80,7 @@ exports[`RestClient Snapshot Tests renders correctly with default props 1`] = `
     </div>
     <p
       class="MuiFormHelperText-root css-1d1r5q-MuiFormHelperText-root"
-      style="color: rgb(211, 47, 47); margin-top: 0px; margin-left: 8px; font-size: 14px; height: 1.5rem;"
+      style="color: rgb(211, 47, 47); max-width: 600px; margin: 0px auto; padding-left: 8px; font-size: 14px; height: 1.5rem;"
     />
     <div
       class="MuiBox-root css-8atqhb"
@@ -297,7 +297,7 @@ exports[`RestClient Snapshot Tests renders correctly with different tab selected
       REST Client
     </h4>
     <div
-      class="MuiBox-root css-9tqv8o"
+      class="MuiBox-root css-7vjabc"
     >
       <div
         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth  css-1ohborb-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
@@ -368,7 +368,7 @@ exports[`RestClient Snapshot Tests renders correctly with different tab selected
     </div>
     <p
       class="MuiFormHelperText-root css-1d1r5q-MuiFormHelperText-root"
-      style="color: rgb(211, 47, 47); margin-top: 0px; margin-left: 8px; font-size: 14px; height: 1.5rem;"
+      style="color: rgb(211, 47, 47); max-width: 600px; margin: 0px auto; padding-left: 8px; font-size: 14px; height: 1.5rem;"
     />
     <div
       class="MuiBox-root css-8atqhb"
@@ -586,7 +586,7 @@ exports[`RestClient Snapshot Tests renders correctly with populated props 1`] = 
       REST Client
     </h4>
     <div
-      class="MuiBox-root css-9tqv8o"
+      class="MuiBox-root css-7vjabc"
     >
       <div
         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth  css-1ohborb-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
@@ -657,7 +657,7 @@ exports[`RestClient Snapshot Tests renders correctly with populated props 1`] = 
     </div>
     <p
       class="MuiFormHelperText-root css-1d1r5q-MuiFormHelperText-root"
-      style="color: rgb(211, 47, 47); margin-top: 0px; margin-left: 8px; font-size: 14px; height: 1.5rem;"
+      style="color: rgb(211, 47, 47); max-width: 600px; margin: 0px auto; padding-left: 8px; font-size: 14px; height: 1.5rem;"
     />
     <div
       class="MuiBox-root css-8atqhb"

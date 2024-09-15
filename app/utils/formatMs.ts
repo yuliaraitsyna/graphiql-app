@@ -1,5 +1,6 @@
 export default function formatMs(ms: number, decimals = 2) {
   if (ms === 0) return '0 ms';
+  if (isNaN(ms)) return '';
 
   const timeUnits = [
     {unit: 'h', value: 3600000},

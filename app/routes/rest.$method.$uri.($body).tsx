@@ -21,7 +21,6 @@ interface LoaderResponseData extends ResponseData {
 
 type LoaderData = {
   loaderData: LoaderResponseData;
-  routes: Routes;
 };
 
 export function ErrorBoundary() {
@@ -51,8 +50,7 @@ export async function loader({params, request}: LoaderFunctionArgs) {
 }
 
 export default function RESTMethodRoute() {
-  const {loaderData, routes} = useLoaderData<LoaderData>();
-  console.log(routes);
+  const {loaderData} = useLoaderData<LoaderData>();
   return (
     <>
       <ResponseBar

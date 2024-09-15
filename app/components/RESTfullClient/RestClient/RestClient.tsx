@@ -98,9 +98,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
   };
 
   const updateUri = () => {
-    console.log('a', errorUriMessage, errorJsonMessage);
     if (!errorUriMessage && !errorJsonMessage) {
-      console.log('b');
       const requestData: RestHistoryData = {
         uri: replaceVariables(uri, variables),
         method,
@@ -111,10 +109,8 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
       };
 
       const encodedUri = createRestEncodedUri(requestData);
-      const updatedUrl = `${window.location.origin}${window.location.pathname}/${encodedUri}`;
+      const updatedUrl = `${window.location.origin}/${encodedUri}`;
       window.history.replaceState({}, '', updatedUrl);
-    } else {
-      window.history.replaceState({}, '', window.location.origin + window.location.pathname);
     }
   };
 
@@ -255,6 +251,8 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
           borderRadius: '5px',
           display: 'flex',
           width: '100%',
+          maxWidth: '600px',
+          margin: '0 auto',
           textAlign: 'center',
         }}>
         <Select fullWidth value={method} onChange={handleMethodSelection} sx={{maxWidth: '120px'}}>
@@ -281,8 +279,9 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
       <FormHelperText
         style={{
           color: theme.palette.error.main,
-          marginTop: 0,
-          marginLeft: '8px',
+          maxWidth: '600px',
+          margin: '0 auto',
+          paddingLeft: '8px',
           fontSize: '14px',
           height: '1.5rem',
         }}>

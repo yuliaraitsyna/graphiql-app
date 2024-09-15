@@ -3,7 +3,7 @@ export const pages = {
   signIn: {path: '/sign-in', translationKey: 'links.signIn'},
   signOut: {path: '/sign-out', translationKey: 'links.signOut'},
   signUp: {path: '/sign-up', translationKey: 'links.signUp'},
-  restClient: {path: '/rest', translationKey: 'links.restClient'},
+  restClient: {path: '/rest/GET', translationKey: 'links.restClient'},
   graphqlClient: {path: '/graphql', translationKey: 'links.graphqlClient'},
   history: {path: '/history', translationKey: 'links.history'},
 };
