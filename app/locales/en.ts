@@ -1,4 +1,7 @@
 export default {
+  title: 'Graphiql',
+  description:
+    'An intuitive tool for making REST API and GraphQL requests, designed to simplify data fetching and interaction with APIs.',
   common: {
     altAppLogo: 'App logo',
   },
@@ -68,5 +71,12 @@ export default {
     history: 'History',
     restClient: 'Rest Client',
     graphqlClient: 'GraphiQL Client',
+  },
+  errorBoundary: {
+    startOver: 'You can start over',
+    orOver: 'or start over',
+    goBack: 'You can go back',
+    throw: 'Throw error',
+    nonExistence: 'non existence route',
   },
 };
