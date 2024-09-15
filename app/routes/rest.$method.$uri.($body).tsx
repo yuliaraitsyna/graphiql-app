@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {StartOverLink} from '~/components/CustomLinks';
 import {ErrorBoundaryWrapper} from '~/components/ErrorBoundary/ErrorBoundary';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
+import ProtectedRoute from '~/components/ProtectedRoute/ProtectedRoute';
 import ResponseBar from '~/components/ResponseBar/ResponseBar';
 import {HTTPMethods} from '~/components/RESTfullClient/RestClient/models/HTTPMethods';
 import fetchRestData, {ResponseData} from '~/utils/fetchRestData';
@@ -55,15 +56,17 @@ export default function RESTMethodRoute() {
   const {loaderData} = useLoaderData<LoaderData>();
   return (
     <>
-      <ResponseBar
-        status={loaderData.status}
-        statusText={loaderData.statusText}
-        size={loaderData.size}
-        time={loaderData.time}
-      />
-      <Box sx={{marginTop: '1rem'}}>
-        <JsonEditor mode="view" defaultValue={loaderData.payload} type={loaderData.isText ? 'text' : 'JSON'} />
-      </Box>
+      <ProtectedRoute redirectPath="/">
+        <ResponseBar
+          status={loaderData.status}
+          statusText={loaderData.statusText}
+          size={loaderData.size}
+          time={loaderData.time}
+        />
+        <Box sx={{marginTop: '1rem'}}>
+          <JsonEditor mode="view" defaultValue={loaderData.payload} type={loaderData.isText ? 'text' : 'JSON'} />
+        </Box>
+      </ProtectedRoute>
     </>
   );
 }
