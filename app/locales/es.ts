@@ -62,4 +62,11 @@ export default {
     restClient: 'Resto Cliente',
     graphqlClient: 'Cliente GraphiQL',
   },
+  errorBoundary: {
+    startOver: 'Puedes empezar de nuevo',
+    orOver: 'o empezar de nuevo',
+    goBack: 'Puedes volver atrás',
+    throw: 'Lanzar error',
+    nonExistence: 'ruta de la no existencia',
+  },
 };
