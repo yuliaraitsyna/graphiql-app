@@ -4,6 +4,7 @@ import WhiteButton from '../UI/WhiteButton';
 import {useTranslation} from 'react-i18next';
 import {pages} from '~/constants';
 import {useAuth} from '~/hooks/Authorization/useAuth';
+
 interface MobileMenuProps {
   anchorEl: null | HTMLElement;
   open: boolean;
@@ -13,6 +14,11 @@ interface MobileMenuProps {
 export const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose}) => {
   const {t} = useTranslation();
   const {isLoggedIn, logout} = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -32,7 +38,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({anchorEl, open, onClose})
       </MenuItem>
       {isLoggedIn && (
         <MenuItem onClick={onClose}>
-          <WhiteButton component={RemixLink} to={pages.signOut.path} onClick={logout}>
+          <WhiteButton component={RemixLink} to={pages.signOut.path} onClick={handleLogout}>
             {t(pages.signOut.translationKey)}
           </WhiteButton>
         </MenuItem>

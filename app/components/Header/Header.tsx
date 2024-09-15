@@ -75,7 +75,7 @@ export function Header() {
               <LanguageToggler />
               <Stack direction="row" spacing={1} ml={2}>
                 {isLoggedIn ? (
-                  <WhiteButton component={RemixLink} to={pages.signOut.path} onClick={handleSignOut}>
+                  <WhiteButton component={RemixLink} to={pages.main.path} onClick={handleSignOut}>
                     {t(pages.signOut.translationKey)}
                   </WhiteButton>
                 ) : (

@@ -14,7 +14,7 @@ export function ErrorBoundary() {
 
 export default function RESTMethodRoute() {
   return (
-    <ProtectedRoute redirectPath={'/'}>
+    <ProtectedRoute>
       <RestClient>
         <Outlet />
       </RestClient>

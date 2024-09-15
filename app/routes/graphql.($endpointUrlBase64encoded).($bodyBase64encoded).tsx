@@ -3,7 +3,7 @@ import {GraphiqlRequest} from '../components/GraphiqlClient/GraphiqlClientReques
 
 export default function GraphqlRoute() {
   return (
-    <ProtectedRoute redirectPath="/">
+    <ProtectedRoute>
       <GraphiqlRequest />
     </ProtectedRoute>
   );
