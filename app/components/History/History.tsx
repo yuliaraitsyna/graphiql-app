@@ -7,12 +7,12 @@ import styles from './History.module.css';
 
 interface RequestData {
   method: string;
-  endpoint: string;
+  uri: string;
   sdl: string;
   body: string;
   headers: object;
   variables: string;
-  url: string;
+  encoded: string;
 }
 
 export function History() {
@@ -56,9 +56,9 @@ export function History() {
     <>
       {requestsData &&
         Object.entries(requestsData).map(([key, value]) => (
-          <RemixLink className={styles.historyLink} to={value.url} key={key}>
+          <RemixLink className={styles.historyLink} to={value.encoded} key={key}>
             <p className={styles.historyLinkMethod}>{value.method}</p>
-            <p className={styles.historyLinkEndpoint}>{value.endpoint}</p>
+            <p className={styles.historyLinkEndpoint}>{value.uri}</p>
           </RemixLink>
         ))}
     </>
