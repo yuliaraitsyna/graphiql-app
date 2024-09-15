@@ -27,7 +27,7 @@ describe('VariablesEditor tests', () => {
   });
 
   it('should render component', () => {
-    render(<VariablesEditor decodedVariables={[]} setStoredVariables={() => {}} />);
+    render(<VariablesEditor vars={[]} onChange={() => {}} />);
 
     expect(screen.getByText('Variables')).toBeInTheDocument();
     expect(screen.getByText('Name')).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe('VariablesEditor tests', () => {
   });
 
   it("should add a variable when clicking the 'Add' button", () => {
-    render(<VariablesEditor decodedVariables={[]} setStoredVariables={() => {}} />);
+    render(<VariablesEditor vars={[]} onChange={() => {}} />);
 
     const addButton = screen.getByText('Add');
     fireEvent.click(addButton);
@@ -50,7 +50,7 @@ describe('VariablesEditor tests', () => {
   });
 
   it("should allow editing a variable when clicking the 'Edit' button", () => {
-    render(<VariablesEditor decodedVariables={[]} setStoredVariables={() => {}} />);
+    render(<VariablesEditor vars={[]} onChange={() => {}} />);
 
     const addButton = screen.getByText('Add');
     fireEvent.click(addButton);
@@ -71,7 +71,7 @@ describe('VariablesEditor tests', () => {
   });
 
   it("should allow deleting a variable when clicking the 'Delete' button", () => {
-    render(<VariablesEditor decodedVariables={[]} setStoredVariables={() => {}} />);
+    render(<VariablesEditor vars={[]} onChange={() => {}} />);
 
     const addButton = screen.getByText('Add');
     fireEvent.click(addButton);
@@ -87,7 +87,7 @@ describe('VariablesEditor tests', () => {
   });
 
   it('should toggle the checkbox state when clicking it', () => {
-    render(<VariablesEditor decodedVariables={[]} setStoredVariables={() => {}} />);
+    render(<VariablesEditor vars={[]} onChange={() => {}} />);
 
     const addButton = screen.getByText('Add');
     fireEvent.click(addButton);
