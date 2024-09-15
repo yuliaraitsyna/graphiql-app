@@ -12,7 +12,7 @@ import {
   FormHelperText,
   useTheme,
 } from '@mui/material';
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {CSSProperties, ReactNode, useEffect, useState} from 'react';
 import {useLocation, useNavigate} from '@remix-run/react';
 import {HTTPMethods} from './models/HTTPMethods';
 import {grey} from '@mui/material/colors';
@@ -37,6 +37,7 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  style?: CSSProperties;
 }
 
 type Props = {
@@ -246,7 +247,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
 
   return (
     <Container sx={{width: '80%', margin: '4rem auto'}}>
-      <Typography component={'h4'} variant="h4" textAlign={'left'} sx={{marginBottom: '2rem'}}>
+      <Typography component={'h4'} variant="h4" textAlign={'center'} sx={{marginBottom: '2rem'}}>
         {t('page.rest.title')}
       </Typography>
       <Box
@@ -255,6 +256,8 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
           borderRadius: '5px',
           display: 'flex',
           width: '100%',
+          maxWidth: '600px',
+          margin: '0 auto',
           textAlign: 'center',
         }}>
         <Select fullWidth value={method} onChange={handleMethodSelection} sx={{maxWidth: '120px'}}>
@@ -298,13 +301,13 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
             <Tab label={t('editors.responseTitle')} {...a11yProps(4)} />
           </Tabs>
         </Box>
-        <CustomTabPanel value={tab} index={0}>
+        <CustomTabPanel value={tab} index={0} style={{maxWidth: '920px', margin: '0 auto'}}>
           <VariablesEditor onChange={handleVariablesChange} vars={variables} />
         </CustomTabPanel>
-        <CustomTabPanel value={tab} index={1}>
+        <CustomTabPanel value={tab} index={1} style={{maxWidth: '920px', margin: '0 auto'}}>
           <QueryParamsEditor onParamsChange={handleParamsChange} queryParams={params} />
         </CustomTabPanel>
-        <CustomTabPanel value={tab} index={2}>
+        <CustomTabPanel value={tab} index={2} style={{maxWidth: '920px', margin: '0 auto'}}>
           <HeadersEditor setStoredHeaders={handleHeadersChange} decodedHeaders={headers} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={3}>

@@ -77,7 +77,6 @@ const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}
     const updatedVariables = variables.filter((_, i) => i !== index);
     setVariables(updatedVariables);
     if (onChange) onChange(updatedVariables);
-    feature / graphiql - request;
   };
 
   return (

@@ -10,7 +10,7 @@ export const SendRequestButton: React.FC<SendRequestButtonProps> = ({handleReque
   const {t} = useTranslation();
   return (
     <div className={styles.sendRequestBtnWrap}>
-      <Button variant="contained" onClick={handleRequest}>
+      <Button variant="contained" onClick={handleRequest} sx={{height: '56px'}}>
         {t('page.graphiql.sendButton')}
       </Button>
     </div>
