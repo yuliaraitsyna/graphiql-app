@@ -1,9 +1,20 @@
 import {Box, Button, Container, Typography} from '@mui/material';
 import {Link as RemixLink} from '@remix-run/react';
+import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {pages} from '~/constants';
+import {useAuth} from '~/hooks/Authorization/useAuth';
+
 export function Welcome() {
   const {t} = useTranslation();
+  const [name, setName] = useState<string>('');
+  const {isLoggedIn, user} = useAuth();
+
+  useEffect(() => {
+    const emailName = user?.user.email?.split('@')[0];
+    setName(emailName || 'User');
+  }, [user]);
+
   return (
     <Container maxWidth="lg" sx={{paddingTop: '50px', paddingBottom: '50px'}}>
       <Box
@@ -19,7 +30,7 @@ export function Welcome() {
           boxShadow: 2,
         }}>
         <Typography component={'h2'} variant="h3" textAlign={'center'} style={{marginBottom: '24px'}}>
-          {t('page.main.welcome')} / {t('page.main.welcomeBack')}, User!
+          {!isLoggedIn ? `${t('page.main.welcome')}, User!` : `${t('page.main.welcomeBack')}, ${name}!`}
         </Typography>
         <Box
           display="flex"
@@ -28,22 +39,28 @@ export function Welcome() {
           sx={{
             flexWrap: 'wrap',
           }}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{marginBottom: 2, marginRight: 1}}
-            component={RemixLink}
-            to={pages.signIn.path}>
-            {t(pages.signIn.translationKey)}
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{marginBottom: 2}}
-            component={RemixLink}
-            to={pages.signUp.path}>
-            {t(pages.signUp.translationKey)}
-          </Button>
+          {isLoggedIn ? (
+            <></>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{marginBottom: 2, marginRight: 1}}
+                component={RemixLink}
+                to={pages.signIn.path}>
+                {t(pages.signIn.translationKey)}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{marginBottom: 2}}
+                component={RemixLink}
+                to={pages.signUp.path}>
+                {t(pages.signUp.translationKey)}
+              </Button>
+            </>
+          )}
         </Box>
         <Box
           display="flex"
