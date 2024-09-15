@@ -3,7 +3,7 @@ import ProtectedRoute from '~/components/ProtectedRoute/ProtectedRoute';
 
 export default function HistoryRoute() {
   return (
-    <ProtectedRoute redirectPath="/sign-in">
+    <ProtectedRoute redirectPath="/">
       <History />
     </ProtectedRoute>
   );
