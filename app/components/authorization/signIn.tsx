@@ -3,6 +3,7 @@ import {Box, Typography, TextField, Button} from '@mui/material';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {FormProps} from './models/formProps';
 import {emailPattern} from './models/regex';
+import {useTranslation} from 'react-i18next';
 
 const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () => void}> = ({
   onSubmit,
@@ -16,20 +17,22 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
     mode: 'onChange',
   });
 
+  const {t} = useTranslation();
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
         <Typography component={'label'} htmlFor="email">
-          Email
+          {t('form.email')}
         </Typography>
         <TextField
           type="email"
           id="email"
           {...register('email', {
-            required: 'Email is required',
+            required: `${t('form.requiredEmailMessage')}`,
             pattern: {
               value: emailPattern,
-              message: 'Invalid email address',
+              message: `${t('form.invalidEmailMessage')}`,
             },
             onChange: () => {
               onInputChange();
@@ -39,13 +42,13 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
           helperText={errors.email?.message || ' '}
         />
         <Typography component={'label'} htmlFor="password">
-          Password
+          {t('form.password')}
         </Typography>
         <TextField
           type="password"
           id="password"
           {...register('password', {
-            required: 'Password is required',
+            required: `${t('form.requiredPasswordMessage')}`,
             onChange: () => {
               onInputChange();
             },
@@ -55,7 +58,7 @@ const SignIn: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
       </Box>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} padding={2}>
         <Button variant="contained" type="submit">
-          Sign in
+          {t('form.signIn')}
         </Button>
       </Box>
     </form>

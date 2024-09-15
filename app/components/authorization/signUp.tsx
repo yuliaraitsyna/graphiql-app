@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Typography, TextField, Button} from '@mui/material';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {handlePasswordCheck} from './utils/passwordValidation';
 import {FormProps} from './models/formProps';
 import {emailPattern} from './models/regex';
+import {useTranslation} from 'react-i18next';
 
 const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () => void}> = ({
   onSubmit,
@@ -20,21 +21,27 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
   });
 
   const password = watch('password');
+  const [lang, setLang] = useState('');
+  const {i18n, t} = useTranslation();
+
+  useEffect(() => {
+    setLang(i18n.language);
+  }, [i18n.language]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
         <Typography component={'label'} htmlFor="email">
-          Email
+          {t('form.email')}
         </Typography>
         <TextField
           type="email"
           id="email"
           {...register('email', {
-            required: 'Email is required',
+            required: `${t('form.requiredEmailMessage')}`,
             pattern: {
               value: emailPattern,
-              message: 'Invalid email address',
+              message: `${t('form.invalidEmailMessage')}`,
             },
             onChange: () => {
               onInputChange();
@@ -44,15 +51,15 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
           helperText={errors.email?.message || ' '}
         />
         <Typography component={'label'} htmlFor="password">
-          Password
+          {t('form.password')}
         </Typography>
         <TextField
           type="password"
           id="password"
           {...register('password', {
-            required: 'Password is required',
+            required: `${t('form.requiredPasswordMessage')}`,
             validate: value => {
-              const passwordError = handlePasswordCheck(value);
+              const passwordError = handlePasswordCheck(lang, value);
               return passwordError || true;
             },
             onChange: () => {
@@ -64,13 +71,13 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
           helperText={errors.password?.message || ' '}
         />
         <Typography component={'label'} htmlFor="repeat-password">
-          Repeat Password
+          {t('form.repeatPassword')}
         </Typography>
         <TextField
           type="password"
           id="repeat-password"
           {...register('repeatPassword', {
-            required: 'Repeating password is required',
+            required: `${t('form.requiredRepeatPasswordMessage')}`,
             validate: value => value === password || 'Passwords do not match',
             onChange: () => {
               onInputChange();
@@ -82,7 +89,7 @@ const SignUp: React.FC<{onSubmit: SubmitHandler<FormProps>; onInputChange: () =>
       </Box>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} padding={2}>
         <Button variant="contained" type="submit">
-          Sign up
+          {t('form.signUp')}
         </Button>
       </Box>
     </form>
