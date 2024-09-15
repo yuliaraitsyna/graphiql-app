@@ -14,8 +14,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      setIsLoggedIn(true);
+      console.log(parsedUser.user.stsTokenManager.expirationTime);
+      if (parsedUser.user.stsTokenManager.expirationTime <= Date.now()) {
+        logout();
+      } else {
+        setUser(parsedUser);
+        setIsLoggedIn(true);
+      }
     }
   }, []);
 
