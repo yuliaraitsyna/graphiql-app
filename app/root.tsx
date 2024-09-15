@@ -3,12 +3,13 @@ import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRoute
 import i18nServer, {localeCookie} from './i18n.server';
 import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
-import {Header} from './components/Header/Header';
+import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 import {AuthProvider} from './hooks/Authorization/AuthProvider';
 
+
 export function links() {
-  return [{rel: 'stylesheet', href: './app/styles/global.css'}];
+  return [{rel: 'stylesheet', href: '/app/styles/global.css'}];
 }
 
 export const handle = {i18n: ['translation']};
@@ -18,9 +19,10 @@ export async function loader({request}: LoaderFunctionArgs) {
   return json({locale}, {headers: {'Set-Cookie': await localeCookie.serialize(locale)}});
 }
 
-export function Layout({children}: {children: React.ReactNode}) {
+export default function App() {
   const loaderData = useRouteLoaderData<typeof loader>('root');
-
+  const {locale} = useLoaderData<typeof loader>();
+  useChangeLanguage(locale);
   return (
     <html lang={loaderData?.locale ?? 'en'}>
       <head>
@@ -40,10 +42,4 @@ export function Layout({children}: {children: React.ReactNode}) {
       </body>
     </html>
   );
-}
-
-export default function App() {
-  const {locale} = useLoaderData<typeof loader>();
-  useChangeLanguage(locale);
-  return <Outlet />;
 }

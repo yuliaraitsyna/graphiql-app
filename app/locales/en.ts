@@ -1,6 +1,13 @@
 export default {
+  title: 'Graphiql',
+  description:
+    'An intuitive tool for making REST API and GraphQL requests, designed to simplify data fetching and interaction with APIs.',
   common: {
     altAppLogo: 'App logo',
+    show: 'Show',
+    hide: 'Hide',
+    variables: 'Variables',
+    headers: 'Headers',
   },
   page: {
     main: {
@@ -51,6 +58,23 @@ export default {
         },
       ],
     },
+    graphiql: {
+      sendButton: 'Send request',
+      endpointUrl: 'Endpoint URL',
+      placeholderEndpointUrl: 'Enter endpoint URL',
+      sdlUrl: 'SDL URL',
+      placeholderSdlUrl: 'Enter SDL URL',
+      queryEditor: 'Query',
+      format: 'Format',
+      response: 'Response',
+      httpStatus: 'HTTP status',
+    },
+    history: {
+      title: 'History',
+      noRequests: "You haven't executed any request.",
+      tryRequests: "It's empty here. Try:",
+      historyRequests: 'History requests',
+    },
   },
   editors: {
     headersTitle: 'Headers',
@@ -68,5 +92,23 @@ export default {
     history: 'History',
     restClient: 'Rest Client',
     graphqlClient: 'GraphiQL Client',
+  },
+  errors: {
+    graphql: {
+      endpoint: 'Check endpoint url!',
+      sdl: 'Check sdl url!',
+      sendRequest: 'Unable to send request! Check fields!',
+      responseError: 'Unable to get data! Error occurs!',
+      responseErrorStatus: 'Unable to get data! Status: ',
+      notValidEndpoint: 'Provide correct endpoint URL!',
+      notValidSdlUrl: 'Provide correct sdl URL!',
+    },
+  },
+  errorBoundary: {
+    startOver: 'You can start over',
+    orOver: 'or start over',
+    goBack: 'You can go back',
+    throw: 'Throw error',
+    nonExistence: 'non existence route',
   },
 };

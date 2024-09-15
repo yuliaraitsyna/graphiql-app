@@ -3,6 +3,17 @@ import i18nServer from '../i18n.server';
 import {AboutTeam} from '~/components/AboutTeam/AboutTeam';
 import {AboutApp} from '~/components/AboutApp/AboutApp';
 import {Welcome} from '~/components/Welcome/Welcome';
+import {StartOverLink} from '~/components/CustomLinks';
+import {ErrorBoundaryWrapper} from '~/components/ErrorBoundary/ErrorBoundary';
+
+export function ErrorBoundary() {
+  return (
+    <ErrorBoundaryWrapper>
+      <StartOverLink message="You can start over" />
+    </ErrorBoundaryWrapper>
+  );
+}
+
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: data?.title}, {name: 'description', content: data?.description}];
 };

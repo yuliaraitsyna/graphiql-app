@@ -1,4 +1,14 @@
 export default {
+  common: {
+    altAppLogo: 'Logotipo de la aplicación',
+    show: 'Mostrar',
+    hide: 'Ocultar',
+    variables: 'Variables',
+    headers: 'Cabeceras',
+  },
+  title: 'Graphiql',
+  description:
+    'Una herramienta intuitiva para realizar solicitudes API REST y GraphQL, diseñada para simplificar la obtención de datos y la interacción con las API.',
   page: {
     main: {
       welcome: 'Bienvenido',
@@ -49,6 +59,23 @@ export default {
       ],
       altAppLogo: 'Logotipo de la aplicación',
     },
+    graphiql: {
+      sendButton: 'Enviar',
+      endpointUrl: 'URL del punto final',
+      placeholderEndpointUrl: 'Introduzca la URL del punto final',
+      sdlUrl: 'LDE Url',
+      placeholderSdlUrl: 'Introduzca la URL de LDE',
+      queryEditor: 'Consulta',
+      format: 'Formato',
+      response: 'Respuesta',
+      httpStatus: 'Estado HTTP',
+    },
+    history: {
+      title: 'Historia',
+      noRequests: 'No has ejecutado ninguna petición. ',
+      tryRequests: 'Está vacío. Inténtalo:',
+      historyRequests: 'Historial de solicitudes',
+    },
   },
   editors: {
     headersTitle: 'Encabezados',
@@ -66,5 +93,23 @@ export default {
     history: 'Historia',
     restClient: 'Resto Cliente',
     graphqlClient: 'Cliente GraphiQL',
+  },
+  errors: {
+    graphql: {
+      endpoint: 'Comprobar url de punto final!',
+      sdl: 'Comprobar url LDE!',
+      sendRequest: '¡No se puede enviar la solicitud! Compruebe los campos',
+      responseError: 'No se pueden obtener datos!',
+      responseErrorStatus: 'No se pueden obtener datos. Estado: ',
+      notValidEndpoint: 'Proporcione la URL correcta del punto final.',
+      notValidSdlUrl: 'Proporcione la URL sdl correcta',
+    },
+  },
+  errorBoundary: {
+    startOver: 'Puedes empezar de nuevo',
+    orOver: 'o empezar de nuevo',
+    goBack: 'Puedes volver atrás',
+    throw: 'Lanzar error',
+    nonExistence: 'ruta de la no existencia',
   },
 };
