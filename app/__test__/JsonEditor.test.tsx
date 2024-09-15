@@ -4,6 +4,17 @@ import {userEvent} from '@testing-library/user-event';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
 
 jest.mock('@fontsource/roboto-mono', () => {});
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'jsonEditor.format': 'Format',
+        'jsonEditor.jsonContent': 'JSON Content',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
 
 describe('Testing JSON-Editor component', () => {
   it('renders without props with default values', async () => {
@@ -27,20 +38,12 @@ describe('Testing JSON-Editor component', () => {
     await user.keyboard(endValue);
     expect(input.textContent).toBe(startValue + endValue);
   });
-  it('format default value for JSON type', async () => {
+  it("don't format default value for JSON type", async () => {
     const startValue = `{"message": "Welcome to Thunder Client","about": "Lightweight Rest API Client for VSCode","features": {"git": "Save data to Git Workspace","themes": "Supports VSCode Themes"}}`;
-    const formattedValue = `{
-  "message": "Welcome to Thunder Client",
-  "about": "Lightweight Rest API Client for VSCode",
-  "features": {
-    "git": "Save data to Git Workspace",
-    "themes": "Supports VSCode Themes"
-  }
-}`;
     const callback = jest.fn();
     render(<JsonEditor type="JSON" mode="edit" defaultValue={startValue} onChange={callback} />);
     const input = await screen.findByRole('textbox');
-    expect(input.textContent).toBe(formattedValue);
+    expect(input.textContent).toBe(startValue);
   });
   it('format content for JSON type by clicking "Format" button', async () => {
     const user = userEvent.setup();

@@ -4,12 +4,15 @@ import {useEffect, useState} from 'react';
 import {Box, Button, FormHelperText, Typography, useTheme} from '@mui/material';
 import {EditIcon, VisibleIcon} from '../Icons';
 import prettifyJson from '~/utils/prettifyJson';
+import {useTranslation} from 'react-i18next';
 
 type EditorProps = {
   mode: 'view' | 'edit';
   type: 'JSON' | 'text';
   defaultValue: string;
+  errorMessage: string;
   onChange: (v: string) => void;
+  onBlur: () => void;
 };
 
 function StrNum({content}: {content: string}) {
@@ -17,26 +20,24 @@ function StrNum({content}: {content: string}) {
   return <pre className={styles.numeration}>{numStr}</pre>;
 }
 
-export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue = '', onChange}: Partial<EditorProps>) {
+export default function JsonEditor({
+  mode = 'view',
+  type = 'JSON',
+  defaultValue = '',
+  errorMessage = '',
+  onChange,
+  onBlur,
+}: Partial<EditorProps>) {
   const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue);
-  const [errorMessage, setErrorMessage] = useState('');
   const [formattable, setFormattable] = useState(false);
+  const {t} = useTranslation();
 
-  useEffect(() => {
-    if (type === 'JSON') {
-      const message = prettifyJson(content).error?.message ?? '';
-      setErrorMessage(message);
-    }
-  }, [content, type]);
-
-  useEffect(() => setContent(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue), [defaultValue, type]);
+  useEffect(() => setContent(defaultValue), [defaultValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
     if (type === 'JSON') {
-      const message = prettifyJson(v).error?.message ?? '';
-      setErrorMessage(message);
-      setFormattable(v !== prettifyJson(v).json && !message);
+      setFormattable(!!v && v !== prettifyJson(v).json && !errorMessage);
     }
     setContent(v);
     if (onChange) {
@@ -59,18 +60,18 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
     <Box component="section" className={styles.editor}>
       <Box component="div" className={styles.marker}>
         {mode === 'view' ? (
-          <VisibleIcon style={{width: '12px', height: '12px'}} />
+          <VisibleIcon style={{width: '16px', height: '16px'}} />
         ) : (
-          <EditIcon style={{width: '12px', height: '12px'}} />
+          <EditIcon style={{width: '16px', height: '16px'}} />
         )}
       </Box>
       <Box component="div" className={styles.heading}>
         <Typography variant="subtitle1" component="p">
-          {type === 'JSON' ? 'JSON ' : 'Text '} Content
+          {type === 'JSON' ? t('jsonEditor.jsonContent') : t('jsonEditor.textContent')}
         </Typography>
         {type === 'JSON' && (
           <Button size="small" onClick={formatJson} disabled={!formattable}>
-            Format
+            {t('jsonEditor.format')}
           </Button>
         )}
       </Box>
@@ -79,14 +80,14 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
           {type === 'JSON' && <StrNum content={content} />}
           <Box>
             <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
-              <textarea value={content} onChange={handleChange} disabled={mode === 'view'}></textarea>
+              <textarea value={content} onChange={handleChange} onBlur={onBlur} disabled={mode === 'view'} />
             </Box>
           </Box>
         </Box>
       </Box>
       <FormHelperText
         className={styles.helper}
-        style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px'}}>
+        style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px', fontSize: '14px'}}>
         {errorMessage}
       </FormHelperText>
     </Box>

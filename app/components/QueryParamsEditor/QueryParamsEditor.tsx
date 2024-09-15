@@ -13,57 +13,57 @@ import {
   Typography,
 } from '@mui/material';
 import {blue, grey} from '@mui/material/colors';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {useTranslation} from 'react-i18next';
-import {Variable} from './models/variable';
-import {variableNamePattern, variableValuePattern} from './models/regex';
+import {QueryParam} from './models/queryParams';
+import {variableNamePattern, variableValuePattern} from '../VariablesEditor/models/regex';
 
-interface VariableProps {
-  onChange: (variables: Variable[]) => void;
-  vars: Variable[];
-}
-
-const initialVariable: Variable = {
+const initialVariable: QueryParam = {
   name: '',
   value: '',
   checked: false,
 };
 
-const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}) => {
+type Props = {
+  onParamsChange: (params: QueryParam[]) => void;
+  queryParams: QueryParam[];
+};
+
+const QueryParamsEditor: React.FC<Partial<Props>> = ({onParamsChange, queryParams = []}) => {
   const {t} = useTranslation();
-  const [variables, setVariables] = useState<Variable[]>(vars);
+  const [params, setParams] = useState<QueryParam[]>(queryParams);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const handleVariableAddition = () => {
-    const updatedVariables = [...variables, initialVariable];
-    setVariables(updatedVariables);
-    if (onChange) onChange(updatedVariables);
+  useEffect(() => setParams(queryParams), [queryParams]);
+
+  const handleParamAddition = () => {
+    setParams([...params, initialVariable]);
   };
 
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
   };
 
-  const handleVariableChange = (field: keyof Variable, value: string) => {
+  const handleParamChange = (field: keyof QueryParam, value: string) => {
     const pattern = field === 'name' ? variableNamePattern : variableValuePattern;
 
     if (pattern.test(value) || value === '') {
       if (editingIndex !== null) {
-        const updatedVariables = [...variables];
-        updatedVariables[editingIndex] = {...updatedVariables[editingIndex], [field]: value};
-        setVariables(updatedVariables);
-        if (onChange) onChange(updatedVariables);
+        const updatedParams = [...params];
+        updatedParams[editingIndex] = {...updatedParams[editingIndex], [field]: value};
+        setParams(updatedParams);
+        onParamsChange?.(updatedParams);
       }
     }
   };
 
   const handleCheckboxChange = (index: number) => {
-    const updatedVariables = [...variables];
-    updatedVariables[index].checked = !updatedVariables[index].checked;
-    setVariables(updatedVariables);
-    if (onChange) onChange(updatedVariables);
+    const updatedParams = [...params];
+    updatedParams[index].checked = !updatedParams[index].checked;
+    setParams(updatedParams);
+    onParamsChange?.(updatedParams);
   };
 
   const handleEditFinish = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -74,18 +74,18 @@ const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}
   };
 
   const handleDelete = (index: number) => {
-    const updatedVariables = variables.filter((_, i) => i !== index);
-    setVariables(updatedVariables);
-    if (onChange) onChange(updatedVariables);
+    const updatedParams = params.filter((_, i) => i !== index);
+    setParams(updatedParams);
+    onParamsChange?.(updatedParams);
   };
 
   return (
     <Container sx={{width: '90%', padding: 2}}>
       <Box sx={{width: '100%'}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={2}>
         <Typography component={'h6'} variant="h6">
-          {t('editors.variablesTitle')}
+          {t('editors.paramsTitle')}
         </Typography>
-        <Button variant="contained" onClick={handleVariableAddition}>
+        <Button variant="contained" onClick={handleParamAddition}>
           {t('editors.add')}
         </Button>
       </Box>
@@ -118,7 +118,7 @@ const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}
             </TableRow>
           </TableHead>
           <TableBody>
-            {variables.map((variable, index) => (
+            {params.map((variable, index) => (
               <TableRow
                 key={index}
                 sx={index === editingIndex ? {backgroundColor: blue[100]} : {backgroundColor: 'transparent'}}>
@@ -131,7 +131,7 @@ const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}
                     disableUnderline
                     fullWidth
                     disabled={index !== editingIndex}
-                    onChange={e => handleVariableChange('name', e.target.value)}
+                    onChange={e => handleParamChange('name', e.target.value)}
                     onKeyDown={handleEditFinish}
                     onBlur={() => setEditingIndex(null)}
                   />
@@ -142,7 +142,7 @@ const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}
                     disableUnderline
                     fullWidth
                     disabled={index !== editingIndex}
-                    onChange={e => handleVariableChange('value', e.target.value)}
+                    onChange={e => handleParamChange('value', e.target.value)}
                     onKeyDown={handleEditFinish}
                     onBlur={() => setEditingIndex(null)}
                   />
@@ -166,4 +166,4 @@ const VariablesEditor: React.FC<Partial<VariableProps>> = ({onChange, vars = []}
   );
 };
 
-export default VariablesEditor;
+export default QueryParamsEditor;

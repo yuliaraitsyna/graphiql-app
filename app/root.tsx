@@ -7,7 +7,6 @@ import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 import {AuthProvider} from './hooks/Authorization/AuthProvider';
 
-
 export function links() {
   return [{rel: 'stylesheet', href: '/app/styles/global.css'}];
 }

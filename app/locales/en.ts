@@ -58,6 +58,25 @@ export default {
         },
       ],
     },
+    rest: {
+      title: 'REST Client',
+      setHeaders: 'Set headers',
+      setVariables: 'Set variables',
+      send: 'Send',
+      placeholder: 'Endpoint URL',
+    },
+  },
+  editors: {
+    paramsTitle: 'Params',
+    headersTitle: 'Headers',
+    variablesTitle: 'Variables',
+    queryTitle: 'Query',
+    bodyTitle: 'Body',
+    responseTitle: 'Response',
+    keyTitle: 'Key',
+    valueTitle: 'Value',
+    nameTitle: 'Name',
+    add: 'Add',
     graphiql: {
       sendButton: 'Send request',
       endpointUrl: 'Endpoint URL',
@@ -76,13 +95,10 @@ export default {
       historyRequests: 'History requests',
     },
   },
-  editors: {
-    headersTitle: 'Headers',
-    variablesTitle: 'Variables',
-    keyTitle: 'Key',
-    valueTitle: 'Value',
-    nameTitle: 'Name',
-    add: 'Add',
+  response: {
+    status: 'Status:',
+    size: 'Size:',
+    time: 'Time:',
   },
   links: {
     signIn: 'Sign in',
@@ -92,6 +108,14 @@ export default {
     history: 'History',
     restClient: 'Rest Client',
     graphqlClient: 'GraphiQL Client',
+  },
+  jsonEditor: {
+    format: 'Format',
+    text: 'Text',
+    JSON: 'JSON',
+    enter: 'Enter',
+    jsonContent: 'JSON content',
+    textContent: 'Text content',
   },
   errors: {
     graphql: {
