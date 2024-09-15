@@ -5,9 +5,10 @@ import {useChangeLanguage} from 'remix-i18next/react';
 import '@fontsource/roboto';
 import {Header} from './components/Header';
 import {Footer} from './components/Footer';
+import {AuthProvider} from './hooks/Authorization/AuthProvider';
 
 export function links() {
-  return [{rel: 'stylesheet', href: './app/styles/global.css'}];
+  return [{rel: 'stylesheet', href: '/app/styles/global.css'}];
 }
 
 export const handle = {i18n: ['translation']};
@@ -30,11 +31,11 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header />
-        <main>
-          <Outlet />
-        </main>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </AuthProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
