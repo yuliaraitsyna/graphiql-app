@@ -1,8 +1,7 @@
-/* eslint-disable import/no-unresolved */
 import '@fontsource/roboto-mono';
 import styles from './JsonEditor.module.css';
 import {useEffect, useState} from 'react';
-import {Box, Button, Typography} from '@mui/material';
+import {Box, Button, FormHelperText, Typography, useTheme} from '@mui/material';
 import {EditIcon, VisibleIcon} from '../Icons';
 import prettifyJson from '~/utils/prettifyJson';
 
@@ -19,27 +18,42 @@ function StrNum({content}: {content: string}) {
 }
 
 export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue = '', onChange}: Partial<EditorProps>) {
-  const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue) : defaultValue);
+  const [content, setContent] = useState(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [formattable, setFormattable] = useState(false);
+
+  useEffect(() => {
+    if (type === 'JSON') {
+      const message = prettifyJson(content).error?.message ?? '';
+      setErrorMessage(message);
+    }
+  }, [content, type]);
+
+  useEffect(() => setContent(type === 'JSON' ? prettifyJson(defaultValue).json : defaultValue), [defaultValue, type]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
+    if (type === 'JSON') {
+      const message = prettifyJson(v).error?.message ?? '';
+      setErrorMessage(message);
+      setFormattable(v !== prettifyJson(v).json && !message);
+    }
     setContent(v);
     if (onChange) {
       onChange(v);
     }
   };
 
-  useEffect(() => {
-    setContent(prettifyJson(defaultValue));
-  }, [defaultValue]);
-
   const formatJson = () => {
-    const fC = prettifyJson(content);
+    const fC = prettifyJson(content).json;
     setContent(fC);
+    setFormattable(false);
     if (onChange) {
       onChange(fC);
     }
   };
+
+  const theme = useTheme();
 
   return (
     <Box component="section" className={styles.editor}>
@@ -55,19 +69,26 @@ export default function JsonEditor({mode = 'view', type = 'JSON', defaultValue =
           {type === 'JSON' ? 'JSON ' : 'Text '} Content
         </Typography>
         {type === 'JSON' && (
-          <Button size="small" onClick={formatJson}>
+          <Button size="small" onClick={formatJson} disabled={!formattable}>
             Format
           </Button>
         )}
       </Box>
-      <Box component="div" className={styles.wrapper}>
-        {type === 'JSON' && <StrNum content={content} />}
-        <Box>
-          <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
-            <textarea value={content} onChange={handleChange} disabled={mode === 'view'}></textarea>
+      <Box component="div" className={styles.body}>
+        <Box component="div" className={styles.wrapper}>
+          {type === 'JSON' && <StrNum content={content} />}
+          <Box>
+            <Box component="div" className={styles.inputWrapper} data-replicated-value={content}>
+              <textarea value={content} onChange={handleChange} disabled={mode === 'view'}></textarea>
+            </Box>
           </Box>
         </Box>
       </Box>
+      <FormHelperText
+        className={styles.helper}
+        style={{color: theme.palette.error.main, marginTop: 0, marginLeft: '8px'}}>
+        {errorMessage}
+      </FormHelperText>
     </Box>
   );
 }

@@ -1,4 +1,7 @@
 export default {
+  title: 'Graphiql',
+  description:
+    'An intuitive tool for making REST API and GraphQL requests, designed to simplify data fetching and interaction with APIs.',
   common: {
     altAppLogo: 'App logo',
     show: 'Show',
@@ -66,6 +69,12 @@ export default {
       response: 'Response',
       httpStatus: 'HTTP status',
     },
+    history: {
+      title: 'History',
+      noRequests: "You haven't executed any request.",
+      tryRequests: "It's empty here. Try:",
+      historyRequests: 'History requests',
+    },
   },
   editors: {
     headersTitle: 'Headers',
@@ -94,5 +103,12 @@ export default {
       notValidEndpoint: 'Provide correct endpoint URL!',
       notValidSdlUrl: 'Provide correct sdl URL!',
     },
+  },
+  errorBoundary: {
+    startOver: 'You can start over',
+    orOver: 'or start over',
+    goBack: 'You can go back',
+    throw: 'Throw error',
+    nonExistence: 'non existence route',
   },
 };
