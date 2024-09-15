@@ -1,23 +1,27 @@
 import React, {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from '~/hooks/Authorization/useAuth';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  redirectPath: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children, redirectPath}) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
   const {isLoggedIn} = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate(redirectPath);
-    }
-  }, [isLoggedIn, navigate, redirectPath]);
+    const authRoutes = ['/sign-in', '/sign-up'];
 
-  if (!isLoggedIn) {
+    if (isLoggedIn && authRoutes.includes(location.pathname)) {
+      navigate('/');
+    } else if (!isLoggedIn && !authRoutes.includes(location.pathname)) {
+      navigate('/sign-in');
+    }
+  }, [isLoggedIn, navigate, location]);
+
+  if (!isLoggedIn && !['/sign-in', '/sign-up'].includes(location.pathname)) {
     return null;
   }
 

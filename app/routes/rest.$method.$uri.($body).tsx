@@ -56,7 +56,7 @@ export default function RESTMethodRoute() {
   const {loaderData} = useLoaderData<LoaderData>();
   return (
     <>
-      <ProtectedRoute redirectPath="/">
+      <ProtectedRoute>
         <ResponseBar
           status={loaderData.status}
           statusText={loaderData.statusText}

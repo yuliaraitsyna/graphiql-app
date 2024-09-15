@@ -1,5 +1,10 @@
 import Authorization from '~/components/authorization/authorization';
+import ProtectedRoute from '~/components/ProtectedRoute/ProtectedRoute';
 
 export default function SignInRoute() {
-  return <Authorization />;
+  return (
+    <ProtectedRoute>
+      <Authorization />
+    </ProtectedRoute>
+  );
 }
