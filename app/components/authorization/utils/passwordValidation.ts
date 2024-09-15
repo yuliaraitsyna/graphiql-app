@@ -1,6 +1,7 @@
-export const handlePasswordCheck = (password: string): string | null => {
+export const handlePasswordCheck = (lang: string, password: string): string | null => {
   if (password.length < 8) {
-    return 'Password must be at least 8 characters long.';
+    if (lang === 'en') return 'Password must be at least 8 characters long.';
+    if (lang === 'es') return 'La contraseña debe tener al menos 8 caracteres.';
   }
 
   const hasUpperCase = /[\p{Lu}]/u.test(password);
@@ -8,15 +9,18 @@ export const handlePasswordCheck = (password: string): string | null => {
   const hasSpecialChar = /[\p{S}\p{P}]/u.test(password);
 
   if (!hasUpperCase) {
-    return 'Password must contain at least one uppercase letter (unicode is spported).';
+    if (lang === 'en') return 'Password must contain at least one uppercase letter (unicode is supported).';
+    if (lang === 'es') return 'La contraseña debe contener al menos una letra mayúscula (se admite unicode).';
   }
 
   if (!hasNumber) {
-    return 'Password must contain at least one number (unicode is spported).';
+    if (lang === 'en') return 'Password must contain at least one number (unicode is supported).';
+    if (lang === 'es') return 'La contraseña debe contener al menos un número (se admite unicode).';
   }
 
   if (!hasSpecialChar) {
-    return 'Password must contain at least one special character (unicode is spported)';
+    if (lang === 'en') return 'Password must contain at least one special character (unicode is supported).';
+    if (lang === 'es') return 'La contraseña debe contener al menos un carácter especial (se admite unicode).';
   }
 
   return null;

@@ -10,11 +10,13 @@ import {FormAction} from './models/formAction';
 import {useNavigate, useLocation} from '@remix-run/react';
 import {red} from '@mui/material/colors';
 import {useAuth} from '~/hooks/Authorization/useAuth';
+import {useTranslation} from 'react-i18next';
 
 const Authorization: React.FC = () => {
   const location = useLocation();
   const initialAction = location.pathname === '/sign-up' ? FormAction.SIGN_UP : FormAction.SIGN_IN;
   const {login} = useAuth();
+  const {t} = useTranslation();
 
   const [action, setAction] = useState<FormAction>(initialAction);
   const [authError, setAuthError] = useState<string>('');
@@ -41,7 +43,7 @@ const Authorization: React.FC = () => {
       }
     } catch (error) {
       console.error('Authentication error:', error);
-      setAuthError('Authorization error');
+      setAuthError(`${t('form.authErrorMessage')}`);
     }
   };
 
@@ -63,7 +65,7 @@ const Authorization: React.FC = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Typography component={'h5'} variant="h5" textAlign={'center'}>
-        {action === FormAction.SIGN_IN ? 'Sign in' : 'Sign up'}
+        {action === FormAction.SIGN_IN ? `${t('form.signIn')}` : `${t('form.signUp')}`}
       </Typography>
       {action === FormAction.SIGN_IN ? (
         <SignIn onSubmit={handleSubmit} onInputChange={handleInputChange} />
@@ -74,7 +76,9 @@ const Authorization: React.FC = () => {
         {authError}
       </Typography>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
-        <Button onClick={toggleAction}>{action === FormAction.SIGN_IN ? 'Sign up' : 'Sign in'}</Button>
+        <Button onClick={toggleAction}>
+          {action === FormAction.SIGN_IN ? `${t('form.signUp')}` : `${t('form.signIn')}`}
+        </Button>
       </Box>
     </Container>
   );

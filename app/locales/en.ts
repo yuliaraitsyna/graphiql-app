@@ -135,4 +135,17 @@ export default {
     throw: 'Throw error',
     nonExistence: 'non existence route',
   },
+  form: {
+    signIn: 'Sign in',
+    signUp: 'Sign up',
+    email: 'Email',
+    password: 'Password',
+    repeatPassword: 'Repeat password',
+    requiredEmailMessage: 'Email is required',
+    requiredPasswordMessage: 'Password is required',
+    invalidEmailMessage: 'Invalid email address',
+    requiredRepeatPasswordMessage: 'Repeating password is required',
+    mismatchPasswordMessage: 'Passwords do not match',
+    authErrorMessage: 'Authorization error',
+  },
 };

@@ -136,4 +136,17 @@ export default {
     throw: 'Lanzar error',
     nonExistence: 'ruta de la no existencia',
   },
+  form: {
+    signIn: 'Iniciar sesión',
+    signUp: 'Registrarse',
+    email: 'Correo electrónico',
+    password: 'Contraseña',
+    repeatPassword: 'Repetir contraseña',
+    requiredEmailMessage: 'El correo electrónico es obligatorio',
+    requiredPasswordMessage: 'La contraseña es obligatoria',
+    invalidEmailMessage: 'Dirección de correo electrónico no válida',
+    requiredRepeatPasswordMessage: 'Repetir la contraseña es obligatorio',
+    mismatchPasswordMessage: 'Las contraseñas no coinciden',
+    authErrorMessage: 'Error de autorización',
+  },
 };
