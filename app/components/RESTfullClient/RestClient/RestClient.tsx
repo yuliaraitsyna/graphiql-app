@@ -315,6 +315,7 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
             {t('jsonEditor.text')}
           </Button>
           <JsonEditor
+            data-testid="json-editor"
             mode={mode}
             type={editorMode}
             onChange={handleBodyChange}
