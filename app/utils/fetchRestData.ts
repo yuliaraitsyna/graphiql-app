@@ -14,9 +14,9 @@ const ErrorResponse: ResponseData = {
   headers: new Headers(),
   payload: '',
   status: NaN,
-  statusText: 'Unknown Error',
-  size: 0,
-  time: 0,
+  statusText: 'Failed to fetch',
+  size: NaN,
+  time: NaN,
 };
 
 export default async function fetchRestData(

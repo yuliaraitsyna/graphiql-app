@@ -88,6 +88,23 @@ export default {
     queryTitle: 'Query',
     bodyTitle: 'Body',
     responseTitle: 'Response',
+    graphiql: {
+      sendButton: 'Send request',
+      endpointUrl: 'Endpoint URL',
+      placeholderEndpointUrl: 'Enter endpoint URL',
+      sdlUrl: 'SDL URL',
+      placeholderSdlUrl: 'Enter SDL URL',
+      queryEditor: 'Query',
+      format: 'Format',
+      response: 'Response',
+      httpStatus: 'HTTP status',
+    },
+    history: {
+      title: 'History',
+      noRequests: "You haven't executed any request.",
+      tryRequests: "It's empty here. Try:",
+      historyRequests: 'History requests',
+    },
   },
   response: {
     status: 'Status:',
@@ -121,12 +138,12 @@ export default {
         notValidSdlUrl: 'Provide correct sdl URL!',
       },
     },
-  },
-  errorBoundary: {
-    startOver: 'You can start over',
-    orOver: 'or start over',
-    goBack: 'You can go back',
-    throw: 'Throw error',
-    nonExistence: 'non existence route',
+    errorBoundary: {
+      startOver: 'You can start over',
+      orOver: 'or start over',
+      goBack: 'You can go back',
+      throw: 'Throw error',
+      nonExistence: 'non existence route',
+    },
   },
 };

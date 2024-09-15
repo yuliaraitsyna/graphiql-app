@@ -10,14 +10,18 @@ import Logo from '../../../public/logo.svg';
 import WhiteLink from '../UI/WhiteLink';
 import {MobileMenu} from '../MobileMenu/MobileMenu';
 import {pages} from '../../constants/index';
+import {useAuth} from '~/hooks/Authorization/useAuth';
 
 export function Header() {
   const {t} = useTranslation();
   const theme = useTheme();
   const [bgColor, setBgColor] = useState(theme.palette.primary.main);
+  const {isLoggedIn, logout} = useAuth();
+
   const trigger = useScrollTrigger({
     threshold: 0,
   });
+
   useEffect(() => {
     if (trigger) {
       setBgColor('#96B3D0');
@@ -28,11 +32,17 @@ export function Header() {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSignOut = () => {
+    logout();
   };
 
   return (
@@ -64,15 +74,20 @@ export function Header() {
             <Box display={{xs: 'none', md: 'flex'}} alignItems="center">
               <LanguageToggler />
               <Stack direction="row" spacing={1} ml={2}>
-                <WhiteButton component={RemixLink} to={pages.signOut.path}>
-                  {t(pages.signOut.translationKey)}
-                </WhiteButton>
-                <WhiteButton component={RemixLink} to={pages.signIn.translationKey}>
-                  {t(pages.signIn.translationKey)}
-                </WhiteButton>
-                <WhiteButton component={RemixLink} to={pages.signUp.translationKey}>
-                  {t(pages.signUp.translationKey)}
-                </WhiteButton>
+                {isLoggedIn ? (
+                  <WhiteButton component={RemixLink} to={pages.signOut.path} onClick={handleSignOut}>
+                    {t(pages.signOut.translationKey)}
+                  </WhiteButton>
+                ) : (
+                  <>
+                    <WhiteButton component={RemixLink} to={pages.signIn.path}>
+                      {t(pages.signIn.translationKey)}
+                    </WhiteButton>
+                    <WhiteButton component={RemixLink} to={pages.signUp.path}>
+                      {t(pages.signUp.translationKey)}
+                    </WhiteButton>
+                  </>
+                )}
               </Stack>
             </Box>
           </Box>

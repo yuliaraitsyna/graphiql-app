@@ -22,7 +22,6 @@ interface LoaderResponseData extends ResponseData {
 
 type LoaderData = {
   loaderData: LoaderResponseData;
-  routes: Routes;
 };
 
 export function ErrorBoundary() {

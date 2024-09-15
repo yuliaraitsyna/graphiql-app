@@ -9,6 +9,9 @@ export default {
     variables: 'Variables',
     headers: 'Cabeceras',
   },
+  title: 'Graphiql',
+  description:
+    'Una herramienta intuitiva para realizar solicitudes API REST y GraphQL, diseñada para simplificar la obtención de datos y la interacción con las API.',
   page: {
     main: {
       welcome: 'Bienvenido',
@@ -81,14 +84,31 @@ export default {
   editors: {
     paramsTitle: 'Parámetros',
     headersTitle: 'Encabezados',
-    keyTitle: 'Clave',
-    valueTitle: 'Valor',
-    nameTitle: 'Nombre',
-    add: 'Añadir',
     variablesTitle: 'Variables',
     queryTitle: 'Consulta',
     bodyTitle: 'Cuerpo',
     responseTitle: 'Respuesta',
+    keyTitle: 'Clave',
+    valueTitle: 'Valor',
+    nameTitle: 'Nombre',
+    add: 'Añadir',
+    graphiql: {
+      sendButton: 'Enviar',
+      endpointUrl: 'URL del punto final',
+      placeholderEndpointUrl: 'Introduzca la URL del punto final',
+      sdlUrl: 'LDE Url',
+      placeholderSdlUrl: 'Introduzca la URL de LDE',
+      queryEditor: 'Consulta',
+      format: 'Formato',
+      response: 'Respuesta',
+      httpStatus: 'Estado HTTP',
+    },
+    history: {
+      title: 'Historia',
+      noRequests: 'No has ejecutado ninguna petición. ',
+      tryRequests: 'Está vacío. Inténtalo:',
+      historyRequests: 'Historial de solicitudes',
+    },
   },
   response: {
     status: 'Estado:',
