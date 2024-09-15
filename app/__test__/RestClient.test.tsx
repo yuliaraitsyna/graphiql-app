@@ -12,10 +12,6 @@ jest.mock('@remix-run/react', () => ({
   useState: jest.fn(),
 }));
 
-jest.mock('~/routes/api_.rest', () => ({
-  fetchRestData: jest.fn(),
-}));
-
 jest.mock('~/utils/prettifyJson', () => ({
   __esModule: true,
   default: jest.fn(),

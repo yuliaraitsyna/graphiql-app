@@ -1,6 +1,7 @@
 import {Box} from '@mui/material';
 import {useLoaderData} from '@remix-run/react';
 import {json, LoaderFunctionArgs} from '@vercel/remix';
+import {useTranslation} from 'react-i18next';
 import {StartOverLink} from '~/components/CustomLinks';
 import {ErrorBoundaryWrapper} from '~/components/ErrorBoundary/ErrorBoundary';
 import JsonEditor from '~/components/JsonEditor/JsonEditor';
@@ -24,9 +25,10 @@ type LoaderData = {
 };
 
 export function ErrorBoundary() {
+  const {t} = useTranslation();
   return (
     <ErrorBoundaryWrapper>
-      <StartOverLink message="You can start over" />
+      <StartOverLink message={t('errorBoundary.startOver')} />
     </ErrorBoundaryWrapper>
   );
 }

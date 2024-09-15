@@ -6,7 +6,7 @@ exports[`RestClient Snapshot Tests renders correctly with default props 1`] = `
     class="MuiContainer-root MuiContainer-maxWidthLg css-1ndngdk-MuiContainer-root"
   >
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1dphx2r-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1rh84su-MuiTypography-root"
     >
       REST Client
     </h4>
@@ -185,6 +185,7 @@ exports[`RestClient Snapshot Tests renders correctly with default props 1`] = `
         aria-labelledby="simple-tab-0"
         id="simple-tabpanel-0"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       >
         <div
           class="MuiBox-root css-19kzrtu"
@@ -262,12 +263,14 @@ exports[`RestClient Snapshot Tests renders correctly with default props 1`] = `
         hidden=""
         id="simple-tabpanel-1"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       />
       <div
         aria-labelledby="simple-tab-2"
         hidden=""
         id="simple-tabpanel-2"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       />
       <div
         aria-labelledby="simple-tab-3"
@@ -292,7 +295,7 @@ exports[`RestClient Snapshot Tests renders correctly with different tab selected
     class="MuiContainer-root MuiContainer-maxWidthLg css-1ndngdk-MuiContainer-root"
   >
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1dphx2r-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1rh84su-MuiTypography-root"
     >
       REST Client
     </h4>
@@ -474,6 +477,7 @@ exports[`RestClient Snapshot Tests renders correctly with different tab selected
         aria-labelledby="simple-tab-0"
         id="simple-tabpanel-0"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       >
         <div
           class="MuiBox-root css-19kzrtu"
@@ -551,12 +555,14 @@ exports[`RestClient Snapshot Tests renders correctly with different tab selected
         hidden=""
         id="simple-tabpanel-1"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       />
       <div
         aria-labelledby="simple-tab-2"
         hidden=""
         id="simple-tabpanel-2"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       />
       <div
         aria-labelledby="simple-tab-3"
@@ -581,7 +587,7 @@ exports[`RestClient Snapshot Tests renders correctly with populated props 1`] = 
     class="MuiContainer-root MuiContainer-maxWidthLg css-1ndngdk-MuiContainer-root"
   >
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1dphx2r-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1rh84su-MuiTypography-root"
     >
       REST Client
     </h4>
@@ -762,6 +768,7 @@ exports[`RestClient Snapshot Tests renders correctly with populated props 1`] = 
         aria-labelledby="simple-tab-0"
         id="simple-tabpanel-0"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       >
         <div
           class="MuiBox-root css-19kzrtu"
@@ -839,12 +846,14 @@ exports[`RestClient Snapshot Tests renders correctly with populated props 1`] = 
         hidden=""
         id="simple-tabpanel-1"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       />
       <div
         aria-labelledby="simple-tab-2"
         hidden=""
         id="simple-tabpanel-2"
         role="tabpanel"
+        style="max-width: 920px; margin: 0px auto;"
       />
       <div
         aria-labelledby="simple-tab-3"

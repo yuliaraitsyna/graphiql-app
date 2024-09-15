@@ -41,7 +41,7 @@ export default function ResponseBar({status, statusText, size, time}: Props) {
           }}
         />
         <ListItemText
-          primary={status}
+          primary={status || ''}
           sx={{flexGrow: 0, color: statusColor}}
           primaryTypographyProps={{
             fontWeight: 600,

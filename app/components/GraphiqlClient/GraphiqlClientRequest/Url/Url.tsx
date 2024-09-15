@@ -5,12 +5,12 @@ import styles from './Url.module.css';
 export const Url: React.FC<UrlProps> = ({label, name, value, onInput, onBlur, onChange, placeholder = ''}) => {
   return (
     <Grid className={styles.urlRow} container spacing={2} alignItems="center">
-      <Grid item xs={12} sm={3}>
-        <Typography component={'h6'} variant="h6">
+      <Grid item xs={12} sm={4}>
+        <Typography component={'h6'} variant="h6" textAlign="end">
           {label}:
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={9}>
+      <Grid item xs={12} sm={8}>
         <TextField
           variant="outlined"
           fullWidth

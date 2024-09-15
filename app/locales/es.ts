@@ -1,4 +1,7 @@
 export default {
+  title: 'Graphiql',
+  description:
+    'Una herramienta intuitiva para realizar solicitudes API REST y GraphQL, diseñada para simplificar la obtención de datos y la interacción con las API.',
   common: {
     altAppLogo: 'Logotipo de la aplicación',
     show: 'Mostrar',
@@ -66,6 +69,17 @@ export default {
       send: 'Enviar',
       placeholder: 'URL del punto de acceso',
     },
+    graphiql: {
+      sendButton: 'Enviar',
+      endpointUrl: 'URL del punto final',
+      placeholderEndpointUrl: 'Introduzca la URL del punto final',
+      sdlUrl: 'LDE Url',
+      placeholderSdlUrl: 'Introduzca la URL de LDE',
+      queryEditor: 'Consulta',
+      format: 'Formato',
+      response: 'Respuesta',
+      httpStatus: 'Estado HTTP',
+    },
   },
   editors: {
     paramsTitle: 'Parámetros',
@@ -128,12 +142,12 @@ export default {
         notValidSdlUrl: 'Proporcione la URL sdl correcta',
       },
     },
-    errorBoundary: {
-      startOver: 'Puedes empezar de nuevo',
-      orOver: 'o empezar de nuevo',
-      goBack: 'Puedes volver atrás',
-      throw: 'Lanzar error',
-      nonExistence: 'ruta de la no existencia',
-    },
+  },
+  errorBoundary: {
+    startOver: 'Puedes empezar de nuevo',
+    orOver: 'o empezar de nuevo',
+    goBack: 'Puedes volver atrás',
+    throw: 'Lanzar error',
+    nonExistence: 'ruta de la no existencia',
   },
 };

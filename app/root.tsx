@@ -30,10 +30,12 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body style={{overflowY: 'scroll'}}>
         <AuthProvider>
           <Header />
-          <main>{children}</main>
+          <main>
+            <Outlet />
+          </main>
           <Footer />
         </AuthProvider>
         <ScrollRestoration />
