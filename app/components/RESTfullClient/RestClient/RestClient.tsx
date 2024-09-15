@@ -172,7 +172,11 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
     };
     const encodedUri = createRestEncodedUri(requestData);
     const history: RestHistoryData[] = JSON.parse(localStorage.getItem('history') || '[]');
-    history.push(requestData);
+    const additionalData = {
+      encoded: `${window.location.origin}/${requestData.type}/${requestData.method}/${encodedUri}`,
+    };
+    history.push({...requestData, ...additionalData});
+
     localStorage.setItem('history', JSON.stringify(history));
     navigate(encodedUri);
     setTab(4);

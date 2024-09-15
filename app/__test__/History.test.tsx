@@ -28,7 +28,7 @@ describe('Test History Component', () => {
     const mockHistoryData = [
       {
         method: 'GRAPHQL',
-        endpoint: 'https://countries.trevorblades.com/graphql',
+        uri: 'https://countries.trevorblades.com/graphql',
         sdl: 'https://countries.trevorblades.com/graphql?sdl',
         body: `query Query { country(code: "BR") {
                         name
@@ -44,11 +44,12 @@ describe('Test History Component', () => {
                     }`,
         headers: {},
         variables: '',
-        url: '/GRAPHQL/aHR0cHM6Ly9yaWNrYW5kbW9ydHlhcGkuY29tL2dyYXBocWw=/cXVlcnkgR2V0Q2hhcmFjdGVycygkcGFnZTogSW50ISkgewogIGNoYXJhY3RlcnMocGFnZTogMikgewogICAgaW5mbyB7CiAgICAgIGNvdW50CiAgICB9CiAgICByZXN1bHRzIHsKICAgICAgbmFtZQogICAgfQogIH0KfQ==',
+        encoded:
+          '/GRAPHQL/aHR0cHM6Ly9yaWNrYW5kbW9ydHlhcGkuY29tL2dyYXBocWw=/cXVlcnkgR2V0Q2hhcmFjdGVycygkcGFnZTogSW50ISkgewogIGNoYXJhY3RlcnMocGFnZTogMikgewogICAgaW5mbyB7CiAgICAgIGNvdW50CiAgICB9CiAgICByZXN1bHRzIHsKICAgICAgbmFtZQogICAgfQogIH0KfQ==',
       },
       {
         method: 'GRAPHQL',
-        endpoint: 'https://rickandmortyapi.com/graphql',
+        uri: 'https://rickandmortyapi.com/graphql',
         sdl: 'https://rickandmortyapi.com/graphql/?sdl',
         body: `query GetCharacters($page: Int!) {
                             characters(page: $page) {
@@ -62,7 +63,8 @@ describe('Test History Component', () => {
                         }`,
         headers: {},
         variables: '{"page": 2}',
-        url: '/GRAPHQL/aHR0cHM6Ly9yaWNrYW5kbW9ydHlhcGkuY29tL2dyYXBocWw=/cXVlcnkgR2V0Q2hhcmFjdGVycygkcGFnZTogSW50ISkgewogIGNoYXJhY3RlcnMocGFnZTogMikgewogICAgaW5mbyB7CiAgICAgIGNvdW50CiAgICB9CiAgICByZXN1bHRzIHsKICAgICAgbmFtZQogICAgfQogIH0KfQ==',
+        encoded:
+          '/GRAPHQL/aHR0cHM6Ly9yaWNrYW5kbW9ydHlhcGkuY29tL2dyYXBocWw=/cXVlcnkgR2V0Q2hhcmFjdGVycygkcGFnZTogSW50ISkgewogIGNoYXJhY3RlcnMocGFnZTogMikgewogICAgaW5mbyB7CiAgICAgIGNvdW50CiAgICB9CiAgICByZXN1bHRzIHsKICAgICAgbmFtZQogICAgfQogIH0KfQ==',
       },
     ];
 
