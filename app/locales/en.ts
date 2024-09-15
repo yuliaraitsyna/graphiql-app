@@ -76,6 +76,12 @@ export default {
       response: 'Response',
       httpStatus: 'HTTP status',
     },
+    history: {
+      title: 'History',
+      noRequests: "You haven't executed any request.",
+      tryRequests: "It's empty here. Try:",
+      historyRequests: 'History requests',
+    },
   },
   editors: {
     keyTitle: 'Key',
@@ -88,23 +94,6 @@ export default {
     queryTitle: 'Query',
     bodyTitle: 'Body',
     responseTitle: 'Response',
-    graphiql: {
-      sendButton: 'Send request',
-      endpointUrl: 'Endpoint URL',
-      placeholderEndpointUrl: 'Enter endpoint URL',
-      sdlUrl: 'SDL URL',
-      placeholderSdlUrl: 'Enter SDL URL',
-      queryEditor: 'Query',
-      format: 'Format',
-      response: 'Response',
-      httpStatus: 'HTTP status',
-    },
-    history: {
-      title: 'History',
-      noRequests: "You haven't executed any request.",
-      tryRequests: "It's empty here. Try:",
-      historyRequests: 'History requests',
-    },
   },
   response: {
     status: 'Status:',
@@ -120,6 +109,17 @@ export default {
     restClient: 'Rest Client',
     graphqlClient: 'GraphiQL Client',
   },
+  errors: {
+    graphql: {
+      endpoint: 'Check endpoint url!',
+      sdl: 'Check sdl url!',
+      sendRequest: 'Unable to send request! Check fields!',
+      responseError: 'Unable to get data! Error occurs!',
+      responseErrorStatus: 'Unable to get data! Status: ',
+      notValidEndpoint: 'Provide correct endpoint URL!',
+      notValidSdlUrl: 'Provide correct sdl URL!',
+    },
+  },
   jsonEditor: {
     format: 'Format',
     text: 'Text',
@@ -127,23 +127,12 @@ export default {
     enter: 'Enter',
     jsonContent: 'JSON content',
     textContent: 'Text content',
-    errors: {
-      graphql: {
-        endpoint: 'Check endpoint url!',
-        sdl: 'Check sdl url!',
-        sendRequest: 'Unable to send request! Check fields!',
-        responseError: 'Unable to get data! Error occurs!',
-        responseErrorStatus: 'Unable to get data! Status: ',
-        notValidEndpoint: 'Provide correct endpoint URL!',
-        notValidSdlUrl: 'Provide correct sdl URL!',
-      },
-    },
-    errorBoundary: {
-      startOver: 'You can start over',
-      orOver: 'or start over',
-      goBack: 'You can go back',
-      throw: 'Throw error',
-      nonExistence: 'non existence route',
-    },
+  },
+  errorBoundary: {
+    startOver: 'You can start over',
+    orOver: 'or start over',
+    goBack: 'You can go back',
+    throw: 'Throw error',
+    nonExistence: 'non existence route',
   },
 };
