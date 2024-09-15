@@ -110,7 +110,9 @@ const RestClient: React.FC<Partial<Props>> = ({children, initialBody = '', initi
       };
 
       const encodedUri = createRestEncodedUri(requestData);
-      const updatedUrl = `${window.location.origin}/${encodedUri}`;
+      const routeArr = window.location.pathname.split('/');
+      const route = routeArr[1] + '/' + routeArr[2];
+      const updatedUrl = `${window.location.origin}/${route}/${encodedUri}`;
       window.history.replaceState({}, '', updatedUrl);
     }
   };
